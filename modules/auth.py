@@ -1,68 +1,91 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
-from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, login_required, logout_user
-from .models import User
-from . import db
+import json
+import requests
+from flask import Blueprint, redirect, request, url_for
+from flask_login import current_user, login_user, logout_user
+from oauthlib.oauth2 import WebApplicationClient
+from .user import User
+from config import Config
 
 auth = Blueprint('auth', __name__)
 
+# Configuration
+client = WebApplicationClient(Config.GOOGLE_CLIENT_ID)
 
-@auth.route('/login')
+
+def get_google_provider_cfg():
+    return requests.get(Config.GOOGLE_DISCOVERY_URI).json()
+
+
+@auth.route("/login")
 def login():
-    return render_template('login.html')
+    # URL for Google login
+    google_provider_cfg = get_google_provider_cfg()
+    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+
+    # the request for Google login
+    request_uri = client.prepare_request_uri(
+        authorization_endpoint,
+        redirect_uri=request.base_url + "/callback",
+        scope=["openid", "email", "profile"],
+    )
+    return redirect(request_uri)
 
 
-@auth.route('/login', methods=['POST'])
-def login_post():
-    # Get the information of the login user
-    email = request.form.get('email')
-    password = request.form.get('password')
-    remember = True if request.form.get('remember') else False
+@auth.route("/login/callback")
+def callback():
+    # Get authorization code from Google
+    code = request.args.get("code")
 
-    # check if the user actually exists
-    user = User.query.filter_by(email=email).first()
-    if not user:
-        flash("The email doesn't exist")
-        return redirect(url_for('auth.login'))
-    elif not check_password_hash(user.password, password):
-        flash("Invalid password")
-        return redirect(url_for('auth.login'))
+    # URL to get tokens
+    google_provider_cfg = get_google_provider_cfg()
+    token_endpoint = google_provider_cfg["token_endpoint"]
 
-    login_user(user, remember=remember)
-    return redirect(url_for('main.profile'))
+    # Prepare and send a request to get tokens
+    token_url, headers, body = client.prepare_token_request(
+        token_endpoint,
+        authorization_response=request.url,
+        redirect_url=request.base_url,
+        code=code
+    )
+    token_response = requests.post(
+        token_url,
+        headers=headers,
+        data=body,
+        auth=(Config.GOOGLE_CLIENT_ID, Config.GOOGLE_CLIENT_SECRET),
+    )
+
+    # Parse the tokens
+    client.parse_request_body_response(json.dumps(token_response.json()))
+
+    # Getting the user's profile information
+    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
+    uri, headers, body = client.add_token(userinfo_endpoint)
+    userinfo_response = requests.get(uri, headers=headers, data=body)
+
+    # Check if their email is verified
+    if userinfo_response.json().get("email_verified"):
+        unique_id = userinfo_response.json()["sub"]
+        users_email = userinfo_response.json()["email"]
+        picture = userinfo_response.json()["picture"]
+        users_name = userinfo_response.json()["given_name"]
+    else:
+        return "User email not available or not verified by Google.", 400
+
+    # Check if this account is in the database
+    if not User.get(unique_id[:-2]):
+        User.create(unique_id[:-2], users_name, users_email, picture)
+
+    # Begin user session
+    user = User.get(unique_id[:-2])
+    login_user(user)
+
+    if current_user.is_authenticated:
+        return redirect(url_for('main.profile'))
+    else:
+        return redirect(url_for('main.index'))
 
 
-@auth.route('/signup')
-def signup():
-    return render_template('signup.html')
-
-
-@auth.route('/signup', methods=['POST'])
-def signup_post():
-    # Get the information of the new user
-    email = request.form.get('email')
-    name = request.form.get('name')
-    password = request.form.get('password')
-
-    # check if the email is existed
-    user = User.query.filter_by(email=email).first()
-    if user:
-        flash('Email address already exists')
-        return redirect(url_for('auth.signup'))
-
-    # create a new user with the form data
-    password = generate_password_hash(password, method='sha256')
-    new_user = User(email=email, name=name, password=password)
-
-    # add the new user to the database
-    db.session.add(new_user)
-    db.session.commit()
-
-    return redirect(url_for('auth.login'))
-
-
-@auth.route('/logout')
-@login_required
+@auth.route("/logout")
 def logout():
     logout_user()
     return redirect(url_for('main.index'))

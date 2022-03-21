@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-
-{% block content %}
-<h1 class="title">
-  Welcome, {{ name }}! Testinggggggggg
-</h1>
-{% endblock %}
+<p>Hello, {{ name }}! You're logged in! Email: {{ email }}</p>
+<div><p>Google Profile Picture:</p>
+<img src="{{ picture }}" alt="Google profile pic"></img></div>
+<a class="button" href="/logout">Logout</a>

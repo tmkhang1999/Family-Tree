@@ -1,3 +1,6 @@
 flask
 flask-login
-flask-sqlalchemy
+pyopenssl
+oauthlib==3.0.1
+requests==2.21.0
+pyOpenSSL==19.0.0
