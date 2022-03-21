@@ -1,0 +1,7 @@
+__pycache__/
+
+# Environments
+.env
+
+# IDE stuffs
+.idea/
