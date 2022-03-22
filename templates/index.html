@@ -1,15 +1,15 @@
-<!DOCTYPE html>
-<html>
+{% extends "layout.html" %}
+{% block content %}
 
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Family-Tree</title>
-</head>
+<div class="center">
+    <img id="tree-img" src="/static/images/home.png" alt="tree">
+    <div id="container">
+        <a id="welcome-txt">Sign In to Family Tree</a>
+        <a class="button" href="{{ url_for('auth.login') }}" role="button">
+          <img alt="google icon" id="icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
+          Sign In via Google
+        </a>
+    </div>
+</div>
 
-<body>
-    <a href="{{ url_for('auth.login') }}" class="navbar-item">Google Login</a>
-</body>
-
-</html>
+{% endblock %}

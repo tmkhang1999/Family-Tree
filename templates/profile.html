@@ -1,4 +1,14 @@
-<p>Hello, {{ name }}! You're logged in! Email: {{ email }}</p>
-<div><p>Google Profile Picture:</p>
-<img src="{{ picture }}" alt="Google profile pic"></img></div>
-<a class="button" href="/logout">Logout</a>
+{% extends "layout.html" %}
+{% block content %}
+
+<div class="center">
+    <p>Hello, {{ name }}! You're logged in! Email: {{ email }}</p>
+    <div>
+        <p>Google Profile Picture:</p>
+        <img src="{{ picture }}" alt="Google profile pic">
+    </div>
+    <a class="button" href="{{ url_for('auth.logout') }}">Logout</a>
+</div>
+
+{% endblock %}
+

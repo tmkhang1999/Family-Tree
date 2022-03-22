@@ -1,0 +1,61 @@
+body {
+  background-color: #4F6456;
+}
+
+.center{
+  display: grid;
+  grid-template-columns: [line1] 50% [line2] 50% [line3];
+}
+
+#tree-img{
+  grid-column: line1 / line2;
+  place-self: end;
+  align-self: end;
+  height: auto;
+  width: 75%;
+
+}
+
+#container{
+  grid-column: line2 / line3;
+  align-self: center;
+  place-self: center;
+  border-radius: 50px;
+  height: 70vh;
+  width: 70vh;
+  background-color: #333333;
+  text-align: center;
+}
+
+#welcome-txt{
+  font-family: 'Roboto', sans-serif;
+  font-size: 35px;
+  font-weight: bold;
+  color: #FFFFFF;
+  position: relative;
+  top: 80px;
+}
+
+.button {
+  position: relative;
+  top: 120px;
+  display: inline-block;
+  background-color: #FFFFFF;
+  border-radius: 10px;
+
+  padding: 15px 30px;
+  color: #7B7272;
+  font-size: 25px;
+  font-weight: bold;
+  text-decoration: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+#icon{
+  display: inline-block;
+  vertical-align: middle;
+  horiz-align: left;
+  width: 25px;
+  padding: 5px;
+}
+

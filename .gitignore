@@ -5,3 +5,8 @@ __pycache__/
 
 # IDE stuffs
 .idea/
+
+# Database
+sqlite_db
+sqlite_db-shm
+sqlite_db-wal
