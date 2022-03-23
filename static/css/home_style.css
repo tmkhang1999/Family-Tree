@@ -1,8 +1,10 @@
 body {
-  background-color: #4F6456;
+  margin: 0;
+  padding: 0;
 }
 
-.center{
+#home-container{
+  background-color: #4F6456;
   display: grid;
   grid-template-columns: [line1] 50% [line2] 50% [line3];
 }
@@ -16,7 +18,7 @@ body {
 
 }
 
-#container{
+#login-container{
   grid-column: line2 / line3;
   align-self: center;
   place-self: center;
@@ -28,15 +30,15 @@ body {
 }
 
 #welcome-txt{
-  font-family: 'Roboto', sans-serif;
-  font-size: 35px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 25px;
   font-weight: bold;
   color: #FFFFFF;
   position: relative;
   top: 80px;
 }
 
-.button {
+.login-button {
   position: relative;
   top: 120px;
   display: inline-block;
@@ -48,14 +50,14 @@ body {
   font-size: 25px;
   font-weight: bold;
   text-decoration: none;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
-#icon{
+#google-icon{
   display: inline-block;
   vertical-align: middle;
   horiz-align: left;
-  width: 25px;
-  padding: 5px;
+  width: 40px;
+  padding-right: 10px;
 }
 

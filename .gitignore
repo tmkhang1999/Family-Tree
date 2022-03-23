@@ -1,4 +1,5 @@
 __pycache__/
+**/__pycache__/
 
 # Environments
 .env
@@ -7,6 +8,6 @@ __pycache__/
 .idea/
 
 # Database
-sqlite_db
-sqlite_db-shm
-sqlite_db-wal
+**/sqlite_db
+**/sqlite_db-shm
+**/sqlite_db-wal

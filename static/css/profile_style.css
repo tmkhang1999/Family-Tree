@@ -1,0 +1,58 @@
+#profile-container{
+  display: grid;
+  grid-template-rows: [r1] 7% [r2] auto [r3];
+  height: 100vh;
+  width: 100vw;
+}
+
+.top-bar{
+    grid-row: r1 / r2;
+    background-color: #000000;
+    display: grid;
+    grid-template-columns: [col1] 10% [col2] auto [col3] 10% [col4] ;
+    justify-items: center;
+    align-items: center;
+    text-align: center;
+}
+
+#home-button {
+    grid-column: col1 / col2;
+    background-color: #1B690E;
+    border-radius: 5px;
+    text-align: center;
+
+    padding: 5px 15px;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 100;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+#hello-txt {
+    grid-column: col2 / col3;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 400;
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+}
+
+#logout-button{
+    grid-column: col3 / col4;
+    background-color: #444857;
+    border-radius: 5px;
+    text-align: center;
+
+    padding: 5px 15px;
+    color: #FFFFFF;
+    font-size: 15px;
+    font-weight: 100;
+    text-decoration: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+#tree-menu {
+    grid-row: r2 / r3;
+    background-color: #333333;
+}

@@ -66,14 +66,13 @@ def callback():
     if userinfo_response.json().get("email_verified"):
         unique_id = userinfo_response.json()["sub"]
         users_email = userinfo_response.json()["email"]
-        picture = userinfo_response.json()["picture"]
         users_name = userinfo_response.json()["given_name"]
     else:
         return "User email not available or not verified by Google.", 400
 
     # Check if this account is in the database
     if not User.get(unique_id[:-2]):
-        User.create(unique_id[:-2], users_name, users_email, picture)
+        User.create(unique_id[:-2], users_name, users_email)
 
     # Begin user session
     user = User.get(unique_id[:-2])

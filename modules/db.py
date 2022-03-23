@@ -31,9 +31,15 @@ class Database:
             users.create_column("id", db.types.text)
             users.create_column("name", db.types.text)
             users.create_column("email", db.types.text)
-            users.create_column("profile_pic", db.types.text)
-            # users.create_column("trees", db.types.json)
+            users.create_column("tree_ids", db.types.json)
             log.info("Created missing table: users")
+
+        if "tree" not in db:
+            trees = db.create_table("tree")
+            trees.create_column("id", db.types.text)
+            trees.create_column("name", db.types.text)
+            trees.create_column("content", db.types.json)
+            log.info("Created missing table: trees")
 
         db.commit()
         db.close()

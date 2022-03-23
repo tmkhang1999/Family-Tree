@@ -1,13 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="center">
-    <p>Hello, {{ name }}! You're logged in! Email: {{ email }}</p>
-    <div>
-        <p>Google Profile Picture:</p>
-        <img src="{{ picture }}" alt="Google profile pic">
+<div id="profile-container">
+    <div class="top-bar">
+        <a id="home-button" href="{{ url_for('main.profile') }}">
+            Home
+        </a>
+        <a id="hello-txt">Welcome to Family Tree, {{ name }}!</a>
+        <a id="logout-button" href="{{ url_for('auth.logout') }}">
+            Sign Out
+        </a>
     </div>
-    <a class="button" href="{{ url_for('auth.logout') }}">Logout</a>
+
+    <div id="tree-menu">
+    </div>
 </div>
 
 {% endblock %}

@@ -11,8 +11,4 @@ def index():
 
 @main.route('/profile')
 def profile():
-    return render_template('profile.html',
-                           name=current_user.name,
-                           email=current_user.email,
-                           picture=current_user.profile_pic
-                           )
+    return render_template('profile.html', name=current_user.name)

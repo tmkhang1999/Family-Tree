@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}
 
-<div class="center">
+<div id="home-container">
     <img id="tree-img" src="/static/images/home.png" alt="tree">
-    <div id="container">
+    <div id="login-container">
         <a id="welcome-txt">Sign In to Family Tree</a>
-        <a class="button" href="{{ url_for('auth.login') }}" role="button">
-          <img alt="google icon" id="icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
+        <a class="login-button" href="{{ url_for('auth.login') }}" role="button">
+          <img alt="google icon" id="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
           Sign In via Google
         </a>
     </div>
