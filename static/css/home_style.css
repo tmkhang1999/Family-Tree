@@ -32,12 +32,13 @@ body {
 }
 
 #welcome-txt{
-  font-family: 'Montserrat', sans-serif;
-  font-size: 25px;
-  font-weight: bold;
-  color: #FFFFFF;
   position: relative;
   top: 15%;
+
+  color: #FFFFFF;
+  font-size: 25px;
+  font-weight: bold;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .login-button {
@@ -56,9 +57,7 @@ body {
 }
 
 #google-icon{
-  display: inline-block;
   vertical-align: middle;
-  horiz-align: left;
   width: 40px;
   padding-right: 10px;
 }
