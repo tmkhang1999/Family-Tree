@@ -13,23 +13,38 @@
     </div>
 
     <div id="tree-menu">
-        <div class="tree-box" id="create-button" onclick="create()">New Tree</div>
+        <div class="menu-box create-box" id="create-button" onclick="create()">
+            <img id="add-button-img" src="/static/images/add-button.png" alt="add icon">
+            <a id="create-txt">New Tree</a>
+        </div>
     </div>
 </div>
 
 <script>
     function create() {
-      const name = document.createTextNode("test-box");
-      const holder = document.createElement("a");
-      holder.setAttribute('id', 'tree-name');
-      const box = document.createElement("div");
-      box.setAttribute('class', 'tree-box');
+        const name = document.createTextNode("Test box");
 
-      holder.appendChild(name);
-      box.appendChild(holder);
-      $(box).insertBefore("#create-button");
+        const holder = document.createElement("a");
+        holder.setAttribute('class', 'tree-name');
+
+        const trash = document.createElement("img")
+        trash.setAttribute("class", "trash-img")
+        trash.setAttribute("src", "/static/images/trash.png")
+        trash.setAttribute("alt", "trash icon")
+        trash.setAttribute("onclick", "deleteTree(this)")
+
+        const box = document.createElement("div");
+        box.setAttribute('class', 'menu-box tree-box');
+
+        holder.appendChild(name);
+        box.appendChild(holder);
+        box.appendChild(trash);
+        $(box).insertBefore("#create-button");
+    }
+
+    function deleteTree(element) {
+        $(element).parent('div').remove();
     }
 </script>
 
 {% endblock %}
-
