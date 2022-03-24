@@ -7,14 +7,16 @@ body {
   background-color: #4F6456;
   display: grid;
   grid-template-columns: [line1] 50% [line2] 50% [line3];
+  height: 100vh;
+  width: 100vw;
 }
 
 #tree-img{
   grid-column: line1 / line2;
   place-self: end;
   align-self: end;
-  height: auto;
-  width: 75%;
+  height: 95vh;
+  width: auto;
 
 }
 
@@ -35,12 +37,12 @@ body {
   font-weight: bold;
   color: #FFFFFF;
   position: relative;
-  top: 80px;
+  top: 15%;
 }
 
 .login-button {
   position: relative;
-  top: 120px;
+  top: 25%;
   display: inline-block;
   background-color: #FFFFFF;
   border-radius: 10px;
