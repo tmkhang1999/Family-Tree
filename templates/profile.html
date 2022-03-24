@@ -13,8 +13,23 @@
     </div>
 
     <div id="tree-menu">
+        <div class="tree-box" id="create-button" onclick="create()">New Tree</div>
     </div>
 </div>
+
+<script>
+    function create() {
+      const name = document.createTextNode("test-box");
+      const holder = document.createElement("a");
+      holder.setAttribute('id', 'tree-name');
+      const box = document.createElement("div");
+      box.setAttribute('class', 'tree-box');
+
+      holder.appendChild(name);
+      box.appendChild(holder);
+      $(box).insertBefore("#create-button");
+    }
+</script>
 
 {% endblock %}
 
