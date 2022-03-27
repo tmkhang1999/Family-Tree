@@ -69,9 +69,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
-.create-box {
+#add-box {
     vertical-align: top;
     text-align: center;
+}
+
+#add-box:hover {
+    cursor: pointer;
+    background-color: #7B7272;
 }
 
 #add-button-img {
@@ -79,23 +84,24 @@
     padding: 2%;
 }
 
-#create-txt {
+#add-txt {
     display: block;
-}
-
-.tree-box {
 }
 
 .tree-name {
     position: relative;
-    top: 5%;
-    left: 5%;
+    top: 15%;
+    left: 10%;
+    text-decoration: none;
 }
 
 .trash-img {
+    cursor: pointer;
     width: 10%;
     position: relative;
-    top: 70%;
-    left: 55%;
+    display: block;
+    top: 50%;
+    left: 80%;
 }
+
 

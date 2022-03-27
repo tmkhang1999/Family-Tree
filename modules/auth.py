@@ -72,7 +72,7 @@ def callback():
 
     # Check if this account is in the database
     if not User.get(unique_id[:-2]):
-        User.create(unique_id[:-2], users_name, users_email)
+        User.create(unique_id[:-2], users_name, users_email, None)
 
     # Begin user session
     user = User.get(unique_id[:-2])

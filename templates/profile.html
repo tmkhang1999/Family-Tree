@@ -13,37 +13,48 @@
     </div>
 
     <div id="tree-menu">
-        <div class="menu-box create-box" id="create-button" onclick="create()">
+        <div class="menu-box" id="add-box">
             <img id="add-button-img" src="/static/images/add-button.png" alt="add icon">
-            <a id="create-txt">New Tree</a>
+            <a id="add-txt">New Tree</a>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form id="form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create New Tree</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body" id="modal-body">
+                        <div class="form-group mb-3">
+                            <label for="message" class="col-form-label">Message:</label>
+                            <input type="text" class="form-control" id="message" placeholder="Enter the tree's name!" maxlength="18">
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" id="submit">Create</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
 <script>
-    function create() {
-        const name = document.createTextNode("Test box");
-
-        const holder = document.createElement("a");
-        holder.setAttribute('class', 'tree-name');
-
-        const trash = document.createElement("img")
-        trash.setAttribute("class", "trash-img")
-        trash.setAttribute("src", "/static/images/trash.png")
-        trash.setAttribute("alt", "trash icon")
-        trash.setAttribute("onclick", "deleteTree(this)")
-
-        const box = document.createElement("div");
-        box.setAttribute('class', 'menu-box tree-box');
-
-        holder.appendChild(name);
-        box.appendChild(holder);
-        box.appendChild(trash);
-        $(box).insertBefore("#create-button");
-    }
-
-    function deleteTree(element) {
-        $(element).parent('div').remove();
+    window.onload = function(){
+        try {
+            const treeNames = {{ tree_keys|tojson }};
+            treeNames.forEach(function (key) {
+                create(key);
+            })
+        } catch (e) {
+            console.error(e);
+        }
     }
 </script>
 
