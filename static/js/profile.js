@@ -3,7 +3,7 @@ const form = document.getElementById("form");
 const submit = document.getElementById("submit");
 
 add_button.onclick = function () {
-    $("#modal").modal("show");
+    $("#add-modal").modal("show");
 }
 
 submit.onmousemove = function () {
@@ -16,10 +16,34 @@ submit.onmousemove = function () {
 
 form.onsubmit = function (event) {
     event.preventDefault();
-    const text = Array.from(document.querySelectorAll("#form input")).reduce((acc, input) => ({...acc, [input.id]: input.value}), {});
+    const text = Array.from(document.querySelectorAll("#form input")).reduce((acc, input) => ({
+        ...acc,
+        [input.id]: input.value
+    }), {});
     const id = Math.random().toString(36).substr(2, 9)
-    let key = [id, text['message']]
-    create(key)
+    const key = [id, text['message']]
+
+    fetch(`${window.origin}/profile/add`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(key),
+        cache: "no-cache",
+        headers: new Headers({
+        "content-type": "application/json"
+        })
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.log(`Looks like there was a problem. Status code: ${response.status}`);
+            return;
+        }
+        response.json().then(function (data) {
+            if (data['message'] === "OK") {
+                create(key)
+            }
+        });
+    }).catch(function (error) {
+        console.log("Fetch error: " + error);
+    });
 }
 
 function create(key) {
@@ -35,27 +59,50 @@ function create(key) {
     nameHolder.setAttribute('class', 'tree-name');
     nameHolder.appendChild(name);
 
-    const id = document.createTextNode(treeID);
-    const idHolder = document.createElement("a");
-    idHolder.setAttribute('class', 'tree-id');
-    idHolder.setAttribute("style", "display:none");
-    idHolder.appendChild(id);
-
     const trash = document.createElement("img");
     trash.setAttribute("class", "trash-img");
     trash.setAttribute("src", "/static/images/trash.png");
     trash.setAttribute("alt", "trash icon");
-    trash.setAttribute("onclick", "deleteTree(this)");
+    trash.setAttribute("onclick", `deleteConfirm("${treeID}")`);
 
     const box = document.createElement("div");
     box.setAttribute('class', 'menu-box');
+    box.setAttribute('id', `${treeID}`);
 
     box.appendChild(nameHolder);
-    box.appendChild(idHolder);
     box.appendChild(trash);
     $(box).insertBefore("#add-box");
 }
 
+function deleteConfirm(element) {
+    const deleteButton = document.getElementById("delete-button")
+    deleteButton.setAttribute("onclick", `deleteTree("${element}")`)
+    $("#delete-modal").modal("show");
+}
+
 function deleteTree(element) {
-    $(element).parent('div').remove();
+    fetch(`${window.origin}/profile/delete`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(element),
+        cache: "no-cache",
+        headers: new Headers({
+        "content-type": "application/json"
+        })
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.log(`Looks like there was a problem. Status code: ${response.status}`);
+            return;
+        }
+        response.json().then(function (data) {
+            if (data['message'] === "OK") {
+                const box = document.getElementById(element)
+                box.remove()
+            }
+        });
+    }).catch(function (error) {
+        console.log("Fetch error:" + error);
+    });
+
+
 }

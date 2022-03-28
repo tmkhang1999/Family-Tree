@@ -28,7 +28,7 @@ class Database:
         # Create user_info table and columns to store the user-related variables as a JSON object.
         if "users" not in db:
             users = db.create_table("users")
-            users.create_column("id", db.types.text)
+            users.create_column("user_id", db.types.text)
             users.create_column("name", db.types.text)
             users.create_column("email", db.types.text)
             users.create_column("tree_ids", db.types.json)
@@ -36,7 +36,6 @@ class Database:
 
         if "trees" not in db:
             trees = db.create_table("trees")
-            trees.create_column("user_id", db.types.text)
             trees.create_column("tree_id", db.types.text)
             trees.create_column("name", db.types.text)
             trees.create_column("content", db.types.json)
