@@ -63,7 +63,6 @@
     margin: 1.5%;
     display: inline-block;
 
-    color: #000000;
     font-size: 15px;
     font-weight: 600;
     font-family: 'Roboto', sans-serif;
@@ -80,7 +79,7 @@
 }
 
 #add-button-img {
-    width: 30%;
+    width: 35%;
     padding: 2%;
 }
 
@@ -89,6 +88,7 @@
 }
 
 .tree-name {
+    color: #000000;
     position: relative;
     top: 15%;
     left: 10%;
