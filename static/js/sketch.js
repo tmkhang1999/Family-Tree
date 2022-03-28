@@ -15,7 +15,7 @@ function setup() {
   imageMode(CENTER);
   textAlign(CENTER, CENTER);
   mems.push(new Member(100,200))
-  mems[0].addPhoto("person1.jpeg");
+  mems[0].addPhoto("/static/images/person1.jpeg");
   mems[0].addName("Barbra");
   mems[0].addBirthDate(birthday);
   
@@ -94,7 +94,7 @@ class Member{
     this.h = 250;
     this.r = 10
     this.move = false;
-    this.photo = loadImage("person0.jpeg");
+    this.photo = loadImage("/static/images/person0.jpeg");
   }
   
   addPhoto(path){
