@@ -3,8 +3,12 @@ body {
   padding: 0;
 }
 
+h4 {
+  font-weight: bold;
+}
+
 #home-container{
-  background-color: #4F6456;
+  background-color: #577949;
   display: grid;
   grid-template-columns: 60% 40%;
   grid-template-rows: 88% 12%;
@@ -20,12 +24,12 @@ body {
   border-radius: 50px;
   height: 80%;
   width: 80%;
-  background-color: #000000;
+  background-color: #FCFCF4;
 
   text-align: left;
   padding: 5%;
-  color: #FFFFFF;
-  font-size: 90%;
+  color: #222222;
+  font-size: 95%;
   font-family: 'Montserrat', sans-serif;
 }
 
