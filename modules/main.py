@@ -51,3 +51,11 @@ def delete_tree():
 
     res = make_response(jsonify({"message": "OK"}), 200)
     return res
+
+
+@main.route("/profile/rename", methods=["POST"])
+def rename_tree():
+    req = request.get_json()
+    User.rename_tree(tree_id=req[0], new_name=req[1])
+    res = make_response(jsonify({"message": "OK"}), 200)
+    return res

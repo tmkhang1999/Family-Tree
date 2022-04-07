@@ -55,3 +55,9 @@ class User(UserMixin):
         trees = db['trees']
         users.update(dict(user_id=user_id, tree_ids=json.dumps(tree_ids)), ['user_id'])
         trees.delete(tree_id=tree_id)
+
+    @staticmethod
+    def rename_tree(tree_id, new_name):
+        db = Database().get()
+        trees = db['trees']
+        trees.update(dict(tree_id=tree_id, name=new_name), ['tree_id'])

@@ -7,7 +7,7 @@
 
 .top-bar{
     grid-row: r1;
-    background-color: #000000;
+    background-color: #222222;
     display: grid;
     grid-template-columns: [col1] 10% [col2] auto [col3] 10% [col4] ;
     place-items: center;
@@ -15,7 +15,7 @@
 
 #home-button {
     grid-column: col1 / col2;
-    background-color: #1B690E;
+    background-color: #577949;
     border-radius: 5px;
     text-align: center;
 
@@ -95,13 +95,16 @@
     text-decoration: none;
 }
 
-.trash-img {
-    cursor: pointer;
-    width: 10%;
+.nav-item {
     position: relative;
     display: block;
-    top: 50%;
-    left: 80%;
+    top: 40%;
+    left: 75%;
+}
+
+.nav-img {
+    cursor: pointer;
+    width: 10%;
 }
 
 

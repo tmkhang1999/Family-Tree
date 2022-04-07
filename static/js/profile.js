@@ -1,27 +1,103 @@
 const add_button = document.getElementById("add-box")
-const form = document.getElementById("form");
-const submit = document.getElementById("submit");
+const add_form = document.getElementById("add-form");
+const add_submit = document.getElementById("add-submit");
+const rename_button = document.getElementById("rename-button");
+const delete_button = document.getElementById("delete-button")
+
+function create(key) {
+    let treeID = null;
+    let treeName = "New Box";
+    if (key) {
+        treeID = key[0];
+        treeName = key[1];
+    }
+
+    const name = document.createTextNode(treeName);
+    const nameHolder = document.createElement("a");
+    nameHolder.setAttribute('class', 'tree-name');
+    nameHolder.appendChild(name);
+
+    const nav_img = document.createElement("img");
+    nav_img.setAttribute("class", "nav-img");
+    nav_img.setAttribute("src", "/static/images/three-dots.png");
+
+    const nav_button = document.createElement("a");
+    nav_button.setAttribute("class", "nav-link");
+    nav_button.setAttribute("href", "#");
+    nav_button.setAttribute("id", "navbarDropdown");
+    nav_button.setAttribute("role", "button");
+    nav_button.setAttribute("data-toggle", "dropdown");
+    nav_button.setAttribute("aria-haspopup", "true");
+    nav_button.setAttribute("aria-expanded", "false");
+    nav_button.appendChild(nav_img)
+
+    const rename = document.createTextNode("Rename");
+    const option1 = document.createElement("a");
+    option1.setAttribute("class", "dropdown-item");
+    option1.setAttribute("onclick", `renameConfirm("${treeID}")`)
+    option1.appendChild(rename);
+
+    const line1 = document.createElement("div");
+    line1.setAttribute("class", "dropdown-divider");
+
+    const collab = document.createTextNode("Collaboration");
+    const option2 = document.createElement("a");
+    option2.setAttribute("class", "dropdown-item");
+    option2.appendChild(collab);
+
+    const line2 = document.createElement("div");
+    line2.setAttribute("class", "dropdown-divider");
+
+    const remove = document.createTextNode("Delete this tree");
+    const option3 = document.createElement("a");
+    option3.setAttribute("class", "dropdown-item");
+    option3.setAttribute("onclick", `deleteConfirm("${treeID}")`)
+    option3.appendChild(remove);
+
+    const dropdown_menu = document.createElement("div");
+    dropdown_menu.setAttribute("class", "dropdown-menu dropdown-left-manual");
+    dropdown_menu.setAttribute("aria-labelledby", "navbarDropdown");
+    dropdown_menu.appendChild(option1);
+    dropdown_menu.appendChild(line1);
+    dropdown_menu.appendChild(option2);
+    dropdown_menu.appendChild(line2);
+    dropdown_menu.appendChild(option3);
+
+    const nav_bar = document.createElement("div");
+    nav_bar.setAttribute("class", "nav-item");
+    nav_bar.appendChild(nav_button);
+    nav_bar.appendChild(dropdown_menu);
+
+    const box = document.createElement("div");
+    box.setAttribute('class', 'menu-box');
+    box.setAttribute('id', `${treeID}`);
+
+    box.appendChild(nameHolder);
+    box.appendChild(nav_bar);
+    $(box).insertBefore("#add-box");
+}
 
 add_button.onclick = function () {
     $("#add-modal").modal("show");
 }
 
-submit.onmousemove = function () {
-    if (form.checkValidity() === true) {
-        document.getElementById("submit").setAttribute("data-bs-dismiss", "modal");
+add_submit.onmousemove = function () {
+    if (add_form.checkValidity() === true) {
+        document.getElementById("add-submit").setAttribute("data-bs-dismiss", "modal");
     } else {
-        document.getElementById("submit").removeAttribute("data-bs-dismiss");
+        document.getElementById("add-submit").removeAttribute("data-bs-dismiss");
     }
 }
 
-form.onsubmit = function (event) {
+add_form.onsubmit = function (event) {
     event.preventDefault();
-    const text = Array.from(document.querySelectorAll("#form input")).reduce((acc, input) => ({
+    const text = Array.from(document.querySelectorAll("#add-form input")).reduce((acc, input) => ({
         ...acc,
         [input.id]: input.value
     }), {});
     const id = Math.random().toString(36).substr(2, 9)
     const key = [id, text['message']]
+    console.log(key)
 
     fetch(`${window.origin}/profile/add`, {
         method: "POST",
@@ -46,37 +122,8 @@ form.onsubmit = function (event) {
     });
 }
 
-function create(key) {
-    let treeID = null;
-    let treeName = "New Box";
-    if (key) {
-        treeID = key[0];
-        treeName = key[1];
-    }
-
-    const name = document.createTextNode(treeName);
-    const nameHolder = document.createElement("a");
-    nameHolder.setAttribute('class', 'tree-name');
-    nameHolder.appendChild(name);
-
-    const trash = document.createElement("img");
-    trash.setAttribute("class", "trash-img");
-    trash.setAttribute("src", "/static/images/trash.png");
-    trash.setAttribute("alt", "trash icon");
-    trash.setAttribute("onclick", `deleteConfirm("${treeID}")`);
-
-    const box = document.createElement("div");
-    box.setAttribute('class', 'menu-box');
-    box.setAttribute('id', `${treeID}`);
-
-    box.appendChild(nameHolder);
-    box.appendChild(trash);
-    $(box).insertBefore("#add-box");
-}
-
 function deleteConfirm(element) {
-    const deleteButton = document.getElementById("delete-button")
-    deleteButton.setAttribute("onclick", `deleteTree("${element}")`)
+    delete_button.setAttribute("onclick", `deleteTree("${element}")`)
     $("#delete-modal").modal("show");
 }
 
@@ -103,6 +150,49 @@ function deleteTree(element) {
     }).catch(function (error) {
         console.log("Fetch error:" + error);
     });
+}
 
+function renameConfirm(element) {
+    rename_button.setAttribute("onclick", `renameTree("${element}")`)
+    $("#rename-modal").modal("show");
+}
 
+rename_button.onmousemove = function () {
+    if (add_form.checkValidity() === true) {
+        document.getElementById("rename-button").setAttribute("data-bs-dismiss", "modal");
+    } else {
+        document.getElementById("rename-button").removeAttribute("data-bs-dismiss");
+    }
+}
+
+function renameTree (element) {
+    const text = Array.from(document.querySelectorAll("#rename-form input")).reduce((acc, input) => ({
+        ...acc,
+        [input.id]: input.value
+    }), {});
+    const key = [element, text['message']]
+
+    fetch(`${window.origin}/profile/rename`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(key),
+        cache: "no-cache",
+        headers: new Headers({
+        "content-type": "application/json"
+        })
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.log(`Looks like there was a problem. Status code: ${response.status}`);
+            return;
+        }
+        response.json().then(function (data) {
+            if (data['message'] === "OK") {
+                const box = document.getElementById(element)
+                const name = box.childNodes[0]
+                name.innerHTML = text['message']
+            }
+        });
+    }).catch(function (error) {
+        console.log("Fetch error: " + error);
+    });
 }
