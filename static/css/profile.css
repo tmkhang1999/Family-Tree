@@ -68,14 +68,14 @@
     font-family: 'Roboto', sans-serif;
 }
 
+.menu-box:hover {
+    cursor: pointer;
+    background-color: #7B7272;
+}
+
 #add-box {
     vertical-align: top;
     text-align: center;
-}
-
-#add-box:hover {
-    cursor: pointer;
-    background-color: #7B7272;
 }
 
 #add-button-img {
