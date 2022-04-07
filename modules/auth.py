@@ -71,11 +71,11 @@ def callback():
         return "User email not available or not verified by Google.", 400
 
     # Check if this account is in the database
-    if not User.get(unique_id[:-2]):
-        User.create(unique_id[:-2], users_name, users_email, None)
+    if not User.get(unique_id):
+        User.create(unique_id, users_name, users_email, None)
 
     # Begin user session
-    user = User.get(unique_id[:-2])
+    user = User.get(unique_id)
     login_user(user)
 
     if current_user.is_authenticated:
