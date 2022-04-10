@@ -137,6 +137,8 @@ h3 {
     margin-bottom: 2rem;
 }
 
+/* EDIT TREE STYLING */
+
 .canvas {
     width: 100%;
     height: 100%;
@@ -145,8 +147,10 @@ h3 {
 
 .sidebar {
     width: 30%;
+    height: 100%;
     background-color: #FCFCF4;
     padding: 2rem;
+    margin-top: 5rem;
     position: fixed;
     z-index: 90;
     right:0;
@@ -198,28 +202,33 @@ input {
     background-color: #ECECEC;
 }
 
+#save:focus {
+    color:#577949;
+    background-color: #ECECEC;
+}
+
 #save:active {
     border: 1px solid #333F20;
 }
 
-footer {
-    font-size: 0.889rem;
-    line-height: 1.5rem;
-    text-align: center;
-
-    position:relative;
-    width: 60%;
-    margin:auto;
-    margin-top: 4rem;
-    margin-bottom: 4rem;
-    padding: 1rem;
-    background-color: #2b3f24;
-    color:#FCFCF4;
-    border-radius: 10px;
+.creation {
+    width: 5rem;
+    margin-right: 4rem;
+    display: flex;
+    justify-content: space-between;
 }
 
-footer a {
-    padding: 0;
+.createnew {
+    width: 40px;
+    border: none;
+}
+
+.createnew:hover {
+    border: 1px solid #333F20;
+}
+
+.createnew:focus {
+    border: 1px solid #333F20;
 }
 
 /* MEMBER BOX STYLING */
@@ -288,6 +297,26 @@ footer a {
 .param {
     color:#575757;
     margin-right: .5rem;
+}
+
+footer {
+    font-size: 0.889rem;
+    line-height: 1.5rem;
+    text-align: center;
+
+    position:relative;
+    width: 60%;
+    margin:auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 1rem;
+    background-color: #2b3f24;
+    color:#FCFCF4;
+    border-radius: 10px;
+}
+
+footer a {
+    padding: 0;
 }
 
 abbr {
