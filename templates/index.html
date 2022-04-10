@@ -1,88 +1,50 @@
-{% extends "layout.html" %}
-{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Sapling</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="A tool for creating and displaying flexible family trees.">
+    <link rel="stylesheet" href="styles.css">
 
-<div id="home-container">
-    <div id="info-container">
-        <h4>Welcome to Sapling!</h4>
-        <p>Make highly flexible and customizable family trees and invite your family to collaborate!</p>
-        <br>
-        <h4>What is Sapling?</h4>
-        <p>Sapling is an application for creating family trees that allows you to represent your family in the way you feel is most appropriate. The arrangement of members of your family and their relationships is highly flexible and entirely up to you. With the ability to customize your relationships to have colors and labels of your choice, you won't get stuck in anyone's rigid expectations. Create multiple trees to represent your forest of families and then invite your family to help you nurture them by adding collaborators.</p>
-        <br>
-        <h4>About the Creators</h4>
-        <p>Sapling was created by <em>Joseph Montalvo, Trevor Strickland, Khang Tran, and Maddie Bauso</em> during the Software Engineering course at SUNY Oswego.</p>
-    </div>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap" rel="stylesheet"> 
+</head>
+<body>
+    <header>
+        <div class="leftheader">
+            <h1>Sapling</h1>
+            <a href="index.html" aria-current="page"><span style="border-bottom: 2px solid #333F20;">Home</span></a> | 
+            <a href="help.html">Instructions, Help and FAQ</a> | 
+            <a href="edittree.html">Edit Tree</a> | 
+            <a href="members.html">Member List Example</a>
+        </div>
+    </header>
 
-    <div id="login-container">
-        <a id="welcome-txt">Sign In to Family Tree</a>
-        <a class="login-button" id="facebook-button" role="button">
-          <img alt="facebook icon" class="icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/05/Facebook_Logo_%282019%29.png/1024px-Facebook_Logo_%282019%29.png"/>
-          Sign In via Facebook
-        </a>
-        <a class="login-button" id="github-button" role="button">
-          <img alt="github icon" class="icon" src="https://www.whitesourcesoftware.com/wp-content/media/2021/03/pngegg-300x300.png"/>
-          Sign In via Github
-        </a>
-        <a class="login-button" id="google-button" href="{{ url_for('auth.login') }}" role="button">
-          <img alt="google icon" class="icon" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"/>
-          Sign In via Google
-        </a>
-        <a id="help-button">
-            Instructions, Help and FAQ
-        </a>
-    </div>
-
-    <div class="footer">
-        <p>Sapling ©2022 Joseph Montalvo, Trevor Strickland, Khang Tran, and Maddie Bauso.</p>
-    </div>
-
-    <div class="modal fade" id="help-modal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header text-center">
-                    <h5 class="modal-title w-100">Instructions, Help and FAQ</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-
-                <div class="modal-body">
-                    <h4>Getting Started</h4>
-                    <p>Click the "Create Tree" box in your forest menu and give it a name. From here, you can add members and relations to your tree.</p>
-                    <br>
-
-                    <h4>Editing and Deleting a Tree</h4>
-                    <p>Click on any of the trees in your forest to edit them. If you want to delete a tree, you can do so by [...add del tree desc...], but remember that once it's gone, you can't get it back.</p>
-                    <br>
-
-                    <h4>Creating, editing and deleting Members</h4>
-                    <p>Click the "Create Member" button at the top right of the interface. You have to give your member a name, but everything else can be filled in later. When your member is created, it will appear in your tree. It won't be connected to your other members yet, but you can change that by adding a relation.</p>
-                    <p>Click on your member [...add edit member desc...]</p>
-                    <p>If your member is no longer needed, click [...add del member desc...]. Any relations connected to your member will disappear with the member, so delete carefully.</p>
-                    <p>Note: From your tree page [...where?], you can view a simple, sortable list of your members and edit them from there. Use this when your tree grows large and editing members within the tree feels tedious.</p>
-                    <br>
-
-                    <h4>Creating, editing and deleting Relations</h4>
-                    <p>Click the "Create Relation" button at the top right of the interface. Then click the first member of your relation, followed by the second. When your relation is created, it will appear in your tree as a solid black line, but you can change that later.</p>
-                    <p>Click on your relation and drag it around until it fits in with the rest of your tree and looks how you want it to. Doing this won't shift existing members and relations, so don't let that stop you while you customize. Click on any of your existing relations and a menu of options will appear, including the color, weight, and style (like solid, dashed, etc.). You can also use this menu to add a label to your relation and resolve any ambiguities.</p>
-                    <p>If your relation is no longer needed, click [...add del relation desc...]. The members connected to your relation will go unaffected when you do this, but the line will disappear, along with its labels and customizations.</p>
-                    <br>
-
-                    <h4>Adding and Removing Collaborators</h4>
-                    <p>If you want some help nurturing your tree, add a collaborator(s) by [...add collab desc...]. If you are the creator of a tree, only you have the right to add or remove collaborators or delete the tree. Everything else (creating, editing, and deleting members and relations) is fair game to both you and your collaborators. If you are the collaborator of a tree, it will appear in your forest like any other tree [...except?], but you won't be able to delete it or add or remove other collaborators.</p>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                </div>
+    <main>
+        <div class="login">
+            <div class="loginitem">
+            <h2>Welcome to Sapling!</h2>
+            <p>Make highly flexible and customizable family trees and invite your family to collaborate!</p>
+            </div>
+            <div class="loginitem">
+            <h2>Log-In or Create an Account</h2>
+            <p>[Google log-in API]</p>
             </div>
         </div>
-    </div>
-</div>
+        <div class="wrapper">
+            <div class="content">
+            <h3>What is Sapling?</h3>
+            <p>Sapling is an application for creating family trees that allows you to represent your family in the way you feel is most appropriate. The arrangement of members of your family and their relationships is highly flexible and entirely up to you. With the ability to customize your relationships to have colors and labels of your choice, you won't get stuck in anyone's rigid expectations. Create multiple trees to represent your forest of families and then invite your family to help you nurture them by adding collaborators.</p>
+            <h3>About the Creators</h3>
+            <p>Sapling was created by Joseph Montalvo, Trevor Strickland, Khang Tran, and Maddie Bauso during the Software Engineering course at SUNY Oswego.</p>
+            </div>
+        </div>
+    </main>
 
-<script>
-    const help_button = document.getElementById("help-button")
-    help_button.onclick = function () {
-        $("#help-modal").modal("show");
-    }
-</script>
-
-{% endblock %}
+    <footer>
+        <p>Sapling &copy;2022 Joseph Montalvo, Trevor Strickland, Khang Tran, and Maddie Bauso.</p>
+    </footer>
+</body>
+</html>

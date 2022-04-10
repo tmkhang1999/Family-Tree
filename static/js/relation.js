@@ -1,0 +1,134 @@
+class Relation
+{
+  xOff =  0;
+  yOff = 0;
+  midOff = 0;
+  dw = 25;
+  isMoving = false;
+  selected = false;
+  
+  constructor(mem1, mem2){
+    this.mem1 = mem1;
+    this.mem2 = mem2;
+    this.dotted = false;
+  }
+
+  setOffset(x, y){
+    this.xOff = x;
+    this.yOff = y;
+  }
+
+  setWeight(w)
+  {
+    this.dw = w;
+  }
+
+  draw(canvas){
+    var x1 = this.mem1.x + this.mem1.width / 2;
+    var x2 = this.mem2.x + this.mem2.width / 2;
+    var y1 = this.mem1.y + this.mem1.height / 2;
+    var y2 = this.mem2.y + this.mem2.height / 2;
+    var midX = x1/ 2 + x2 / 2;
+    var midY = y1/ 2 + y2 / 2;
+    var xLen = Math.abs(x1 - x2);
+    var yLen = Math.abs(y1 - y2);
+    
+    if(x1 == x2){
+      if(this.xOff == 0){
+        if(this.selected)
+        {
+          line(canvas,x1, y1,x2, y2, "green", this.dw + BorderOffset * 2);
+        }
+        line(canvas,x1, y1,x2, y2, "black", this.dw);
+      }
+      else if(this.xOff != 0){
+        if(this.selected)
+        {
+          ULine(canvas, x1,y1,x2,y2,this.xOff,0,"green", this.dw + BorderOffset * 2);
+        }
+        ULine(canvas, x1,y1,x2,y2,this.xOff,0,"black", this.dw);
+      }
+    }
+    else if(y1 == y2){
+      if(this.yOff == 0){
+        if(this.selected)
+        {
+          line(canvas, x1, y1,x2, y2, "green", this.dw + BorderOffset * 2);
+        }
+        line(canvas, x1, y1,x2, y2, "black", this.dw);
+      }
+      else if(this.yOff != 0){
+        if(this.selected)
+        {
+          ULine(canvas, x1,y1,x2,y2,0,this.yOff,"green", this.dw + BorderOffset * 2);
+        }
+        ULine(canvas, x1,y1,x2,y2,0,this.yOff,"black", this.dw);
+      }
+    }
+    else if(xLen > yLen){
+      if(this.selected)
+      {
+        stepLine(canvas,x1,y1,x2,y2,midX,0, "green", this.dw + BorderOffset * 2);
+      }
+      stepLine(canvas,x1,y1,x2,y2,midX,0, "black", this.dw);
+    }else{
+      if(this.selected)
+      {
+        stepLine(canvas,x1,y1,x2,y2,0,midY, "green", this.dw + BorderOffset * 2);
+      }
+      stepLine(canvas,x1,y1,x2,y2,0,midY, "black", this.dw);
+    }
+  }
+
+  isHovering(mx, my){
+    
+    var x1 = (this.mem1.x + this.mem1.width / 2 - cameraX) * scale ;
+    var y1 = (this.mem1.y + this.mem1.height / 2 - cameraY) * scale;
+    var x2 = (this.mem2.x + this.mem2.width / 2 - cameraX)* scale;
+    var y2 = (this.mem2.y + this.mem2.height / 2 - cameraY) * scale;
+    var midX = x1 / 2 + x2 / 2;
+    var midY = y1/ 2 + y2 / 2;
+    var xLen = Math.abs(x1 - x2);
+    var yLen = Math.abs(y1 - y2);
+
+    if ( inBounds(mx , x1, x2, this.dw * scale) && inBounds(my, y1, y2, this.dw * scale) ){
+      if(x1 == x2){
+        if(this.xOff != 0){
+          return false;
+        }else{
+          return pointOnLine(mx, my, x1, y1, x2, y2, this.dw * scale);
+        }
+      }
+      else if (y1 == y2){
+        if(this.yOff != 0){
+          return false;
+        }else{
+          return pointOnLine(mx, my, x1, y1, x2, y2, this.dw * scale);
+        }
+      }
+      else if(xLen > yLen){
+        return pointOnLine(mx,my,x1,y1,midX,y1, this.dw * scale) || pointOnLine(mx,my,midX,y1,midX,y2, this.dw * scale) || pointOnLine(mx,my,midX,y2,x2,y2, this.dw * scale);
+      }else if(yLen > xLen){
+        return pointOnLine(mx,my,x1,y1,x1,midY, this.dw * scale) || pointOnLine(mx,my,x1,midY,x2,midY, this.dw * scale) || pointOnLine(mx,my,x2,midY,x2,y2, this.dw * scale);
+      }
+
+    }
+    return false
+  }
+
+  update(mouseX, mouseY,movementX,movementY)
+  {
+      if(this.isMoving)
+      {
+        if(movementX > movementY){
+          this.xOff += movementX
+        }
+        else{
+          this.yOff += movementY
+        }
+        //same as the member move except that we are changing the xOff, yOff, or midOff
+        //based off of how which movement is larger movementX or movementY
+        //what is a better way to handle movements ? mousemove/pressed/released per mem or relation? 
+      }
+  }
+}

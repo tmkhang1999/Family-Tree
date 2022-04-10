@@ -1,0 +1,295 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* modular scale:
+0.79rem
+0.889rem
+1rem
+1.125rem
+*/
+
+html {
+    font-family:"Lato", sans-serif;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    color:#222;
+}
+
+body {
+    background-color:#577949;
+}
+
+a {
+    margin-left: 1rem;
+    margin-right: 1rem;
+    padding: .5rem;
+    text-decoration: none;
+    transition: background .5s;
+}
+
+a:link {
+    color:#333F20;
+}
+
+a:visited {
+    color: #2E1B17;
+}
+
+a:hover {
+    color:#ECECEC;
+    text-decoration: none;
+    background-color: #333F20;
+}
+
+a:focus {
+    text-decoration: none;
+    /* border: 1px solid #333F20; */
+}
+
+a:active {
+    color: #333F20;
+    background-color: #FCFCF4;
+    /* border: 2px solid #333F20; */
+}
+
+header {
+    background-color:#FCFCF4;
+    height: auto;
+	width: 100%;
+	top: 0px;
+	left: 0px;
+	padding: 1rem;
+	border-bottom: 1px solid #c1c1c1;
+    position: fixed;
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.leftheader {
+    display: flex;
+    align-items: center;
+}
+
+h1 {
+    text-align:left;
+    font-size: 1.424rem;
+    padding: .5rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+    /* border-left: 2px solid #333F20;
+    border-right: 2px solid #333F20; */
+}
+
+h2 {
+    color: #333F20;
+    font-size: 1.266rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+}
+
+h3 {
+    color: #333F20;
+    font-size: 1.266rem;
+    line-height: 2rem;
+    margin-bottom: 1rem;
+}
+
+.login {
+    position: relative;
+    width: 60%;
+    margin: auto;
+    margin-top: 8rem;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.loginitem {
+    background-color: #FCFCF4;
+    width: 45%;
+    padding: 2rem;
+    border-radius: 10px;
+}
+
+.wrapper {
+    background-color: #FCFCF4;
+    position: relative;
+    width: 60%;
+    margin: auto;
+    margin-top: 4rem;
+    padding: 4rem;
+    padding-bottom: 2rem;
+    border-radius: 10px;
+}
+
+.content {
+    margin:auto;
+    max-width: 36rem;
+}
+
+.content p {
+    margin-bottom: 2rem;
+}
+
+.canvas {
+    width: 100%;
+    height: 100%;
+    background-color:#c1c1c1;
+}
+
+.sidebar {
+    width: 30%;
+    background-color: #FCFCF4;
+    padding: 2rem;
+    position: fixed;
+    z-index: 90;
+    right:0;
+
+    border-left: 1px solid #c1c1c1;
+}
+
+input {
+    width: 10rem;
+    font-family:"Lato", sans-serif;
+    color:#222;
+
+    margin-left: .75rem;
+    margin-top: .5rem;
+    margin-bottom: .75rem;
+    padding: 5px;
+
+    border: 1px solid #c1c1c1;
+    border-radius: 5px;
+}
+
+#note {
+    font-family:"Lato", sans-serif;
+    width: 20rem;
+    height: 8rem;
+    margin-left: .75rem;
+    margin-top: .5rem;
+    margin-bottom: .75rem;
+    padding:5px;
+    box-sizing: border-box;
+    resize: vertical;
+
+    border: 1px solid #c1c1c1;
+    border-radius: 5px;
+}
+
+#save {
+    color: #ECECEC;
+    font-size: 1rem;
+    margin-top: 2rem;
+    background-color: #577949;
+    border: 1px solid #c1c1c1;
+
+    transition: background .5s;
+}
+
+#save:hover {
+    color:#577949;
+    background-color: #ECECEC;
+}
+
+#save:active {
+    border: 1px solid #333F20;
+}
+
+footer {
+    font-size: 0.889rem;
+    line-height: 1.5rem;
+    text-align: center;
+
+    position:relative;
+    width: 60%;
+    margin:auto;
+    margin-top: 4rem;
+    margin-bottom: 4rem;
+    padding: 1rem;
+    background-color: #2b3f24;
+    color:#FCFCF4;
+    border-radius: 10px;
+}
+
+footer a {
+    padding: 0;
+}
+
+/* MEMBER BOX STYLING */
+.memberpagewrapper {
+    margin-top: 4rem;
+    /* display: flex;
+    justify-content: space-between; */
+}
+
+.members {
+    max-width: 74rem;
+    margin:auto;
+    padding: 2rem;
+}
+
+.sort {
+    background-color: #FCFCF4;
+    height: auto;
+    width: 20rem;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 10px;
+}
+
+#sort {
+    background-color: white;
+    color:#222;
+    font-family:"Lato", sans-serif;
+    width: 8rem;
+    margin-left: 1rem;
+    padding: 5px;
+    border: 1px solid #c1c1c1;
+    border-radius: 5px;
+}
+
+.member {
+    background-color: #FCFCF4;
+    width: 15rem;
+    height: auto;
+    padding: 1rem;
+    margin: 1rem;
+    border: 3px solid #4b5c2f;
+    border-radius: 10px;
+
+    display: inline-block;
+    transition: .5s;
+}
+
+.member:hover {
+    box-shadow: .5rem .5rem 5px #333F20;
+}
+
+.imagePH {
+    width: 100%;
+    height: 12rem;
+    background-color: #577949;
+    text-align: center;
+    color:#ECECEC;
+}
+
+.name {
+    font-size: 1.125rem;
+    line-height: 2rem;
+}
+
+.param {
+    color:#575757;
+    margin-right: .5rem;
+}
+
+abbr {
+    text-decoration: none;
+}
