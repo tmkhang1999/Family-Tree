@@ -1,9 +1,14 @@
+
+//HTML Selections
 const canvas = document.querySelector('canvas');
 const body = document.querySelector('body');
-canvas.height = innerHeight;
-canvas.width = innerWidth;
 
-var form = document.getElementById("editMemberForm");
+const memberForm = document.getElementById("memberForm");
+const newMemberButton = document.getElementById("newMember");
+const newRelationButton = document.getElementById("newRelation");
+const deleteMemberButton = document.getElementById("deleteMember");
+
+var c = canvas.getContext('2d');
 
 //Canvas Related Variabled
 var topLeftX = 0;
@@ -25,14 +30,13 @@ var relationSelected = -1;
 var memberSelected = -1;
 
 //Modes
-var inputMode = 0;
+var placeMemberMode = false;
 
 //Input Variables
 var mouseX = 0;
 var mouseY = 0;
 var newMemberX = 0;
 var newMemberY = 0;
-
 var movementDir = {
     "up" : false,
     "down" : false,
@@ -40,22 +44,10 @@ var movementDir = {
     "right" : false
 }
 
+//Member + Relation Variables
+var newMember = null;
 const members = [];
 const relations = [];
-
-//being able to only select a relation or 
-
-var mem1 = new Member(100, 100);
-var mem2 = new Member(300, 100);
-mem1.setName("John Doe");
-mem2.setName("Ur Mom");
-
-members.push(mem1);
-members.push(mem2);
-
-relations.push(new Relation(members[0],members[1]));
-
-var c = canvas.getContext('2d');
 
 function mousePressed(event)
 {
@@ -66,8 +58,8 @@ function mousePressed(event)
     
         memberSelected = -1;
         relationSelected = -1;
-        form.reset();
-        if(event.button == 0 && inputMode == 0)
+        memberForm.reset();
+        if(event.button == 0 && !placeMemberMode)
         {
             for(i = 0; i < members.length; i++)
             {
@@ -88,11 +80,12 @@ function mousePressed(event)
                 }
             }
         }
-        else if(event.button == 0 && inputMode == 1)
+        else if(event.button == 0 && placeMemberMode && newMember != null)
         {
-
-            members.push(new Member(newMemberX, newMemberY));
-            inputMode = 0;
+            newMember.setPosition(newMemberX,newMemberY);
+            members.push(newMember);
+            newMember = null;
+            placeMemberMode = false;
         }
     }
 }
@@ -131,7 +124,6 @@ function mouseReleased(event)
 //Handler for key pressing events.
 function keyPressed(event)
 {
-    console.log(event);
     if(event.srcElement == body)
     {
         key = event.key;
@@ -139,26 +131,18 @@ function keyPressed(event)
         if(key == 'w')
         {
             movementDir.up = true;
-            moveUp = true;
         }
         if(key == 'a')
         {
             movementDir.left = true;
-            moveLeft = true;
         }
         if(key == 's')
         {
             movementDir.down = true;
-            moveDown = true;
         }
         if(key == 'd')
         {
             movementDir.right = true;
-            moveRight = true;
-        }
-        if(key == 'n')
-        {
-            inputMode = 1;
         }
         if(event.shiftKey)
         {
@@ -175,18 +159,16 @@ function keyReleased(event)
     movementDir.down = !(key == 's') & movementDir.down;
     movementDir.left = !(key == 'a') & movementDir.left;
     movementDir.right = !(key == 'd') & movementDir.right;
-
     gridAligning = true;
 }
 
 function pageScrolled(event)
 {
-
     width = innerWidth / scale;
     height = innerHeight / scale;
 
     scalelevel += event.deltaY * 0.001;
-    scalelevel = Math.min(Math.max(scalelevel, -0.5), 2);
+    scalelevel = Math.min(Math.max(scalelevel, ZOOM_DEPTH.MAXIMUM), ZOOM_DEPTH.MINIMUM);
 
     // console.log(scalelevel);
 
@@ -206,7 +188,7 @@ function updateCamera()
     canvas.height = innerHeight;
 
     //Filling the background with a white quad to avoid overdrawing.
-    c.fillStyle = '#ffffff';
+    c.fillStyle = COLOR_PALETTE.BG;
     c.fillRect(0, 0, innerWidth, innerHeight);
 
     //Camera translation
@@ -261,11 +243,12 @@ function loop()
     }
 
     //Placing a member.
-    if(inputMode == 1)
+    if(placeMemberMode)
     {
         newMemberX = Math.floor((mouseX / scale + cameraX - 33) / gridSize) * gridSize;
         newMemberY = Math.floor((mouseY / scale + cameraY - 50) / gridSize) * gridSize;
-        fillRoundedRect(c, newMemberX, newMemberY, 100, 150, '#c0c0c0', 20);
+        newMember.setPosition(newMemberX, newMemberY);
+        newMember.draw(c);
     }
 
     c.translate(cameraX, cameraY);
@@ -279,9 +262,9 @@ function drawGrid()
         for(x = topLeftX; x <= bottomRightX; x += gridSize)
         for(y = topLeftY; y <= bottomRightY; y += gridSize)
         {
-            c.fillStyle = '#bbbbbb';
+            c.fillStyle = COLOR_PALETTE.GRID_LINES;
             c.fillRect(x, y, gridSize, gridSize);
-            c.fillStyle = '#ffffff';
+            c.fillStyle = COLOR_PALETTE.BG;
             c.fillRect(x + 1, y + 1, gridSize - 1, gridSize - 1);
         }
     }
@@ -295,5 +278,8 @@ addEventListener('keydown', keyPressed);
 addEventListener('keyup', keyReleased);
 addEventListener('wheel', pageScrolled);
 
-form.addEventListener('submit', handleForm);
+memberForm.addEventListener('submit', handleForm);
+newMemberButton.addEventListener('click', handleNewMember);
+deleteMemberButton.addEventListener('click', handleDeleteMember);
+newRelationButton.addEventListener('click', handleNewRelation);
 loop();
