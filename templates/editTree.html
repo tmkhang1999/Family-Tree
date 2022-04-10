@@ -1,28 +1,51 @@
 <!DOCTYPE html>
-<html lang="">
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Tree</title>
- 
-  <script src="../p5.js"></script>
-  <!-- <script src="../addons/p5.sound.js"></script> -->
-  <script src="sketch.js"></script>
-</head>
+    <title>Sapling - Edit Tree</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sapling application instruction page.">
+    <link rel="stylesheet" href="styles.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap" rel="stylesheet"> 
+</head>
 <body>
     <header>
         <div class="leftheader">
-        <h1>Tree #</h1>
-        <p>Welcome, mbauso!</p>
-    </div>
-    
-    <p>[create member icon] [create relation icon]</p>
-
+            <h1>[Tree Name]</h1>
+            <a href="index.html">Home</a> | 
+            <a href="help.html">Instructions, Help and FAQ</a> | 
+            <a href="edittree.html" aria-current="page"><span style="border-bottom: 2px solid #333F20;">Edit Tree</span></a> | 
+            <a href="members.html">Member List Example</a>
+        </div>
+        
+            <form class="creation">
+                <span title="Create New Member"><input type="image" class="createnew" src="newmember.png" alt="New Member"></span>
+                <span title="Create New Relation"><input type="image" class="createnew" src="newrelation.png" alt="New Relation"></span>
+            </form>
+        
     </header>
+
     <main>
+        <div class="sidebar">
+            <h2>Edit Member</h2>
+            <form id = "editMemberForm">
+                <label for="name">First name:</label><br>
+                <input type="text" id="name" name="name" min="1" required><br>
+                <label for="birthDate">Birthdate:</label><br>
+                <input type="date" id="birthDate" name="birthDate"><br>
+                <label for="birthPlace">Birthplace:</label><br>
+                <input type="text" id="birthPlace" name="birthPlace"><br>
+                <label for="note">Note:</label><br>
+                <textarea id="note" name="note" maxlength="500" wrap="soft" placeholder="Put more information about this person here."></textarea><br>
+                <input type="submit" id="save" value="Save">
+            </form>
+        </div>
+        <div class="canvas">
+            <p>The Java canvas goes here.</p>
+        </div>
     </main>
 </body>
-
 </html>
