@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sapling application instruction page.">
     <link rel="stylesheet" href="styles.css">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap" rel="stylesheet"> 
@@ -21,17 +20,24 @@
             <a href="members.html">Member List Example</a>
         </div>
         
-            <form class="creation">
-                <span title="Create New Member"><input type="image" class="createnew" src="newmember.png" alt="New Member"></span>
-                <span title="Create New Relation"><input type="image" class="createnew" src="newrelation.png" alt="New Relation"></span>
-            </form>
+
+        <!-- Changed this from a form to a div because forms cause reload when an input is pressed-->
+        <div class = "creation">
+            <input type="image" class="createnew" id = "newMember" src="newmember.png" alt="New Member">
+            <input type="image" class="createnew" id = "newRelation" src="newrelation.png" alt="New Relation">
+        </div>
         
     </header>
 
     <main>
         <div class="sidebar">
-            <h2>Edit Member</h2>
-            <form id = "editMemberForm">
+            <!-- 
+                -- Changed the names and id's for the form so that they matched the member variables were using in JS
+                -- Moved the header inside the form and gave it an ID of "formHeader"
+                -- Changed the form ID to "memberForm" because I use this form for editing and creating members
+            -->
+            <form id = "memberForm">
+                <h2 id = "formHeader">Edit Member</h2>
                 <label for="name">First name:</label><br>
                 <input type="text" id="name" name="name" min="1" required><br>
                 <label for="birthDate">Birthdate:</label><br>
@@ -41,11 +47,16 @@
                 <label for="note">Note:</label><br>
                 <textarea id="note" name="note" maxlength="500" wrap="soft" placeholder="Put more information about this person here."></textarea><br>
                 <input type="submit" id="save" value="Save">
+                <input type="button" id="deleteMember" value="Delete" style = "display : none;">
             </form>
         </div>
         <div class="canvas">
-            <p>The Java canvas goes here.</p>
+            <canvas></canvas>
         </div>
     </main>
+    <script src="canvasutils.js"></script>
+    <script src="member.js"></script>
+    <script src="relation.js"></script>
+    <script src="canvas.js"></script>
 </body>
 </html>

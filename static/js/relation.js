@@ -3,7 +3,7 @@ class Relation
   xOff =  0;
   yOff = 0;
   midOff = 0;
-  dw = 25;
+  dw = gridSize / 2;
   isMoving = false;
   selected = false;
   
@@ -37,46 +37,46 @@ class Relation
       if(this.xOff == 0){
         if(this.selected)
         {
-          line(canvas,x1, y1,x2, y2, "green", this.dw + BorderOffset * 2);
+          line(canvas,x1, y1,x2, y2, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
         }
-        line(canvas,x1, y1,x2, y2, "black", this.dw);
+        line(canvas,x1, y1,x2, y2, COLOR_PALETTE.RELATION, this.dw);
       }
       else if(this.xOff != 0){
         if(this.selected)
         {
-          ULine(canvas, x1,y1,x2,y2,this.xOff,0,"green", this.dw + BorderOffset * 2);
+          ULine(canvas, x1,y1,x2,y2,this.xOff,0,COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
         }
-        ULine(canvas, x1,y1,x2,y2,this.xOff,0,"black", this.dw);
+        ULine(canvas, x1,y1,x2,y2,this.xOff,0,COLOR_PALETTE.RELATION, this.dw);
       }
     }
     else if(y1 == y2){
       if(this.yOff == 0){
         if(this.selected)
         {
-          line(canvas, x1, y1,x2, y2, "green", this.dw + BorderOffset * 2);
+          line(canvas, x1, y1,x2, y2, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
         }
-        line(canvas, x1, y1,x2, y2, "black", this.dw);
+        line(canvas, x1, y1,x2, y2, COLOR_PALETTE.RELATION, this.dw);
       }
       else if(this.yOff != 0){
         if(this.selected)
         {
-          ULine(canvas, x1,y1,x2,y2,0,this.yOff,"green", this.dw + BorderOffset * 2);
+          ULine(canvas, x1,y1,x2,y2,0,this.yOff,COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
         }
-        ULine(canvas, x1,y1,x2,y2,0,this.yOff,"black", this.dw);
+        ULine(canvas, x1,y1,x2,y2,0,this.yOff,COLOR_PALETTE.RELATION, this.dw);
       }
     }
     else if(xLen > yLen){
       if(this.selected)
       {
-        stepLine(canvas,x1,y1,x2,y2,midX,0, "green", this.dw + BorderOffset * 2);
+        stepLine(canvas,x1,y1,x2,y2,midX,0, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
       }
-      stepLine(canvas,x1,y1,x2,y2,midX,0, "black", this.dw);
+      stepLine(canvas,x1,y1,x2,y2,midX,0, COLOR_PALETTE.RELATION, this.dw);
     }else{
       if(this.selected)
       {
-        stepLine(canvas,x1,y1,x2,y2,0,midY, "green", this.dw + BorderOffset * 2);
+        stepLine(canvas,x1,y1,x2,y2,0,midY, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
       }
-      stepLine(canvas,x1,y1,x2,y2,0,midY, "black", this.dw);
+      stepLine(canvas,x1,y1,x2,y2,0,midY, COLOR_PALETTE.RELATION, this.dw);
     }
   }
 
