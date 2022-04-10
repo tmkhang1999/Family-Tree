@@ -1,34 +1,36 @@
 #profile-container{
   display: grid;
-  grid-template-rows: [r1] 7vh [r2] auto [r3];
+  grid-template-rows: 7vh auto;
   height: 100vh;
   width: 100vw;
 }
 
 .top-bar{
-    grid-row: r1;
+    grid-row: 1/2;
     background-color: #222222;
     display: grid;
-    grid-template-columns: [col1] 10% [col2] auto [col3] 10% [col4] ;
+    grid-template-columns: 10vw 10vw auto 10vw 10vw;
     place-items: center;
 }
 
-#home-button {
-    grid-column: col1 / col2;
-    background-color: #577949;
+.profile-button {
     border-radius: 5px;
     text-align: center;
-
     padding: 5px 15px;
-    color: #FFFFFF;
     font-size: 15px;
     font-weight: 100;
     text-decoration: none;
     font-family: 'Roboto', sans-serif;
+    color: #FFFFFF;
+}
+
+#home-button {
+    grid-column: 1/2;
+    background-color: #1B690E;
 }
 
 #hello-txt {
-    grid-column: col2 / col3;
+    grid-column: 3/4;
     color: #FFFFFF;
     font-size: 25px;
     font-weight: 600;
@@ -36,22 +38,23 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-#logout-button{
-    grid-column: col3 / col4;
-    background-color: #444857;
-    border-radius: 5px;
-    text-align: center;
+#help-button {
+    grid-column: 4/5;
+    background-color: #577949;
+    justify-self: right;
+}
 
-    padding: 5px 15px;
-    color: #FFFFFF;
-    font-size: 15px;
-    font-weight: 100;
-    text-decoration: none;
-    font-family: 'Roboto', sans-serif;
+#help-button:hover {
+  cursor: pointer;
+}
+
+#logout-button{
+    grid-column: 5/6;
+    background-color: #444857;
 }
 
 #tree-menu {
-    grid-row: r2;
+    grid-row: 2/3;
     background-color: #444444;
 }
 

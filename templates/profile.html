@@ -3,13 +3,10 @@
 
 <div id="profile-container">
     <div class="top-bar">
-        <a id="home-button" href="{{ url_for('main.profile') }}">
-            Home
-        </a>
+        <a class="profile-button" id="home-button" href="{{ url_for('main.profile') }}">Home</a>
         <a id="hello-txt">Welcome to Family Tree, {{ name }}!</a>
-        <a id="logout-button" href="{{ url_for('auth.logout') }}">
-            Sign Out
-        </a>
+        <a class="profile-button" id="help-button">Instructions</a>
+        <a class="profile-button" id="logout-button" href="{{ url_for('auth.logout') }}">Sign Out</a>
     </div>
 
     <div id="tree-menu">
@@ -80,6 +77,8 @@
             </div>
         </div>
     </div>
+
+    {% include "help.html" %}
 </div>
 
 <script>
@@ -92,6 +91,11 @@
         } catch (e) {
             console.error(e);
         }
+    }
+
+    const help_button = document.getElementById("help-button")
+    help_button.onclick = function () {
+        $("#help-modal").modal("show");
     }
 </script>
 
