@@ -24,7 +24,7 @@ class Member
     {
         this.x = x;
         this.y = y;
-        this.image.src = "person0.jpeg";
+        this.image.src = "/static/images/person0.jpeg";
     }
 
     setSex(sex)

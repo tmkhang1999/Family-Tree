@@ -15,21 +15,22 @@ function create(key) {
     const name = document.createTextNode(treeName);
     const nameHolder = document.createElement("a");
     nameHolder.setAttribute('class', 'tree-name');
+    nameHolder.setAttribute("onclick", `redirect("${treeName}")`)
     nameHolder.appendChild(name);
 
     const nav_img = document.createElement("img");
     nav_img.setAttribute("class", "nav-img");
     nav_img.setAttribute("src", "/static/images/three-dots.png");
 
-    const nav_button = document.createElement("a");
-    nav_button.setAttribute("class", "nav-link");
-    nav_button.setAttribute("href", "#");
-    nav_button.setAttribute("id", "navbarDropdown");
-    nav_button.setAttribute("role", "button");
-    nav_button.setAttribute("data-toggle", "dropdown");
-    nav_button.setAttribute("aria-haspopup", "true");
-    nav_button.setAttribute("aria-expanded", "false");
-    nav_button.appendChild(nav_img)
+    const nav_link = document.createElement("a");
+    nav_link.setAttribute("class", "nav-link");
+    nav_link.setAttribute("href", "#");
+    nav_link.setAttribute("id", "navbarDropdown");
+    nav_link.setAttribute("role", "button");
+    nav_link.setAttribute("data-toggle", "dropdown");
+    nav_link.setAttribute("aria-haspopup", "true");
+    nav_link.setAttribute("aria-expanded", "false");
+    nav_link.appendChild(nav_img)
 
     const rename = document.createTextNode("Rename");
     const option1 = document.createElement("a");
@@ -63,18 +64,23 @@ function create(key) {
     dropdown_menu.appendChild(line2);
     dropdown_menu.appendChild(option3);
 
-    const nav_bar = document.createElement("div");
-    nav_bar.setAttribute("class", "nav-item");
-    nav_bar.appendChild(nav_button);
-    nav_bar.appendChild(dropdown_menu);
+    const nav_item = document.createElement("div");
+    nav_item.setAttribute("class", "nav-item");
+    nav_item.appendChild(nav_link);
+    nav_item.appendChild(dropdown_menu);
 
     const box = document.createElement("div");
     box.setAttribute('class', 'menu-box');
     box.setAttribute('id', `${treeID}`);
-
     box.appendChild(nameHolder);
-    box.appendChild(nav_bar);
+    box.appendChild(nav_item);
+
     $(box).insertBefore("#add-box");
+}
+
+function redirect(name){
+    const location = `${window.location.protocol}//${window.location.host}/`;
+    window.location.href = location + `editTree/${name}`;
 }
 
 add_button.onclick = function () {

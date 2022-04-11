@@ -51,7 +51,7 @@ const relations = [];
 
 function mousePressed(event)
 {
-    if(event.toElement == canvas)
+    if(event.toElement === canvas)
     {
         x = event.clientX;
         y = event.clientY;
@@ -59,7 +59,7 @@ function mousePressed(event)
         memberSelected = -1;
         relationSelected = -1;
         memberForm.reset();
-        if(event.button == 0 && !placeMemberMode)
+        if(event.button === 0 && !placeMemberMode)
         {
             for(i = 0; i < members.length; i++)
             {
@@ -80,7 +80,7 @@ function mousePressed(event)
                 }
             }
         }
-        else if(event.button == 0 && placeMemberMode && newMember != null)
+        else if(event.button === 0 && placeMemberMode && newMember != null)
         {
             newMember.setPosition(newMemberX,newMemberY);
             members.push(newMember);
@@ -92,12 +92,12 @@ function mousePressed(event)
 
 function mouseMoved(event)
 {
-    if(event.toElement == canvas)
+    if(event.toElement === canvas)
     {
         mouseX = event.clientX;
         mouseY = event.clientY;
 
-        if(relationSelected != -1){
+        if(relationSelected !== -1){
             relations[relationSelected].update(event.clientX,event.clientY, event.movementX, event.movementY);
         }
     }
@@ -105,15 +105,15 @@ function mouseMoved(event)
 
 function mouseReleased(event)
 {
-    if(event.toElement == canvas)
+    if(event.toElement === canvas)
     {
-        if(event.button == 0)
+        if(event.button === 0)
         {
-            for(i = 0; i < members.length; i++)
+            for(let i = 0; i < members.length; i++)
             {
                 members[i].isMoving = false;
             }
-            for(i = 0; i < relations.length; i++)
+            for(let i = 0; i < relations.length; i++)
             {
                 relations[i].isMoving = false;
             }
@@ -124,23 +124,23 @@ function mouseReleased(event)
 //Handler for key pressing events.
 function keyPressed(event)
 {
-    if(event.srcElement == body)
+    if(event.srcElement === body)
     {
         key = event.key;
 
-        if(key == 'w')
+        if(key === 'w')
         {
             movementDir.up = true;
         }
-        if(key == 'a')
+        if(key === 'a')
         {
             movementDir.left = true;
         }
-        if(key == 's')
+        if(key === 's')
         {
             movementDir.down = true;
         }
-        if(key == 'd')
+        if(key === 'd')
         {
             movementDir.right = true;
         }
@@ -155,17 +155,17 @@ function keyPressed(event)
 function keyReleased(event)
 {
     key = event.key;
-    movementDir.up = !(key == 'w') & movementDir.up;
-    movementDir.down = !(key == 's') & movementDir.down;
-    movementDir.left = !(key == 'a') & movementDir.left;
-    movementDir.right = !(key == 'd') & movementDir.right;
+    movementDir.up = !(key === 'w') && movementDir.up;
+    movementDir.down = !(key === 's') && movementDir.down;
+    movementDir.left = !(key === 'a') && movementDir.left;
+    movementDir.right = !(key === 'd') && movementDir.right;
     gridAligning = true;
 }
 
 function pageScrolled(event)
 {
-    width = innerWidth / scale;
-    height = innerHeight / scale;
+    let width = innerWidth / scale;
+    let height = innerHeight / scale;
 
     scalelevel += event.deltaY * 0.001;
     scalelevel = Math.min(Math.max(scalelevel, ZOOM_DEPTH.MAXIMUM), ZOOM_DEPTH.MINIMUM);
@@ -231,13 +231,13 @@ function loop()
     //Drawing and each relation.
     for(i = 0; i < relations.length; i++)
     {
-        relations[i].selected = (i == relationSelected);
+        relations[i].selected = (i === relationSelected);
         relations[i].draw(c);
     }
     //Drawing and updating each member.
     for(i = 0; i < members.length; i++)
     {
-        members[i].selected = (i == memberSelected);
+        members[i].selected = (i === memberSelected);
         members[i].draw(c);
         members[i].update();
     }

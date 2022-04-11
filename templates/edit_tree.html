@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Sapling - Edit Tree</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sapling application instruction page.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/edit.css')}}" type="text/css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/modal.css')}}" type="text/css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="edit-container">
+        <div class="header">
+            <div class="left-header">
+                <h1 id="name-tree-edit">[{{ name_tree }}]</h1>
+                <a class="top-button" href="{{ url_for('main.profile') }}">Home</a> |
+                <a class="top-button" href="#" id="help-button">Instructions, Help and FAQ</a> |
+                <a class="top-button" href="{{ url_for('edit.members', name=name_tree) }}">Member List Example</a>
+            </div>
+
+            <!-- Changed this from a form to a div because forms cause reload when an input is pressed-->
+            <div class="creation">
+                <input type="image" class="createnew" id="newMember" src="/static/images/newmember.png" alt="New Member">
+                <input type="image" class="createnew" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
+            </div>
+        </div>
+
+        <div class="sidebar">
+            <!--
+                -- Changed the names and id's for the form so that they matched the member variables were using in JS
+                -- Moved the header inside the form and gave it an ID of "formHeader"
+                -- Changed the form ID to "memberForm" because I use this form for editing and creating members
+            -->
+            <form id = "memberForm">
+                <h2 id = "formHeader">Edit Member</h2>
+                <label for="name">First name:</label><br>
+                <input type="text" id="name" name="name" min="1" required><br>
+                <label for="birthDate">Birthdate:</label><br>
+                <input type="date" id="birthDate" name="birthDate"><br>
+                <label for="birthPlace">Birthplace:</label><br>
+                <input type="text" id="birthPlace" name="birthPlace"><br>
+                <label for="note">Note:</label><br>
+                <textarea id="note" name="note" maxlength="500" wrap="soft" placeholder="Put more information about this person here."></textarea><br>
+                <input type="submit" id="save" value="Save">
+                <input type="button" id="deleteMember" value="Delete" style = "display : none;">
+            </form>
+        </div>
+
+        <div id="content" class="canvas">
+            <canvas></canvas>
+        </div>
+    </div>
+
+    {% include "help.html" %}
+
+    <script rel="stylesheet" src="{{url_for('static', filename='js/canvasutils.js')}}" type="text/javascript"></script>
+    <script rel="stylesheet" src="{{url_for('static', filename='js/member.js')}}" type="text/javascript"></script>
+    <script rel="stylesheet" src="{{url_for('static', filename='js/relation.js')}}" type="text/javascript"></script>
+    <script rel="stylesheet" src="{{url_for('static', filename='js/canvas.js')}}" type="text/javascript"></script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+    <script>
+        const help_button = document.getElementById("help-button")
+        help_button.onclick = function () {
+            $("#help-modal").modal("show");
+        }
+    </script>
+</body>
+
+</html>

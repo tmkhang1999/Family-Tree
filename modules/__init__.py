@@ -17,6 +17,7 @@ def create_app():
         from .user import User
         from .auth import auth as auth_blueprint
         from .main import main as main_blueprint
+        from .edit import edit as edit_blueprint
 
         # Database setup
         Database().setup()
@@ -28,5 +29,6 @@ def create_app():
         # Add Blueprints
         app.register_blueprint(auth_blueprint)
         app.register_blueprint(main_blueprint)
+        app.register_blueprint(edit_blueprint)
 
     return app

@@ -5,83 +5,83 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="A list of every member in your tree.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/edit.css')}}" type="text/css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:ital@0;1&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <header>
-        <div class="leftheader">
-            <h1>[tree] - Members</h1>
-            <a href="index.html">Home</a> | 
-            <a href="/">Back to your tree</a> | 
-            <a href="help.html">Instructions, Help and FAQ</a>
-        </div>
-    </header>
-
-    <main><div class="memberpagewrapper">
-    <div class="members">
-        <form class="sort">
-            <label for="sort">Sort by: </label>
-            <select id="sort" name="country">
-            <option value="fname">First Name</option>
-            <option value="lname">Last Name</option>
-            <option value="bdate">Age</option>
-            <option value="bplace">Birthplace</option>
-        </select></form>
-        <div class="member">
-            <div class="imagePH">image here</div>
-            <p class="name">Member Name</p>
-            <p><span class="param">Born:</span> March 3, 1964</p>
-            <p><span class="param">Sex:</span> Female</p>
-            <p><span class="param">Notes:</span> Loves the color blue.</p>
-        </div>
-
-        <div class="member">
-            <div class="imagePH">image here</div>
-            <p class="name">Member Name</p>
-            <p><span class="param">Born:</span> March 3, 1964</p>
-            <p><span class="param">Sex:</span> Female</p>
-            <p><span class="param">Notes:</span> Loves the color blue.</p>
-        </div>
-
-        <div class="member">
-            <div class="imagePH">image here</div>
-            <p class="name">Member Name</p>
-            <p><span class="param">Born:</span> March 3, 1964</p>
-            <p><span class="param">Sex:</span> Female</p>
-            <p><span class="param">Notes:</span> Loves the color blue.</p>
-        </div>
-
-        <div class="member">
-            <div class="imagePH">image here</div>
-            <p class="name">Member Name</p>
-            <p><span class="param">Born:</span> March 3, 1964</p>
-            <p><span class="param">Sex:</span> Female</p>
-            <p><span class="param">Notes:</span> Loves the color blue.</p>
-        </div>
-
-        <div class="member">
-            <div class="imagePH">image here</div>
-            <p class="name">Member Name</p>
-            <p><span class="param">Born:</span> March 3, 1964</p>
-            <p><span class="param">Sex:</span> Female</p>
-            <p><span class="param">Notes:</span> Loves the color blue.</p>
-        </div>
-
-        <div class="member">
-            <div class="imagePH">image here</div>
-            <p class="name">Member Name</p>
-            <p><span class="param">Born:</span> March 3, 1964</p>
-            <p><span class="param">Sex:</span> Female</p>
-            <p><span class="param">Notes:</span> Loves the color blue.</p>
+    <div class="member-header">
+        <div class="left-header">
+            <h1 id="name-tree-edit">[{{ name_tree }}] - Members</h1>
+            <a class="top-button" href="{{ url_for('main.profile') }}">Home</a> |
+            <a class="top-button" href="{{ url_for('edit.edit_tree', name=name_tree) }}">Back to your tree</a> |
+            <a class="top-button" href="#">Instructions, Help and FAQ</a>
         </div>
     </div>
-    <div class="sidebar">
-        <p>Sidebar</p>
-    </div>
-    </div></main>
+
+    <main>
+        <div class="memberpagewrapper">
+            <div class="members">
+                <form class="sort">
+                    <label for="sort">Sort by: </label>
+                    <select id="sort" name="country">
+                    <option value="fname">First Name</option>
+                    <option value="lname">Last Name</option>
+                    <option value="bdate">Age</option>
+                    <option value="bplace">Birthplace</option>
+                </select></form>
+                <div class="member">
+                    <div class="imagePH">image here</div>
+                    <p class="name">Member Name</p>
+                    <p><span class="param">Born:</span> March 3, 1964</p>
+                    <p><span class="param">Sex:</span> Female</p>
+                    <p><span class="param">Notes:</span> Loves the color blue.</p>
+                </div>
+
+                <div class="member">
+                    <div class="imagePH">image here</div>
+                    <p class="name">Member Name</p>
+                    <p><span class="param">Born:</span> March 3, 1964</p>
+                    <p><span class="param">Sex:</span> Female</p>
+                    <p><span class="param">Notes:</span> Loves the color blue.</p>
+                </div>
+
+                <div class="member">
+                    <div class="imagePH">image here</div>
+                    <p class="name">Member Name</p>
+                    <p><span class="param">Born:</span> March 3, 1964</p>
+                    <p><span class="param">Sex:</span> Female</p>
+                    <p><span class="param">Notes:</span> Loves the color blue.</p>
+                </div>
+
+                <div class="member">
+                    <div class="imagePH">image here</div>
+                    <p class="name">Member Name</p>
+                    <p><span class="param">Born:</span> March 3, 1964</p>
+                    <p><span class="param">Sex:</span> Female</p>
+                    <p><span class="param">Notes:</span> Loves the color blue.</p>
+                </div>
+
+                <div class="member">
+                    <div class="imagePH">image here</div>
+                    <p class="name">Member Name</p>
+                    <p><span class="param">Born:</span> March 3, 1964</p>
+                    <p><span class="param">Sex:</span> Female</p>
+                    <p><span class="param">Notes:</span> Loves the color blue.</p>
+                </div>
+
+                <div class="member">
+                    <div class="imagePH">image here</div>
+                    <p class="name">Member Name</p>
+                    <p><span class="param">Born:</span> March 3, 1964</p>
+                    <p><span class="param">Sex:</span> Female</p>
+                    <p><span class="param">Notes:</span> Loves the color blue.</p>
+                </div>
+            </div>
+        </div>
+    </main>
 </body>
+
 </html>
