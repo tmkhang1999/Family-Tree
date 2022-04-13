@@ -2,14 +2,13 @@ class Relation
 {
   xOff =  0;
   yOff = 0;
-  midOff = 0;
   dw = gridSize / 2;
   isMoving = false;
   selected = false;
   
-  constructor(mem1, mem2){
-    this.mem1 = mem1;
-    this.mem2 = mem2;
+  constructor(mem1Index, mem2Index){
+    this.mem1 = mem1Index;
+    this.mem2 = mem2Index;
     this.dotted = false;
   }
 
@@ -24,10 +23,10 @@ class Relation
   }
 
   draw(canvas){
-    var x1 = this.mem1.x + this.mem1.width / 2;
-    var x2 = this.mem2.x + this.mem2.width / 2;
-    var y1 = this.mem1.y + this.mem1.height / 2;
-    var y2 = this.mem2.y + this.mem2.height / 2;
+    var x1 = members[this.mem1].x + Member.width / 2;
+    var x2 = members[this.mem2].x + Member.width / 2;
+    var y1 = members[this.mem1].y + Member.height / 2;
+    var y2 = members[this.mem2].y + Member.height / 2;
     var midX = x1/ 2 + x2 / 2;
     var midY = y1/ 2 + y2 / 2;
     var xLen = Math.abs(x1 - x2);
@@ -37,30 +36,30 @@ class Relation
       if(this.xOff == 0){
         if(this.selected)
         {
-          line(canvas,x1, y1,x2, y2, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
+          line(canvas,x1, y1,x2, y2, COLOR_PALETTE.SELECTED, this.dw + BorderSize * 2);
         }
         line(canvas,x1, y1,x2, y2, COLOR_PALETTE.RELATION, this.dw);
       }
       else if(this.xOff != 0){
         if(this.selected)
         {
-          ULine(canvas, x1,y1,x2,y2,this.xOff,0,COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
+          ULine(canvas, x1,y1,x2,y2,this.xOff,0,COLOR_PALETTE.SELECTED, this.dw + BorderSize * 2);
         }
         ULine(canvas, x1,y1,x2,y2,this.xOff,0,COLOR_PALETTE.RELATION, this.dw);
       }
     }
     else if(y1 == y2){
-      if(this.yOff == 0){
+      if(this.yOff === 0){
         if(this.selected)
         {
-          line(canvas, x1, y1,x2, y2, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
+          line(canvas, x1, y1,x2, y2, COLOR_PALETTE.SELECTED, this.dw + BorderSize * 2);
         }
         line(canvas, x1, y1,x2, y2, COLOR_PALETTE.RELATION, this.dw);
       }
       else if(this.yOff != 0){
         if(this.selected)
         {
-          ULine(canvas, x1,y1,x2,y2,0,this.yOff,COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
+          ULine(canvas, x1,y1,x2,y2,0,this.yOff,COLOR_PALETTE.SELECTED, this.dw + BorderSize * 2);
         }
         ULine(canvas, x1,y1,x2,y2,0,this.yOff,COLOR_PALETTE.RELATION, this.dw);
       }
@@ -68,13 +67,13 @@ class Relation
     else if(xLen > yLen){
       if(this.selected)
       {
-        stepLine(canvas,x1,y1,x2,y2,midX,0, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
+        stepLine(canvas,x1,y1,x2,y2,midX,0, COLOR_PALETTE.SELECTED, this.dw + BorderSize * 2);
       }
       stepLine(canvas,x1,y1,x2,y2,midX,0, COLOR_PALETTE.RELATION, this.dw);
     }else{
       if(this.selected)
       {
-        stepLine(canvas,x1,y1,x2,y2,0,midY, COLOR_PALETTE.SELECTED, this.dw + BorderOffset * 2);
+        stepLine(canvas,x1,y1,x2,y2,0,midY, COLOR_PALETTE.SELECTED, this.dw + BorderSize * 2);
       }
       stepLine(canvas,x1,y1,x2,y2,0,midY, COLOR_PALETTE.RELATION, this.dw);
     }
@@ -82,10 +81,10 @@ class Relation
 
   isHovering(mx, my){
     
-    var x1 = (this.mem1.x + this.mem1.width / 2 - cameraX) * scale ;
-    var y1 = (this.mem1.y + this.mem1.height / 2 - cameraY) * scale;
-    var x2 = (this.mem2.x + this.mem2.width / 2 - cameraX)* scale;
-    var y2 = (this.mem2.y + this.mem2.height / 2 - cameraY) * scale;
+    var x1 = (members[this.mem1].x + Member.width / 2 - cameraX) * scale ;
+    var y1 = (members[this.mem1].y + Member.height / 2 - cameraY) * scale;
+    var x2 = (members[this.mem2].x + Member.width / 2 - cameraX)* scale;
+    var y2 = (members[this.mem2].y + Member.height / 2 - cameraY) * scale;
     var midX = x1 / 2 + x2 / 2;
     var midY = y1/ 2 + y2 / 2;
     var xLen = Math.abs(x1 - x2);
