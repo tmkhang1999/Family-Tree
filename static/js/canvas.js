@@ -8,60 +8,55 @@ const newMemberButton = document.getElementById("newMember");
 const newRelationButton = document.getElementById("newRelation");
 const deleteMemberButton = document.getElementById("deleteMember");
 
-var c = canvas.getContext('2d');
+const c = canvas.getContext('2d');
 
-//Canvas Related Variabled
-var topLeftX = 0;
-var topLeftY = 0;
-var bottomRightX = 0;
-var bottomRightY = 0;
-var gridAligning = true;
-var gridSize = 50;
-var BorderOffset = 5; 
-
-//Camera Related Variabled
-var cameraX = 0;
-var cameraY = 0;
-var scale = 1;
-var scalelevel = 0;
+//Camera Related Variables
+let cameraX = 0;
+let cameraY = 0;
+let scale = 1;
+let scalelevel = 0;
 
 //Selection Variables
-var relationSelected = -1;
-var memberSelected = -1;
+let relationSelected = -1;
+let memberSelected = -1;
 
 //Modes
-var placeMemberMode = false;
+let placeMemberMode = false;
 
 //Input Variables
-var mouseX = 0;
-var mouseY = 0;
-var newMemberX = 0;
-var newMemberY = 0;
-var movementDir = {
-    "up" : false,
-    "down" : false,
-    "left" : false,
-    "right" : false
-}
+let mouseX = 0;
+let mouseY = 0;
+let newMemberX = 0;
+let newMemberY = 0;
+const movementDir = {
+    "up": false,
+    "down": false,
+    "left": false,
+    "right": false
+};
 
 //Member + Relation Variables
-var newMember = null;
-const members = [];
-const relations = [];
+let newMember = null;
+let members = [];
+let relations = [];
+
+
+//Call the LoadTree function here!!!
+//loadTree(jsonFile);
 
 function mousePressed(event)
 {
-    if(event.toElement === canvas)
+    if(event.target === canvas)
     {
-        x = event.clientX;
-        y = event.clientY;
+        let x = event.clientX;
+        let y = event.clientY;
     
         memberSelected = -1;
         relationSelected = -1;
         memberForm.reset();
         if(event.button === 0 && !placeMemberMode)
         {
-            for(i = 0; i < members.length; i++)
+            for(let i = 0; i < members.length; i++)
             {
                 if(members[i].isHovering(x, y))
                 {
@@ -71,7 +66,7 @@ function mousePressed(event)
                 }
             }
     
-            for(i = 0; i < relations.length; i++)
+            for(let i = 0; i < relations.length; i++)
             {
                 if(relations[i].isHovering(x, y))
                 {
@@ -92,7 +87,7 @@ function mousePressed(event)
 
 function mouseMoved(event)
 {
-    if(event.toElement === canvas)
+    if(event.target === canvas)
     {
         mouseX = event.clientX;
         mouseY = event.clientY;
@@ -105,7 +100,7 @@ function mouseMoved(event)
 
 function mouseReleased(event)
 {
-    if(event.toElement === canvas)
+    if(event.target === canvas)
     {
         if(event.button === 0)
         {
@@ -124,9 +119,9 @@ function mouseReleased(event)
 //Handler for key pressing events.
 function keyPressed(event)
 {
-    if(event.srcElement === body)
+    if(event.target === body)
     {
-        key = event.key;
+        let key = event.key;
 
         if(key === 'w')
         {
@@ -154,7 +149,7 @@ function keyPressed(event)
 //Handler for key releasing events.
 function keyReleased(event)
 {
-    key = event.key;
+    let key = event.key;
     movementDir.up = !(key === 'w') && movementDir.up;
     movementDir.down = !(key === 's') && movementDir.down;
     movementDir.left = !(key === 'a') && movementDir.left;
@@ -229,13 +224,13 @@ function loop()
     drawGrid();
 
     //Drawing and each relation.
-    for(i = 0; i < relations.length; i++)
+    for(let i = 0; i < relations.length; i++)
     {
         relations[i].selected = (i === relationSelected);
         relations[i].draw(c);
     }
     //Drawing and updating each member.
-    for(i = 0; i < members.length; i++)
+    for(let i = 0; i < members.length; i++)
     {
         members[i].selected = (i === memberSelected);
         members[i].draw(c);
@@ -255,12 +250,13 @@ function loop()
     c.scale(1 / scale, 1 / scale);
 }
 
+//move to canvas utils?
 function drawGrid()
 {
     if(scalelevel < 1.5 && gridAligning)
     {
-        for(x = topLeftX; x <= bottomRightX; x += gridSize)
-        for(y = topLeftY; y <= bottomRightY; y += gridSize)
+        for(let x = topLeftX; x <= bottomRightX; x += gridSize)
+        for(let y = topLeftY; y <= bottomRightY; y += gridSize)
         {
             c.fillStyle = COLOR_PALETTE.GRID_LINES;
             c.fillRect(x, y, gridSize, gridSize);
