@@ -42,17 +42,24 @@
             -->
             <form id = "memberForm">
                 <h2 id = "formHeader">Edit Member</h2>
-                <label for="name">First name:</label><br>
+                <label for="image">Image:</label><br>
+                <input type="file" id="image" name="image" accept="image/png, image/jpeg"><br>
+                <label for="name">Name:</label><br>
                 <input type="text" id="name" name="name" min="1" required><br>
+                <label for="sex">Sex:</label><br>
+                <input type="text" id="sex" name="sex"><br>
                 <label for="birthDate">Birthdate:</label><br>
                 <input type="date" id="birthDate" name="birthDate"><br>
                 <label for="birthPlace">Birthplace:</label><br>
                 <input type="text" id="birthPlace" name="birthPlace"><br>
+                <label for="deathDate">Death Date:</label><br>
+                <input type="date" id="deathDate" name="deathDate"><br>
                 <label for="note">Note:</label><br>
                 <textarea id="note" name="note" maxlength="500" wrap="soft" placeholder="Put more information about this person here."></textarea><br>
                 <input type="submit" id="save" value="Save">
                 <input type="button" id="deleteMember" value="Delete" style = "display : none;">
             </form>
+
         </div>
 
         <div id="content" class="canvas">
