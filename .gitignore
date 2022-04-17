@@ -11,3 +11,4 @@ __pycache__/
 **/sqlite_db
 **/sqlite_db-shm
 **/sqlite_db-wal
+.DS_Store
