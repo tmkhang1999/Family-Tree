@@ -21,10 +21,11 @@
     <div class="edit-container">
         <div class="header">
             <div class="left-header">
-                <h1 id="name-tree-edit">[{{ name_tree }}]</h1>
+                <h1 id="name-tree-edit">[{{ tree_name }}]</h1>
                 <a class="top-button" href="{{ url_for('main.profile') }}">Home</a> |
                 <a class="top-button" href="#" id="help-button">Instructions, Help and FAQ</a> |
-                <a class="top-button" href="{{ url_for('edit.members', name=name_tree) }}">Member List Example</a>
+                <a class="top-button" href="{{ url_for('edit.members', name=tree_name) }}">Member List Example</a> |
+                <a class="top-button" href="#" onclick="saveTree()">Save Tree</a>
             </div>
 
             <!-- Changed this from a form to a div because forms cause reload when an input is pressed-->
@@ -77,7 +78,66 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 
     <script>
-        const help_button = document.getElementById("help-button")
+        window.onload = function(){
+            try {
+                const treeContent = {{ tree_content|tojson }};
+                console.log(treeContent)
+                loadTree(treeContent)
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function loadTree(data) {
+            for(let i = 0; i < data.members.length; i++) {
+                let x = data.members[i].x;
+                let y = data.members[i].y;
+                // let sex = data.members[i].sex;
+                let note = data.members[i].note;
+                let name = data.members[i].name;
+                // let image = data.members[i].image;
+                let birthPlace = data.members[i].birthPlace;
+                let birthDate = data.members[i].birthDate;
+                // let died = data.members[i].died;
+                // let deathDate = data.members[i].deathDate;
+                let tempMember = new Member(x,y);
+                tempMember.updateInfo(name, birthPlace,birthDate,note);
+                members.push(tempMember);
+            }
+
+            for(let i = 0; i < data.relations.length; i++) {
+                console.log(data.relations[i]);
+                relations.push(new Relation(data.relations[i].mem1,data.relations[i].mem2));
+            }
+        }
+
+        function saveTree() {
+            const data = {"members" : members , "relations" : relations}
+
+            fetch(`${window.origin}/saveTree/{{ tree_id }}`, {
+                method: "POST",
+                credentials: "include",
+                body: JSON.stringify(data),
+                cache: "no-cache",
+                headers: new Headers({
+                "content-type": "application/json"
+                })
+            }).then(function (response) {
+                if (response.status !== 200) {
+                    alert(`Looks like there was a problem. Status code: ${response.status}`);
+                    return;
+                }
+                response.json().then(function (data) {
+                    if (data['message'] === "OK") {
+                        alert("Saved Successfully!");
+                    }
+                });
+            }).catch(function (error) {
+                alert("Fetch error: " + error);
+            });
+        }
+
+                const help_button = document.getElementById("help-button")
         help_button.onclick = function () {
             $("#help-modal").modal("show");
         }

@@ -1,7 +1,6 @@
 from flask import Blueprint, render_template, request, make_response, jsonify
 from flask_login import current_user
 from .user import User
-import json
 
 main = Blueprint('main', __name__)
 
@@ -13,7 +12,7 @@ def index():
 
 @main.route('/profile')
 def profile():
-    tree_ids = json.loads(current_user.tree_ids)
+    tree_ids = current_user.tree_ids
     tree_names = []
     for id in tree_ids:
         name, _ = User.get_tree(id)
@@ -28,7 +27,7 @@ def add_tree():
     req = request.get_json()
 
     # Add the new tree's ID to the tree_ids array of the current user
-    tree_ids = json.loads(current_user.tree_ids)
+    tree_ids = current_user.tree_ids
     tree_ids.append(req[0])
 
     # Add the new tree to the DB
@@ -43,7 +42,7 @@ def delete_tree():
     tree_id = request.get_json()
 
     # Add the new tree's ID to the tree_ids array of the current user
-    tree_ids = json.loads(current_user.tree_ids)
+    tree_ids = current_user.tree_ids
     tree_ids.remove(tree_id)
 
     # Add the new tree to the DB

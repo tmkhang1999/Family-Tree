@@ -1,6 +1,5 @@
 from flask_login import UserMixin
 from .db import Database
-import json
 
 
 class User(UserMixin):
@@ -9,6 +8,15 @@ class User(UserMixin):
         self.name = name
         self.email = email
         self.tree_ids = tree_ids
+
+    @staticmethod
+    def create(user_id, name, email, tree_ids):
+        db = Database().get()
+        table = db['users']
+        if tree_ids is None:
+            tree_ids = list()
+        table.insert(dict(user_id=user_id, name=name, email=email, tree_ids=tree_ids))
+        db.commit()
 
     @staticmethod
     def get(user_id):
@@ -28,32 +36,22 @@ class User(UserMixin):
         tree = table.find_one(tree_id=tree_id)
         if not tree:
             return None
-
         return tree['name'], tree['content']
-
-    @staticmethod
-    def create(user_id, name, email, tree_ids):
-        db = Database().get()
-        table = db['users']
-        if tree_ids is None:
-            tree_ids = json.dumps(list())
-        table.insert(dict(user_id=user_id, name=name, email=email, tree_ids=tree_ids))
-        db.commit()
 
     @staticmethod
     def add_tree(user_id, tree_ids, tree_id, tree_name):
         db = Database().get()
         users = db['users']
         trees = db['trees']
-        users.update(dict(user_id=user_id, tree_ids=json.dumps(tree_ids)), ['user_id'])
-        trees.insert(dict(tree_id=tree_id, name=tree_name, content=json.dumps(None)))
+        users.update(dict(user_id=user_id, tree_ids=tree_ids), ['user_id'])
+        trees.insert(dict(tree_id=tree_id, name=tree_name, content=dict()))
 
     @staticmethod
     def delete_tree(user_id, tree_ids, tree_id):
         db = Database().get()
         users = db['users']
         trees = db['trees']
-        users.update(dict(user_id=user_id, tree_ids=json.dumps(tree_ids)), ['user_id'])
+        users.update(dict(user_id=user_id, tree_ids=tree_ids), ['user_id'])
         trees.delete(tree_id=tree_id)
 
     @staticmethod
@@ -61,3 +59,9 @@ class User(UserMixin):
         db = Database().get()
         trees = db['trees']
         trees.update(dict(tree_id=tree_id, name=new_name), ['tree_id'])
+
+    @staticmethod
+    def save_tree(tree_id, new_content):
+        db = Database().get()
+        trees = db['trees']
+        trees.update(dict(tree_id=tree_id, content=new_content), ['tree_id'])

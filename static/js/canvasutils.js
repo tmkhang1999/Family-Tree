@@ -99,57 +99,6 @@ function fillForm()
     memberForm.elements[FORM_INPUT_LABELS.NOTE].value = members[memberSelected].note;
 }
 
-
-
-//JSON FILE HANDLING
-function saveTree()
-{
-    //jsonData is the json string that will be eventually saved to a file
-    const data = {"members" : members , "relations" : relations}
-    const jsonData = JSON.stringify(data);
-    return jsonData;
-}
-
-function loadTree(jsonFile)
-{
-    //jsonFile is the json file that will be read from the database
-
-    //loading the data from the database goes here!
-
-    const data = JSON.parse(jsonFile);
-
-    for(let i = 0; i < data.members.length; i++)
-    {
-        // the commented out variables have not been
-        // added to the html form yet
-        console.log(data.members[i]);
-        let x = data.members[i].x;
-        let y = data.members[i].y;
-        // let sex = data.members[i].sex;
-        let note = data.members[i].note;
-        let name = data.members[i].name;
-        // let image = data.members[i].image;
-        let birthPlace = data.members[i].birthPlace;
-        let birthDate = data.members[i].birthDate;
-        // let died = data.members[i].died;
-        // let deathDate = data.members[i].deathDate;
-        let tempMember = new Member(x,y);
-        tempMember.updateInfo(name, birthPlace,birthDate,note);
-        members.push(tempMember);
-    }
-
-    for(let i = 0; i < data.relations.length; i++)
-    {
-        console.log(data.relations[i]);
-        relations.push(new Relation(data.relations[i].mem1,data.relations[i].mem2));
-    }
-
-
-
-}
-
-
-
 // DRAWING FUNCTIONS
 function fillRoundedRect(canvas, x, y, width, height, color, radius)
 {
