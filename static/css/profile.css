@@ -1,8 +1,8 @@
 #profile-container{
-  display: grid;
-  grid-template-rows: 7vh auto;
-  height: 100vh;
-  width: 100vw;
+    display: grid;
+    grid-template-rows: 7vh auto;
+    height: 100vh;
+    width: 100vw;
 }
 
 .top-bar{
@@ -61,8 +61,8 @@
 .menu-box {
     background-color: #FFFFFF;
     border-radius: 5px;
-    width: 13%;
-    height: 15%;
+    width: 13vw;
+    height: 15vh;
     margin: 1.5%;
     display: inline-block;
 
@@ -82,8 +82,8 @@
 }
 
 #add-button-img {
-    width: 35%;
-    padding: 2%;
+    width: 40%;
+    padding: 5%;
 }
 
 #add-txt {
@@ -105,9 +105,16 @@
     left: 75%;
 }
 
+/*.dropdown-item {*/
+/*    text-align: center;*/
+/*}*/
+
 .nav-img {
     cursor: pointer;
+    display: inline-block;
     width: 10%;
+    vertical-align: middle;
+    margin-bottom: 5px;
+    margin-right: 10px;
 }
-
 

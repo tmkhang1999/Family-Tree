@@ -1,3 +1,23 @@
+.dropdown-menu {
+    border-radius: 10px;
+    background-color: #C4C4C4;
+}
+
+.dropdown-menu::after {
+    border-bottom: 15px solid #C4C4C4;
+    border-left: 9px solid rgba(0, 0, 0, 0);
+    border-right: 9px solid rgba(0, 0, 0, 0);
+    content: "";
+    display: inline-block;
+    left: 15px;
+    position: absolute;
+    top: -11px;
+}
+
+.dropdown-item {
+    font-weight: 600;
+}
+
 .modal-content {
     background-color: #181818;
     color: #d3d3d3;

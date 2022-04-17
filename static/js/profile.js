@@ -15,7 +15,7 @@ function create(key) {
     const name = document.createTextNode(treeName);
     const nameHolder = document.createElement("a");
     nameHolder.setAttribute('class', 'tree-name');
-    nameHolder.setAttribute("onclick", `redirect("${treeName}")`)
+    nameHolder.setAttribute("onclick", `redirect("${treeID}")`)
     nameHolder.appendChild(name);
 
     const nav_img = document.createElement("img");
@@ -32,29 +32,46 @@ function create(key) {
     nav_link.setAttribute("aria-expanded", "false");
     nav_link.appendChild(nav_img)
 
+    // Add rename option
+    const pen = document.createElement("img");
+    pen.setAttribute("src", "/static/images/rename.png")
+    pen.setAttribute("class", "nav-img")
     const rename = document.createTextNode("Rename");
     const option1 = document.createElement("a");
     option1.setAttribute("class", "dropdown-item");
     option1.setAttribute("onclick", `renameConfirm("${treeID}")`)
+    option1.appendChild(pen);
     option1.appendChild(rename);
 
     const line1 = document.createElement("div");
     line1.setAttribute("class", "dropdown-divider");
 
-    const collab = document.createTextNode("Collaboration");
+    // Add collaboration option
+    const group = document.createElement("img");
+    group.setAttribute("src", "/static/images/group.png")
+    group.setAttribute("class", "nav-img")
+    const collaboration = document.createTextNode("Collaboration");
     const option2 = document.createElement("a");
     option2.setAttribute("class", "dropdown-item");
-    option2.appendChild(collab);
+    option2.appendChild(group);
+    option2.appendChild(collaboration);
 
     const line2 = document.createElement("div");
     line2.setAttribute("class", "dropdown-divider");
 
+    // Add remove tree option
+    const trash = document.createElement("img");
+    trash.setAttribute("src", "/static/images/trash.png")
+    trash.setAttribute("class", "nav-img")
     const remove = document.createTextNode("Delete this tree");
     const option3 = document.createElement("a");
     option3.setAttribute("class", "dropdown-item");
+    option3.setAttribute("style", "color: #FF0000")
     option3.setAttribute("onclick", `deleteConfirm("${treeID}")`)
+    option3.appendChild(trash);
     option3.appendChild(remove);
 
+    // Add these 3 options above to dropdown menu
     const dropdown_menu = document.createElement("div");
     dropdown_menu.setAttribute("class", "dropdown-menu dropdown-left-manual");
     dropdown_menu.setAttribute("aria-labelledby", "navbarDropdown");
@@ -78,9 +95,9 @@ function create(key) {
     $(box).insertBefore("#add-box");
 }
 
-function redirect(name){
+function redirect(tree_id){
     const location = `${window.location.protocol}//${window.location.host}/`;
-    window.location.href = location + `editTree/${name}`;
+    window.location.href = location + `editTree/${tree_id}`;
 }
 
 add_button.onclick = function () {
@@ -103,7 +120,6 @@ add_form.onsubmit = function (event) {
     }), {});
     const id = Math.random().toString(36).substr(2, 9)
     const key = [id, text['message']]
-    console.log(key)
 
     fetch(`${window.origin}/profile/add`, {
         method: "POST",
