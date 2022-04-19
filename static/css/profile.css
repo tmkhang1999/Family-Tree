@@ -90,30 +90,25 @@
     display: block;
 }
 
+.tree-box {
+    display: inline-grid;
+    grid-template-columns: 80% 20%;
+    grid-template-rows: 80% 20%;
+}
+
 .tree-name {
+    grid-area: 1/1/2/2;
     color: #000000;
-    position: relative;
-    top: 15%;
-    left: 10%;
-    text-decoration: none;
+    padding: 10px 15px;
 }
 
 .nav-item {
-    position: relative;
-    display: block;
-    top: 40%;
-    left: 75%;
+    grid-area: 2/2/3/3;
+    place-self: center;
 }
 
-/*.dropdown-item {*/
-/*    text-align: center;*/
-/*}*/
-
 .nav-img {
-    cursor: pointer;
-    display: inline-block;
-    width: 10%;
-    vertical-align: middle;
+    width: 15px;
     margin-bottom: 5px;
     margin-right: 10px;
 }
