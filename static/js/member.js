@@ -13,7 +13,7 @@ class Member
     selected = false;
 
     //Member Info
-    image = new Image();
+    imageSrc = "";
     name = "";
     sex = '';
     birthDate = "";
@@ -26,14 +26,15 @@ class Member
     {
         this.x = x;
         this.y = y;
-        const location = `${window.location.protocol}//${window.location.host}/`;
-        this.image.src = location + "static/images/person0.jpeg";
     }
 
-    setImage(imageSrc = "static/images/person0.jpeg")
+    setImage(imageSrc)
     {
-        const location = `${window.location.protocol}//${window.location.host}/`;
-        this.image.src = location + imageSrc;
+        if (imageSrc) {
+            this.imageSrc = imageSrc;
+        } else {
+            this.imageSrc = "static/images/person0.jpeg";
+        }
     }
 
     setSex(sex)
@@ -57,7 +58,10 @@ class Member
         canvas.fillStyle = COLOR_PALETTE.FONT;
         canvas.textAlign = 'center';
         canvas.fillText(this.name, this.x + Member.width / 2, this.y + 3 * Member.height / 4);
-        canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
+        const image = new Image();
+        const location = `${window.location.protocol}//${window.location.host}/`;
+        image.src = location + this.imageSrc;
+        canvas.drawImage(image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
     }
 
     isHovering(mouseX, mouseY)
@@ -109,5 +113,4 @@ class Member
         this.deathDate = deathDate;
         this.note = note;
     }
-
 }

@@ -89,7 +89,9 @@
         window.onload = function(){
             try {
                 const treeContent = {{ tree_content|tojson }};
-                loadTree(treeContent);
+                if (treeContent.members && treeContent.relations) {
+                    loadTree(treeContent);
+                }
             } catch (e) {
                 console.error(e);
             }
@@ -101,6 +103,7 @@
                 // added to the html form yet
                 let x = data.members[i].x;
                 let y = data.members[i].y;
+                let imageSrc = data.members[i].imageSrc;
                 let sex = data.members[i].sex;
                 let note = data.members[i].note;
                 let name = data.members[i].name;
@@ -110,6 +113,7 @@
                 let deathDate = data.members[i].deathDate;
                 let tempMember = new Member(x,y);
                 tempMember.updateInfo(name, sex, birthPlace, birthDate, false, deathDate, note);
+                tempMember.setImage(imageSrc);
                 members.push(tempMember);
             }
 
@@ -122,7 +126,6 @@
                 }
             }
         }
-
 
         function saveTree() {
             const data = {"members" : members , "relations" : relations}

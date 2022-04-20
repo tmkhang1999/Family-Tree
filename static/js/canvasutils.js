@@ -90,27 +90,26 @@ function handleForm(event)
     event.preventDefault();
     const text = document.getElementById('formHeader').textContent;
 
-    const form_data = new FormData($('#memberForm')[0]);
-    $.ajax({
-        type: 'POST',
-        url: `${window.origin}/saveImage/${treeID}`,
-        data: form_data,
-        contentType: false,
-        cache: false,
-        processData: false,
-        success: function(response) {
-            if (response['message'] === "OK") {
-                console.log(response['image_path']);
-            }
-        },
-    });
-
     let name = memberForm.elements[FORM_INPUT_LABELS.NAME].value;
     let sex = memberForm.elements[FORM_INPUT_LABELS.SEX].value;
     let birthPlace = memberForm.elements[FORM_INPUT_LABELS.BIRTHPLACE].value;
     let birthDate = memberForm.elements[FORM_INPUT_LABELS.BIRTHDATE].value;
     let deathDate = memberForm.elements[FORM_INPUT_LABELS.DEATHDATE].value;
     let note = memberForm.elements[FORM_INPUT_LABELS.NOTE].value;
+    let imageSrc;
+    let member;
+
+    if(text === FORM_HEADERS.EDIT_MEMBER) {
+        if(memberSelected !== -1) {
+            members[memberSelected].updateInfo(name, sex, birthPlace, birthDate, false, deathDate, note);
+            member = members[memberSelected]
+        }
+    } else if(text === FORM_HEADERS.CREATE_MEMBER) {
+        newMember = new Member(0,0);
+        newMember.updateInfo(name, sex, birthPlace, birthDate, false, deathDate, note);
+        member = newMember;
+        placeMemberMode = true;
+    }
 
     const form_data = new FormData($('#memberForm')[0]);
     $.ajax({
@@ -122,24 +121,11 @@ function handleForm(event)
         processData: false,
         success: function(response) {
             if (response['message'] === "OK") {
-                console.log(response['image_path']);
+                imageSrc = response['image_path']
+                member.setImage(imageSrc)
             }
         },
     });
-
-    if(text === FORM_HEADERS.EDIT_MEMBER)
-    {
-        if(memberSelected !== -1)
-        {
-            members[memberSelected].updateInfo(name, sex, birthPlace, birthDate, false, deathDate,note);
-        }
-    }
-    else if(text === FORM_HEADERS.CREATE_MEMBER)
-    {
-        newMember = new Member(0,0);
-        newMember.updateInfo(name, sex, birthPlace, birthDate, false, deathDate, note);
-        placeMemberMode = true;
-    }
 }
 
 function fillForm()
