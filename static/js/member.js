@@ -26,12 +26,14 @@ class Member
     {
         this.x = x;
         this.y = y;
-        this.image.src = "{{url_for('static', filename='images/person0.jpeg')}}";
+        const location = `${window.location.protocol}//${window.location.host}/`;
+        this.image.src = location + "static/images/person0.jpeg";
     }
 
-    setImage(imageSrc = "{{url_for('static', filename='images/person0.jpeg')}}")
+    setImage(imageSrc = "static/images/person0.jpeg")
     {
-        this.image.src = imageSrc;
+        const location = `${window.location.protocol}//${window.location.host}/`;
+        this.image.src = location + imageSrc;
     }
 
     setSex(sex)
@@ -55,7 +57,7 @@ class Member
         canvas.fillStyle = COLOR_PALETTE.FONT;
         canvas.textAlign = 'center';
         canvas.fillText(this.name, this.x + Member.width / 2, this.y + 3 * Member.height / 4);
-        // canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
+        canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
     }
 
     isHovering(mouseX, mouseY)
@@ -63,7 +65,6 @@ class Member
         let xInBounds = inBounds(mouseX, (this.x - cameraX) * scale, (this.x + Member.width - cameraX) * scale, 0);
         let yInBounds = inBounds(mouseY, (this.y - cameraY) * scale, (this.y + Member.height - cameraY) * scale, 0)
         return !!(xInBounds && yInBounds);
-
 
         // if(mouseX > (this.x - cameraX) * scale && mouseX < (this.x + this.width - cameraX) * scale && mouseY > (this.y - cameraY) * scale && mouseY < (this.y + this.height - cameraY) * scale)
         // {
