@@ -1,15 +1,3 @@
-
-//HTML Selections
-const canvas = document.querySelector('canvas');
-const body = document.querySelector('body');
-
-const memberForm = document.getElementById("memberForm");
-const newMemberButton = document.getElementById("newMember");
-const newRelationButton = document.getElementById("newRelation");
-const deleteMemberButton = document.getElementById("deleteMember");
-
-const c = canvas.getContext('2d');
-
 //Camera Related Variables
 let cameraX = 0;
 let cameraY = 0;
@@ -19,15 +7,17 @@ let scalelevel = 0;
 //Selection Variables
 let relationSelected = -1;
 let memberSelected = -1;
-
+let prevMemberSelected = -1;
 //Modes
 let placeMemberMode = false;
+let placeRelationMode = false;
 
 //Input Variables
 let mouseX = 0;
 let mouseY = 0;
 let newMemberX = 0;
 let newMemberY = 0;
+
 const movementDir = {
     "up": false,
     "down": false,
@@ -35,53 +25,56 @@ const movementDir = {
     "right": false
 };
 
-//Member + Relation Variables
 let newMember = null;
-let members = [];
-let relations = [];
+const members = [];
+const relations = [];
 
-
-//Call the LoadTree function here!!!
-//loadTree(jsonFile);
 
 function mousePressed(event)
 {
     if(event.target === canvas)
     {
+        memberForm.style.display = "none";
         let x = event.clientX;
         let y = event.clientY;
-    
         memberSelected = -1;
         relationSelected = -1;
         memberForm.reset();
-        if(event.button === 0 && !placeMemberMode)
-        {
-            for(let i = 0; i < members.length; i++)
-            {
-                if(members[i].isHovering(x, y))
-                {
+
+
+        if (event.button === 0) {
+            for (let i = 0; i < members.length; i++) {
+                if (members[i].isHovering(x, y)) {
                     members[i].isMoving = true;
                     memberSelected = i;
                     fillForm();
+                    if(placeRelationMode)
+                    {
+                        relations.push(new RelationToM(prevMemberSelected, memberSelected));
+                        placeRelationMode = false;
+                    }
                 }
             }
-    
-            for(let i = 0; i < relations.length; i++)
-            {
-                if(relations[i].isHovering(x, y))
-                {
-                    relations[i].isMoving = true;
+            for (let i = 0; i < relations.length; i++) {
+                if (relations[i].isHovering(x, y)) {
                     relationSelected = i;
+                    if(placeRelationMode)
+                    {
+                        relations.push(new RelationToR(prevMemberSelected, relationSelected));
+                        placeRelationMode = false;
+                    }
                 }
             }
         }
-        else if(event.button === 0 && placeMemberMode && newMember != null)
-        {
-            newMember.setPosition(newMemberX,newMemberY);
+
+        if (event.button === 0 && placeMemberMode && newMember != null) {
+            newMember.setPosition(newMemberX, newMemberY);
             members.push(newMember);
             newMember = null;
             placeMemberMode = false;
         }
+
+        placeRelationMode = false;
     }
 }
 
@@ -91,10 +84,6 @@ function mouseMoved(event)
     {
         mouseX = event.clientX;
         mouseY = event.clientY;
-
-        if(relationSelected !== -1){
-            relations[relationSelected].update(event.clientX,event.clientY, event.movementX, event.movementY);
-        }
     }
 }
 
@@ -102,15 +91,9 @@ function mouseReleased(event)
 {
     if(event.target === canvas)
     {
-        if(event.button === 0)
-        {
-            for(let i = 0; i < members.length; i++)
-            {
+        if (event.button === 0) {
+            for (let i = 0; i < members.length; i++) {
                 members[i].isMoving = false;
-            }
-            for(let i = 0; i < relations.length; i++)
-            {
-                relations[i].isMoving = false;
             }
         }
     }
@@ -123,24 +106,38 @@ function keyPressed(event)
     {
         let key = event.key;
 
-        if(key === 'w')
-        {
+        if (key === 'w') {
             movementDir.up = true;
         }
-        if(key === 'a')
-        {
+        if (key === 'a') {
             movementDir.left = true;
         }
-        if(key === 's')
-        {
+        if (key === 's') {
             movementDir.down = true;
         }
-        if(key === 'd')
-        {
+        if (key === 'd') {
             movementDir.right = true;
         }
-        if(event.shiftKey)
-        {
+        if (key === ',' && relationSelected !== -1) {
+            if (relations[relationSelected].modeModifier === 0) relations[relationSelected].modeModifier = 1;
+            else if (relations[relationSelected].modeModifier === 1) relations[relationSelected].modeModifier = 0;
+        }
+        if (key === "Delete" || key === "Backspace") {
+            if (memberSelected !== -1) {
+                for (let i = 0; i < relations.length; i++) {
+                    if (relations[i].indexMemA === memberSelected || relations[i].indexMemB === memberSelected || relations[i].indexMem === memberSelected) {
+                        relations.splice(i, 1);
+                    }
+                }
+                members.splice(memberSelected, 1);
+                memberSelected = -1;
+            }
+            if (relationSelected !== -1) {
+                relations.splice(relationSelected, 1);
+                relationSelected = -1;
+            }
+        }
+        if (event.shiftKey) {
             gridAligning = false;
         }
     }
@@ -149,31 +146,36 @@ function keyPressed(event)
 //Handler for key releasing events.
 function keyReleased(event)
 {
-    let key = event.key;
-    movementDir.up = !(key === 'w') && movementDir.up;
-    movementDir.down = !(key === 's') && movementDir.down;
-    movementDir.left = !(key === 'a') && movementDir.left;
-    movementDir.right = !(key === 'd') && movementDir.right;
-    gridAligning = true;
+    if(event.target === body)
+    {
+        let key = event.key;
+        movementDir.up = !(key === 'w') && movementDir.up;
+        movementDir.down = !(key === 's') && movementDir.down;
+        movementDir.left = !(key === 'a') && movementDir.left;
+        movementDir.right = !(key === 'd') && movementDir.right;
+
+        gridAligning = true;
+    }
 }
 
 function pageScrolled(event)
 {
-    let width = innerWidth / scale;
-    let height = innerHeight / scale;
+    if(event.target === canvas)
+    {
+        let width = innerWidth / scale;
+        let height = innerHeight / scale;
 
-    scalelevel += event.deltaY * 0.001;
-    scalelevel = Math.min(Math.max(scalelevel, ZOOM_DEPTH.MAXIMUM), ZOOM_DEPTH.MINIMUM);
+        scalelevel += event.deltaY * 0.001;
+        scalelevel = Math.min(Math.max(scalelevel, ZOOM_DEPTH.MINIMUM), ZOOM_DEPTH.MAXIMUM);
 
-    // console.log(scalelevel);
+        scale = Math.pow(scalelevel + 1, -2);
 
-    scale = Math.pow(scalelevel + 1, -2);
+        width -= innerWidth / scale;
+        height -= innerHeight / scale;
 
-    width -= innerWidth / scale;
-    height -= innerHeight / scale;
-
-    cameraX += width / 2;
-    cameraY += height / 2;
+        cameraX += width / 2;
+        cameraY += height / 2;
+    }
 }
 
 function updateCamera()
@@ -183,7 +185,7 @@ function updateCamera()
     canvas.height = innerHeight;
 
     //Filling the background with a white quad to avoid overdrawing.
-    c.fillStyle = COLOR_PALETTE.BG;
+    c.fillStyle = '#ffffff';
     c.fillRect(0, 0, innerWidth, innerHeight);
 
     //Camera translation
@@ -223,6 +225,12 @@ function loop()
     
     drawGrid();
 
+
+    if(placeRelationMode)
+    {
+        line(c, members[prevMemberSelected].x + gridSize, members[prevMemberSelected].y + (gridSize + (gridSize / 2)), (mouseX / scale) + cameraX, (mouseY / scale) + cameraY, gridSize / 2, "#999999");
+    }
+
     //Drawing and each relation.
     for(let i = 0; i < relations.length; i++)
     {
@@ -233,37 +241,20 @@ function loop()
     for(let i = 0; i < members.length; i++)
     {
         members[i].selected = (i === memberSelected);
-        members[i].draw(c);
         members[i].update();
+        members[i].draw(c);
     }
 
-    //Placing a member.
     if(placeMemberMode)
     {
-        newMemberX = Math.floor((mouseX / scale + cameraX - 33) / gridSize) * gridSize;
-        newMemberY = Math.floor((mouseY / scale + cameraY - 50) / gridSize) * gridSize;
+        newMemberX = Math.floor((mouseX / scale + cameraX - (2 * gridSize / 3)) / gridSize) * gridSize;
+        newMemberY = Math.floor((mouseY / scale + cameraY - gridSize) / gridSize) * gridSize;
         newMember.setPosition(newMemberX, newMemberY);
         newMember.draw(c);
     }
 
     c.translate(cameraX, cameraY);
     c.scale(1 / scale, 1 / scale);
-}
-
-//move to canvas utils?
-function drawGrid()
-{
-    if(scalelevel < 1.5 && gridAligning)
-    {
-        for(let x = topLeftX; x <= bottomRightX; x += gridSize)
-        for(let y = topLeftY; y <= bottomRightY; y += gridSize)
-        {
-            c.fillStyle = COLOR_PALETTE.GRID_LINES;
-            c.fillRect(x, y, gridSize, gridSize);
-            c.fillStyle = COLOR_PALETTE.BG;
-            c.fillRect(x + 1, y + 1, gridSize - 1, gridSize - 1);
-        }
-    }
 }
 
 addEventListener('mousedown', mousePressed);
@@ -276,6 +267,6 @@ addEventListener('wheel', pageScrolled);
 
 memberForm.addEventListener('submit', handleForm);
 newMemberButton.addEventListener('click', handleNewMember);
-deleteMemberButton.addEventListener('click', handleDeleteMember);
 newRelationButton.addEventListener('click', handleNewRelation);
+deleteMemberButton.addEventListener('click', handleDeleteMember);
 loop();

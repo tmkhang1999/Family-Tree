@@ -21,12 +21,19 @@ class Member
     died = false;
     deathDate = "";
     note = "";
-    
+
     constructor(x, y)
     {
         this.x = x;
         this.y = y;
-        this.image.src = "person0.jpeg";
+        const location = `${window.location.protocol}//${window.location.host}/`;
+        this.image.src = location + "static/images/person0.jpeg";
+    }
+
+    setImage(imageSrc = "static/images/person0.jpeg")
+    {
+        const location = `${window.location.protocol}//${window.location.host}/`;
+        this.image.src = location + imageSrc;
     }
 
     setSex(sex)
@@ -44,9 +51,9 @@ class Member
     {
         if(this.selected)
         {
-            fillRoundedRect(c, this.x - BorderSize, this.y - BorderSize,  Member.width + (BorderSize * 2), Member.height + (BorderSize * 2), COLOR_PALETTE.SELECTED, Member.cornerRad + BorderSize);
+            fillRoundedRect(c, this.x - BorderSize, this.y - BorderSize,  Member.width + (BorderSize * 2), Member.height + (BorderSize * 2), Member.cornerRad + BorderSize, COLOR_PALETTE.SELECTED);
         }
-        fillRoundedRect(canvas, this.x, this.y,Member.width, Member.height, COLOR_PALETTE.MEMBER, Member.cornerRad);
+        fillRoundedRect(canvas, this.x, this.y,Member.width, Member.height, Member.cornerRad, COLOR_PALETTE.MEMBER);
         canvas.fillStyle = COLOR_PALETTE.FONT;
         canvas.textAlign = 'center';
         canvas.fillText(this.name, this.x + Member.width / 2, this.y + 3 * Member.height / 4);
@@ -58,7 +65,6 @@ class Member
         let xInBounds = inBounds(mouseX, (this.x - cameraX) * scale, (this.x + Member.width - cameraX) * scale, 0);
         let yInBounds = inBounds(mouseY, (this.y - cameraY) * scale, (this.y + Member.height - cameraY) * scale, 0)
         return !!(xInBounds && yInBounds);
-
 
         // if(mouseX > (this.x - cameraX) * scale && mouseX < (this.x + this.width - cameraX) * scale && mouseY > (this.y - cameraY) * scale && mouseY < (this.y + this.height - cameraY) * scale)
         // {
@@ -94,11 +100,14 @@ class Member
         }
     }
 
-    updateInfo(name, birthPlace = "", birthDate = "", note = ""){
+    updateInfo(name, sex, birthPlace, birthDate, died, deathDate, note){
         this.name = name;
+        this.sex = sex;
         this.birthPlace = birthPlace;
-        this.note = note;
         this.birthDate = birthDate;
+        this.died = died;
+        this.deathDate = deathDate;
+        this.note = note;
     }
 
 }
