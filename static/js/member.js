@@ -21,12 +21,17 @@ class Member
     died = false;
     deathDate = "";
     note = "";
-    
+
     constructor(x, y)
     {
         this.x = x;
         this.y = y;
-        this.image.src = "person0.jpeg";
+        this.image.src = "{{url_for('static', filename='images/person0.jpeg')}}";
+    }
+
+    setImage(imageSrc = "{{url_for('static', filename='images/person0.jpeg')}}")
+    {
+        this.image.src = imageSrc;
     }
 
     setSex(sex)
@@ -44,13 +49,13 @@ class Member
     {
         if(this.selected)
         {
-            fillRoundedRect(c, this.x - BorderSize, this.y - BorderSize,  Member.width + (BorderSize * 2), Member.height + (BorderSize * 2), COLOR_PALETTE.SELECTED, Member.cornerRad + BorderSize);
+            fillRoundedRect(c, this.x - BorderSize, this.y - BorderSize,  Member.width + (BorderSize * 2), Member.height + (BorderSize * 2), Member.cornerRad + BorderSize, COLOR_PALETTE.SELECTED);
         }
-        fillRoundedRect(canvas, this.x, this.y,Member.width, Member.height, COLOR_PALETTE.MEMBER, Member.cornerRad);
+        fillRoundedRect(canvas, this.x, this.y,Member.width, Member.height, Member.cornerRad, COLOR_PALETTE.MEMBER);
         canvas.fillStyle = COLOR_PALETTE.FONT;
         canvas.textAlign = 'center';
         canvas.fillText(this.name, this.x + Member.width / 2, this.y + 3 * Member.height / 4);
-        canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
+        // canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
     }
 
     isHovering(mouseX, mouseY)
@@ -94,11 +99,14 @@ class Member
         }
     }
 
-    updateInfo(name, birthPlace = "", birthDate = "", note = ""){
+    updateInfo(name, sex, birthPlace, birthDate, died, deathDate, note){
         this.name = name;
+        this.sex = sex;
         this.birthPlace = birthPlace;
-        this.note = note;
         this.birthDate = birthDate;
+        this.died = died;
+        this.deathDate = deathDate;
+        this.note = note;
     }
 
 }

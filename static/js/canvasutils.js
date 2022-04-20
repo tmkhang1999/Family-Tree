@@ -1,3 +1,13 @@
+//HTML Selections
+const canvas = document.querySelector('canvas');
+const body = document.querySelector('body');
+const memberForm = document.getElementById("memberForm");
+const newMemberButton = document.getElementById("newMember");
+const newRelationButton = document.getElementById("newRelation");
+const deleteMemberButton = document.getElementById("deleteMember");
+const formHeader = document.getElementById('formHeader');
+const c = canvas.getContext('2d');
+
 //Canvas Related Variables
 let topLeftX = 0;
 let topLeftY = 0;
@@ -5,7 +15,7 @@ let bottomRightX = 0;
 let bottomRightY = 0;
 let gridAligning = true;
 const gridSize = 50;
-const BorderSize = 5; //rename to borderSize?
+const BorderSize = 5;
 
 //ENUMERATIONS
 const FORM_HEADERS = Object.freeze({
@@ -14,11 +24,15 @@ const FORM_HEADERS = Object.freeze({
 });
 
 const FORM_INPUT_LABELS = Object.freeze({
+    //more to come
+    IMAGE : "image",
     NAME : "name",
+    SEX : "sex",
     BIRTHPLACE : "birthPlace",
     BIRTHDATE : "birthDate",
+    DIED : "died",
+    DEATHDATE : "deathDate",
     NOTE : "note"
-    //more to come
 });
 
 const COLOR_PALETTE = Object.freeze({
@@ -32,20 +46,27 @@ const COLOR_PALETTE = Object.freeze({
 });
 
 const ZOOM_DEPTH = Object.freeze({
-    MINIMUM : 1,
-    MAXIMUM : -0.5
+    MINIMUM : -0.5,
+    MAXIMUM : 1
 });
 
-
+const RELATION_TYPE = Object.freeze({
+    M_TO_M : "MM",
+    M_TO_R : "MR"
+});
 
 //HTML INPUT HANDLING
-function handleNewRelation(event)
+function handleNewRelation()
 {
-
+    if(memberSelected !== -1){
+        placeRelationMode = true;
+        prevMemberSelected = memberSelected;
+    }
 }
 
 function handleNewMember()
 {
+    memberForm.style.display = "block";
     memberSelected = -1;
     memberForm.reset();
     document.getElementById('formHeader').textContent = FORM_HEADERS.CREATE_MEMBER;
@@ -55,7 +76,7 @@ function handleNewMember()
 function handleDeleteMember()
 {
     if(memberSelected !== -1){
-        members.splice(memberSelected, 1); 
+        members.splice(memberSelected, 1);
     }
     memberSelected = -1;
     memberForm.reset();
@@ -65,42 +86,113 @@ function handleDeleteMember()
 }
 
 function handleForm(event)
-{ 
+{
     event.preventDefault();
     const text = document.getElementById('formHeader').textContent;
 
+    const file = memberForm.elements[FORM_INPUT_LABELS.IMAGE].files[0];
+    console.log(file);
+    if(file) {
+        const reader = new FileReader();
+        reader.addEventListener("load", function () {
+            console.log(this);
+            if (text === FORM_HEADERS.CREATE_MEMBER) {
+                newMember.setImage(this.result);
+            } else if (text === FORM_HEADERS.EDIT_MEMBER) {
+                members[memberSelected].setImage(this.result);
+            }
+        });
+        reader.readAsDataURL(file);
+    }
     let name = memberForm.elements[FORM_INPUT_LABELS.NAME].value;
+    let sex = memberForm.elements[FORM_INPUT_LABELS.SEX].value;
     let birthPlace = memberForm.elements[FORM_INPUT_LABELS.BIRTHPLACE].value;
     let birthDate = memberForm.elements[FORM_INPUT_LABELS.BIRTHDATE].value;
+    let deathDate = memberForm.elements[FORM_INPUT_LABELS.DEATHDATE].value;
     let note = memberForm.elements[FORM_INPUT_LABELS.NOTE].value;
 
     if(text === FORM_HEADERS.EDIT_MEMBER)
     {
         if(memberSelected !== -1)
         {
-            members[memberSelected].updateInfo(name, birthPlace, birthDate, note);
+            members[memberSelected].updateInfo(name, sex, birthPlace, birthDate, false, deathDate,note);
         }
     }
     else if(text === FORM_HEADERS.CREATE_MEMBER)
     {
         newMember = new Member(0,0);
-        newMember.updateInfo(name, birthPlace, birthDate, note);
+        newMember.updateInfo(name, sex, birthPlace, birthDate, false, deathDate,note);
         placeMemberMode = true;
     }
-} 
+}
 
 function fillForm()
-{ 
-    document.getElementById('formHeader').textContent = FORM_HEADERS.EDIT_MEMBER;
+{
+    memberForm.style.display = "block";
+    formHeader.textContent = FORM_HEADERS.EDIT_MEMBER;
     deleteMemberButton.style.display = "block";
     memberForm.elements[FORM_INPUT_LABELS.NAME].value = members[memberSelected].name;
+    memberForm.elements[FORM_INPUT_LABELS.SEX].value = members[memberSelected].sex;
     memberForm.elements[FORM_INPUT_LABELS.BIRTHPLACE].value = members[memberSelected].birthPlace;
     memberForm.elements[FORM_INPUT_LABELS.BIRTHDATE].value = members[memberSelected].birthDate;
+    memberForm.elements[FORM_INPUT_LABELS.DEATHDATE].value = members[memberSelected].deathDate;
     memberForm.elements[FORM_INPUT_LABELS.NOTE].value = members[memberSelected].note;
 }
 
+//JSON FILE HANDLING
+function saveTree()
+{
+    //jsonData is the json string that will be eventually saved to a file
+    const data = {members : members , relations : relations }
+    const jsonData = JSON.stringify(data);
+    return jsonData;
+}
+
+function loadTree(jsonFile)
+{
+    //jsonFile is the json file that will be read from the database
+
+    //loading the data from the database goes here!
+
+    const data = JSON.parse(jsonFile);
+
+    for(let i = 0; i < data.members.length; i++)
+    {
+        // the commented out variables have not been
+        // added to the html form yet
+        let x = data.members[i].x;
+        let y = data.members[i].y;
+        let sex = data.members[i].sex;
+        let note = data.members[i].note;
+        let name = data.members[i].name;
+        let birthPlace = data.members[i].birthPlace;
+        let birthDate = data.members[i].birthDate;
+        // let died = data.members[i].died;
+        let deathDate = data.members[i].deathDate;
+        let tempMember = new Member(x,y);
+        tempMember.updateInfo(name, sex, birthPlace, birthDate, false, deathDate, note);
+        members.push(tempMember);
+    }
+
+    for(let i = 0; i < data.relations.length; i++)
+    {
+        if(data.relations[i].TYPE === RELATION_TYPE.M_TO_M)
+        {
+            relations.push(new RelationToM(data.relations[i].indexMemA,data.relations[i].indexMemB));
+        }
+        else if(data.relations[i].TYPE === RELATION_TYPE.M_TO_R)
+        {
+            relations.push(new RelationToR(data.relations[i].indexMem,data.relations[i].indexRel));
+        }
+    }
+
+
+
+}
+
+
 // DRAWING FUNCTIONS
-function fillRoundedRect(canvas, x, y, width, height, color, radius)
+function fillRoundedRect(canvas, x, y, width, height, radius, color = COLOR_PALETTE.DEFAULT)
 {
     canvas.fillStyle = color;
 
@@ -124,15 +216,11 @@ function fillRoundedRect(canvas, x, y, width, height, color, radius)
     canvas.fillRect(x + radius, y, width - radius * 2, height);
 }
 
-function line(canvas, x1, y1, x2, y2, stroke = COLOR_PALETTE.DEFAULT, width = 1)
+function line(canvas, x1, y1, x2, y2, width = 1, stroke = COLOR_PALETTE.DEFAULT)
 {
-    if (stroke) {
-        canvas.strokeStyle = stroke;
-    }
+    canvas.strokeStyle = stroke;
+    canvas.lineWidth = width;
 
-    if (width) {
-        canvas.lineWidth = width;
-    }
     canvas.lineCap = 'round';
     canvas.beginPath();
     canvas.moveTo(x1,y1);
@@ -140,7 +228,7 @@ function line(canvas, x1, y1, x2, y2, stroke = COLOR_PALETTE.DEFAULT, width = 1)
     canvas.stroke();
 }
 
-function stepLine(canvas, x1, y1, x2, y2, midX = 0, midY = 0, stroke = COLOR_PALETTE.DEFAULT, width = 1)
+function stepLine(canvas,x1,y1,x2,y2,midX = 0,midY = 0, width = 1,stroke = COLOR_PALETTE.DEFAULT)
 {
     if(midY === 0)
     {
@@ -156,7 +244,7 @@ function stepLine(canvas, x1, y1, x2, y2, midX = 0, midY = 0, stroke = COLOR_PAL
     }
 }
 
-function ULine(canvas, x1, y1, x2, y2, xOff = 0, yOff = 0, stroke = COLOR_PALETTE.DEFAULT, width = 1)
+function ULine(canvas,x1,y1,x2,y2,xOff = 0,yOff = 0, width = 1, stroke = COLOR_PALETTE.DEFAULT)
 {
     if(xOff === 0)
     {
@@ -172,24 +260,35 @@ function ULine(canvas, x1, y1, x2, y2, xOff = 0, yOff = 0, stroke = COLOR_PALETT
     }
 }
 
+//moved from canvas
+function drawGrid()
+{
+    if(scalelevel < 1.5 && gridAligning)
+    {
+        for(let x = topLeftX; x <= bottomRightX; x += gridSize)
+            for(let y = topLeftY; y <= bottomRightY; y += gridSize)
+            {
+                c.fillStyle = COLOR_PALETTE.GRID_LINES;
+                c.fillRect(x, y, gridSize, gridSize);
+                c.fillStyle = COLOR_PALETTE.BG;
+                c.fillRect(x + 1, y + 1, gridSize - 1, gridSize - 1);
+            }
+    }
+}
 
 
 //COLLISION DETECTION
-function inBounds(a, a1, a2, tolerance)
+function inBounds(x, x1, x2, tolerance)
 {
-    return (a >= a1 - tolerance && a <= a2 + tolerance) || (a >= a2 - tolerance && a <= a1 + tolerance);
+    return (x >= x1 - tolerance && x <= x2 + tolerance) || (x >= x2 - tolerance && x <= x1 + tolerance);
 }
 
-function pointOnLine(x, y, x1, y1, x2, y2, tolerance)
+function pointOnVertical(x, y, y1, y2, lineY, tolerance)
 {
-    if (x1 === x2 && inBounds(x,x1,x2, tolerance))
-    {
-       return true;
-    }
-    let  m = (y2 - y1) / (x2 - x1);
-    let  b = -(m * x1) + y1;
-    return (Math.abs(y - (m * x + b)) <= tolerance);
-
+    return (x > lineY - tolerance && x < lineY + tolerance && y > y1 && y < y2);
 }
 
-
+function pointOnHorizontal(x, y, x1, x2, lineX, tolerance)
+{
+    return (x > x1 && x < x2 && y > lineX - tolerance && y < lineX + tolerance);
+}
