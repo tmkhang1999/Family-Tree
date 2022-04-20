@@ -13,11 +13,12 @@ function create(key) {
     }
 
     const name = document.createTextNode(treeName);
-    const nameHolder = document.createElement("a");
+    const nameHolder = document.createElement("div");
     nameHolder.setAttribute('class', 'tree-name');
     nameHolder.setAttribute("onclick", `redirect("${treeID}")`)
     nameHolder.appendChild(name);
 
+    // Create three-dots button
     const nav_img = document.createElement("img");
     nav_img.setAttribute("class", "nav-img");
     nav_img.setAttribute("src", "/static/images/three-dots.png");
@@ -87,7 +88,7 @@ function create(key) {
     nav_item.appendChild(dropdown_menu);
 
     const box = document.createElement("div");
-    box.setAttribute('class', 'menu-box');
+    box.setAttribute('class', 'menu-box tree-box');
     box.setAttribute('id', `${treeID}`);
     box.appendChild(nameHolder);
     box.appendChild(nav_item);

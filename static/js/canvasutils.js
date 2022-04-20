@@ -112,6 +112,21 @@ function handleForm(event)
     let deathDate = memberForm.elements[FORM_INPUT_LABELS.DEATHDATE].value;
     let note = memberForm.elements[FORM_INPUT_LABELS.NOTE].value;
 
+    const form_data = new FormData($('#memberForm')[0]);
+    $.ajax({
+        type: 'POST',
+        url: `${window.origin}/saveImage/${treeID}`,
+        data: form_data,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(response) {
+            if (response['message'] === "OK") {
+                console.log(response['image_path']);
+            }
+        },
+    });
+
     if(text === FORM_HEADERS.EDIT_MEMBER)
     {
         if(memberSelected !== -1)

@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask
 from flask_login import LoginManager
 from .db import Database
@@ -21,6 +23,11 @@ def create_app():
 
         # Database setup
         Database().setup()
+
+        # History setup
+        history_path = "./static/images/history"
+        if not os.path.exists(history_path):
+            os.mkdir(history_path)
 
         @login_manager.user_loader
         def load_user(user_id):
