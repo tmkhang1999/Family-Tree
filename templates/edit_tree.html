@@ -23,23 +23,17 @@
             <div class="left-header">
                 <h1 id="name-tree-edit">[{{ tree_name }}]</h1>
                 <a class="top-button" href="{{ url_for('main.profile') }}">Home</a> |
-                <a class="top-button" id="help-button">Instructions, Help and FAQ</a> |
-                <a class="top-button" onclick="saveTree()">Save Tree</a>
+                <a class="top-button" id="help-button">Instructions, Help and FAQ</a>
             </div>
 
-            <!-- Changed this from a form to a div because forms cause reload when an input is pressed-->
-            <div class="creation">
-                <input type="image" class="createnew" id="newMember" src="/static/images/newmember.png" alt="New Member">
-                <input type="image" class="createnew" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
-            </div>
         </div>
 
         <div class="sidebar">
-            <!--
-                -- Changed the names and id's for the form so that they matched the member variables were using in JS
-                -- Moved the header inside the form and gave it an ID of "formHeader"
-                -- Changed the form ID to "memberForm" because I use this form for editing and creating members
-            -->
+            <div id="buttons">
+                <input type="image" class="button" id="saveTree" src = "/static/images/saveButton.png" alt="Save" onclick="saveTree()">
+                <input type="image" class="button" id="newMember" src="/static/images/newmember.png" alt="New Member">
+                <input type="image" class="button" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
+            </div>
             <form id = "memberForm" style = "display: none;">
                 <h2 id = "formHeader">Edit Member</h2>
                 <label for="image">Image:</label><br>

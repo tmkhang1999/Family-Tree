@@ -34,6 +34,7 @@ function mousePressed(event)
 {
     if(event.target === canvas)
     {
+        buttonsContainer.style.display = "block";
         memberForm.style.display = "none";
         let x = event.clientX;
         let y = event.clientY;

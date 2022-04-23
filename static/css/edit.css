@@ -67,7 +67,6 @@ body {
 
     overflow-y:auto;
     height: 90vh;
-    width: 25vw;
     position: fixed;
     right:0;
     top:10vh;
@@ -119,14 +118,10 @@ body {
     /* border: 2px solid #333F20; */
 }
 
-.creation {
-    width: 5rem;
-    margin-right: 4rem;
-    display: flex;
+#buttons {
+    display: block;
     justify-content: space-between;
 }
-
-
 
 h2 {
     color: #333F20;
@@ -236,16 +231,19 @@ input {
     border: 1px solid #333F20;
 }
 
-.createnew {
+.button {
+    display:block;
     width: 40px;
+    height: 40px;
     border: none;
+    margin: 0;
 }
 
-.createnew:hover {
+.button:hover {
     border: 1px solid #333F20;
 }
 
-.createnew:focus {
+.button:focus {
     border: 1px solid #333F20;
 }
 

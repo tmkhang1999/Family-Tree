@@ -6,6 +6,7 @@ const newMemberButton = document.getElementById("newMember");
 const newRelationButton = document.getElementById("newRelation");
 const deleteMemberButton = document.getElementById("deleteMember");
 const formHeader = document.getElementById('formHeader');
+const buttonsContainer = document.getElementById('buttons');
 const c = canvas.getContext('2d');
 
 //Canvas Related Variables
@@ -66,6 +67,7 @@ function handleNewRelation()
 
 function handleNewMember()
 {
+    buttonsContainer.style.display = "none";
     memberForm.style.display = "block";
     memberSelected = -1;
     memberForm.reset();
@@ -130,6 +132,7 @@ function handleForm(event)
 
 function fillForm()
 {
+    buttonsContainer.style.display = "none";
     memberForm.style.display = "block";
     formHeader.textContent = FORM_HEADERS.EDIT_MEMBER;
     deleteMemberButton.style.display = "block";
