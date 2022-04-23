@@ -24,7 +24,6 @@
                 <h1 id="name-tree-edit">[{{ tree_name }}]</h1>
                 <a class="top-button" href="{{ url_for('main.profile') }}">Home</a> |
                 <a class="top-button" id="help-button">Instructions, Help and FAQ</a> |
-                <a class="top-button" href="{{ url_for('edit.members', id=tree_id) }}">Member List Example</a> |
                 <a class="top-button" onclick="saveTree()">Save Tree</a>
             </div>
 
@@ -88,6 +87,10 @@
         }
 
         function loadTree(data) {
+            cameraX = data.cameraX;
+            cameraY = data.cameraY;
+            scale = data.scale;
+            scalelevel = data.scalelevel;
             for(let i = 0; i < data.members.length; i++) {
                 // the commented out variables have not been
                 // added to the html form yet
@@ -118,7 +121,14 @@
         }
 
         function saveTree() {
-            const data = {"members" : members , "relations" : relations}
+            const data = {
+                "cameraX" : cameraX,
+                "cameraY" : cameraY,
+                "scale" : scale,
+                "scalelevel" : scalelevel,
+                "members" : members,
+                "relations" : relations
+            }
 
             fetch(`${window.origin}/saveTree/{{ tree_id }}`, {
                 method: "POST",
