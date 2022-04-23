@@ -6,8 +6,9 @@ class RelationToR
 
     centerX = 0;
     centerY = 0;
-
     junction = 0.5;
+
+    dotted = false;
 
     constructor(M, R)
     {
@@ -35,34 +36,34 @@ class RelationToR
         {
             //Straight line.
             case 0:
-                if(this.selected) line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2));
+                if(this.selected) line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), this.dotted);
                 break;
             //Segmented line - vertical junction.
             case 1:
                 const distX = (Rx - Mx) * this.junction;
                 if(this.selected)
                 {
-                    line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                    line(canvas, Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                    line(canvas, Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
+                    line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                 }
-                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), (gridSize / 2));
-                line(canvas, Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2));
-                line(canvas, Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2));
+                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), this.dotted);
+                line(canvas, Mx + distX + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), this.dotted);
+                line(canvas, Mx + distX + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), this.dotted);
                 break;
             //Segmented line - horizontal junction.
             case 2:
                 const distY = (Ry - My) * this.junction;
                 if(this.selected)
                 {
-                    line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                    line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                    line(canvas, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
+                    line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                 }
-                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2));
-                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2));
-                line(canvas, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2));
+                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2), this.dotted);
+                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, (gridSize / 2), this.dotted);
+                line(canvas, Rx + gridSize, My + (gridSize * 2 - (gridSize / 2)) + distY, Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), this.dotted);
                 break;
         }
     }

@@ -28,12 +28,13 @@
 
         </div>
 
+        <div id="buttons">
+            <input type="image" class="button" id="saveTree" src = "/static/images/saveButton.png" alt="Save" onclick="saveTree()">
+            <input type="image" class="button" id="newMember" src="/static/images/newmember.png" alt="New Member">
+            <input type="image" class="button" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
+        </div>
+
         <div class="sidebar">
-            <div id="buttons">
-                <input type="image" class="button" id="saveTree" src = "/static/images/saveButton.png" alt="Save" onclick="saveTree()">
-                <input type="image" class="button" id="newMember" src="/static/images/newmember.png" alt="New Member">
-                <input type="image" class="button" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
-            </div>
             <form id = "memberForm" style = "display: none;">
                 <h2 id = "formHeader">Edit Member</h2>
                 <label for="image">Image:</label><br>
@@ -50,8 +51,17 @@
                 <input type="date" id="deathDate" name="deathDate"><br>
                 <label for="note">Note:</label><br>
                 <textarea id="note" name="note" maxlength="500" wrap="soft" placeholder="Put more information about this person here."></textarea><br>
-                <input type="submit" id="save" value="Save">
+                <input type="submit" class = "save" id="saveMember" value="Save">
                 <input type="button" id="deleteMember" value="Delete" style = "display : none;">
+            </form>
+
+            <form id = "relationForm" style = "display: none;">
+                <h2>Edit Relation</h2>
+                <label for="dotted">Dotted:</label><br>
+                <input type="checkbox" id="dotted" name="dotted"><br>
+                <input type="submit" class="save" id="saveRelation" value="Save"><br>
+                <input type="button" id="deleteRelation" value="Delete">
+
             </form>
 
         </div>
