@@ -2,9 +2,11 @@
 const canvas = document.querySelector('canvas');
 const body = document.querySelector('body');
 const memberForm = document.getElementById("memberForm");
+const relationForm = document.getElementById("relationForm");
 const newMemberButton = document.getElementById("newMember");
 const newRelationButton = document.getElementById("newRelation");
 const deleteMemberButton = document.getElementById("deleteMember");
+const deleteRelationButton = document.getElementById("deleteRelation");
 const formHeader = document.getElementById('formHeader');
 const c = canvas.getContext('2d');
 
@@ -32,14 +34,15 @@ const FORM_INPUT_LABELS = Object.freeze({
     BIRTHDATE : "birthDate",
     DIED : "died",
     DEATHDATE : "deathDate",
-    NOTE : "note"
+    NOTE : "note",
+    DOTTED : "dotted"
 });
 
 const COLOR_PALETTE = Object.freeze({
     BG : "white",
     GRID_LINES : '#bbbbbb',
-    MEMBER : "gray",
-    RELATION : "black",
+    MEMBER : "lightgray",
+    RELATION_PLACE : "#999999",
     SELECTED : "green",
     FONT : "black",
     DEFAULT : "black"
@@ -85,7 +88,17 @@ function handleDeleteMember()
 
 }
 
-function handleForm(event)
+function handleDeleteRelation()
+{
+    if(relationSelected !== -1){
+        relations.splice(relationSelected, 1);
+    }
+    relationSelected = -1;
+    relationForm.style.display = "none";
+
+}
+
+function handleMemberForm(event)
 {
     event.preventDefault();
     const text = document.getElementById('formHeader').textContent;
@@ -128,7 +141,14 @@ function handleForm(event)
     });
 }
 
-function fillForm()
+function handleRelationForm(event)
+{
+    event.preventDefault();
+    console.log(relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked);
+    relations[relationSelected].dotted = relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked;
+}
+
+function fillMemberForm()
 {
     memberForm.style.display = "block";
     formHeader.textContent = FORM_HEADERS.EDIT_MEMBER;
@@ -141,6 +161,11 @@ function fillForm()
     memberForm.elements[FORM_INPUT_LABELS.NOTE].value = members[memberSelected].note;
 }
 
+function fillRelationForm()
+{
+    relationForm.style.display = "block";
+    relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked = relations[relationSelected].dotted;
+}
 // DRAWING FUNCTIONS
 function fillRoundedRect(canvas, x, y, width, height, radius, color = COLOR_PALETTE.DEFAULT)
 {
@@ -166,12 +191,13 @@ function fillRoundedRect(canvas, x, y, width, height, radius, color = COLOR_PALE
     canvas.fillRect(x + radius, y, width - radius * 2, height);
 }
 
-function line(canvas, x1, y1, x2, y2, width = 1, stroke = COLOR_PALETTE.DEFAULT)
+function line(canvas, x1, y1, x2, y2, width = 1, dotted = false, stroke = COLOR_PALETTE.DEFAULT)
 {
     canvas.strokeStyle = stroke;
     canvas.lineWidth = width;
 
     canvas.lineCap = 'round';
+    canvas.setLineDash((dotted) ? [0, gridSize] : []);
     canvas.beginPath();
     canvas.moveTo(x1,y1);
     canvas.lineTo(x2,y2);

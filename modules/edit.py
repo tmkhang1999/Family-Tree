@@ -15,12 +15,6 @@ def edit_tree(id):
     return render_template('edit_tree.html', tree_id=id, tree_name=name, tree_content=content)
 
 
-@edit.route('/members/<id>')
-def members(id):
-    name, _ = User.get_tree(id)
-    return render_template('members.html', tree_name=name, tree_id=id)
-
-
 @edit.route('/saveTree/<tree_id>', methods=["POST"])
 def save_tree(tree_id):
     content = request.get_json()

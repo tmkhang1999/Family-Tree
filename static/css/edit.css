@@ -67,7 +67,6 @@ body {
 
     overflow-y:auto;
     height: 90vh;
-    width: 25vw;
     position: fixed;
     right:0;
     top:10vh;
@@ -119,14 +118,14 @@ body {
     /* border: 2px solid #333F20; */
 }
 
-.creation {
-    width: 5rem;
-    margin-right: 4rem;
-    display: flex;
+#buttons {
+    z-index: 1000;
+	position: absolute;
+    top: 100px;
+    left: 10px;
+    display: block;
     justify-content: space-between;
 }
-
-
 
 h2 {
     color: #333F20;
@@ -214,7 +213,7 @@ input {
     border-radius: 5px;
 }
 
-#save {
+.save {
     color: #ECECEC;
     font-size: 1rem;
     background-color: #577949;
@@ -222,94 +221,34 @@ input {
     transition: background .5s;
 }
 
-#save:hover {
+.save:hover {
     color:#577949;
     background-color: #ECECEC;
 }
 
-#save:focus {
+.save:focus {
     color:#577949;
     background-color: #ECECEC;
 }
 
-#save:active {
+.save:active {
     border: 1px solid #333F20;
 }
 
-.createnew {
+.button {
+    display:block;
     width: 40px;
+    height: 40px;
     border: none;
+    margin: 0;
 }
 
-.createnew:hover {
+.button:hover {
     border: 1px solid #333F20;
 }
 
-.createnew:focus {
+.button:focus {
     border: 1px solid #333F20;
-}
-
-/* MEMBER BOX STYLING */
-.memberpagewrapper {
-    margin-top: 4rem;
-    /* display: flex;
-    justify-content: space-between; */
-}
-
-.members {
-    max-width: 74rem;
-    margin:auto;
-    padding: 2rem;
-}
-
-.sort {
-    background-color: #FCFCF4;
-    height: auto;
-    width: 20rem;
-    padding: 1rem;
-    margin: 1rem;
-    border-radius: 10px;
-}
-
-#sort {
-    background-color: white;
-    color:#222;
-    font-family:"Lato", sans-serif;
-    width: 8rem;
-    margin-left: 1rem;
-    padding: 5px;
-    border: 1px solid #c1c1c1;
-    border-radius: 5px;
-}
-
-.member {
-    background-color: #FCFCF4;
-    width: 15rem;
-    height: auto;
-    padding: 1rem;
-    margin: 1rem;
-    border: 3px solid #4b5c2f;
-    border-radius: 10px;
-
-    display: inline-block;
-    transition: .5s;
-}
-
-.member:hover {
-    box-shadow: .5rem .5rem 5px #333F20;
-}
-
-.imagePH {
-    width: 100%;
-    height: 12rem;
-    background-color: #577949;
-    text-align: center;
-    color:#ECECEC;
-}
-
-.name {
-    font-size: 1.125rem;
-    line-height: 2rem;
 }
 
 .param {

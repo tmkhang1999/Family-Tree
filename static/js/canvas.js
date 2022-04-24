@@ -35,6 +35,7 @@ function mousePressed(event)
     if(event.target === canvas)
     {
         memberForm.style.display = "none";
+        relationForm.style.display = "none";
         let x = event.clientX;
         let y = event.clientY;
         memberSelected = -1;
@@ -47,7 +48,7 @@ function mousePressed(event)
                 if (members[i].isHovering(x, y)) {
                     members[i].isMoving = true;
                     memberSelected = i;
-                    fillForm();
+                    fillMemberForm();
                     if(placeRelationMode)
                     {
                         relations.push(new RelationToM(prevMemberSelected, memberSelected));
@@ -58,6 +59,8 @@ function mousePressed(event)
             for (let i = 0; i < relations.length; i++) {
                 if (relations[i].isHovering(x, y)) {
                     relationSelected = i;
+                    console.log(i);
+                    fillRelationForm();
                     if(placeRelationMode)
                     {
                         relations.push(new RelationToR(prevMemberSelected, relationSelected));
@@ -121,6 +124,10 @@ function keyPressed(event)
         if (key === ',' && relationSelected !== -1) {
             if (relations[relationSelected].modeModifier === 0) relations[relationSelected].modeModifier = 1;
             else if (relations[relationSelected].modeModifier === 1) relations[relationSelected].modeModifier = 0;
+        }
+        if(key === '.' && relationSelected !== -1)
+        {
+            relations[relationSelected].dotted = !relations[relationSelected].dotted;
         }
         if (key === "Delete" || key === "Backspace") {
             if (memberSelected !== -1) {
@@ -228,7 +235,7 @@ function loop()
 
     if(placeRelationMode)
     {
-        line(c, members[prevMemberSelected].x + gridSize, members[prevMemberSelected].y + (gridSize + (gridSize / 2)), (mouseX / scale) + cameraX, (mouseY / scale) + cameraY, gridSize / 2, "#999999");
+        line(c, members[prevMemberSelected].x + gridSize, members[prevMemberSelected].y + (gridSize + (gridSize / 2)), (mouseX / scale) + cameraX, (mouseY / scale) + cameraY, gridSize / 2, false, COLOR_PALETTE.RELATION_PLACE);
     }
 
     //Drawing and each relation.
@@ -265,8 +272,10 @@ addEventListener('keydown', keyPressed);
 addEventListener('keyup', keyReleased);
 addEventListener('wheel', pageScrolled);
 
-memberForm.addEventListener('submit', handleForm);
+memberForm.addEventListener('submit', handleMemberForm);
+relationForm.addEventListener('submit', handleRelationForm);
 newMemberButton.addEventListener('click', handleNewMember);
 newRelationButton.addEventListener('click', handleNewRelation);
 deleteMemberButton.addEventListener('click', handleDeleteMember);
+deleteRelationButton.addEventListener('click', handleDeleteRelation);
 loop();

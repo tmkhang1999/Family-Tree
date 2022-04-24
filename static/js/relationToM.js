@@ -6,8 +6,9 @@ class RelationToM
 
     centerX = 0;
     centerY = 0;
-    
     junction = 0.5;
+
+    dotted = false;
 
     constructor(A, B)
     {
@@ -36,34 +37,34 @@ class RelationToM
         {
             //Straight line.
             case 0:
-            if(this.selected) line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2));
+            if(this.selected) line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2), this.dotted);
                 break;
             //Segmented line - vertical junction.
             case 1:
                 let distX = (Bx - Ax) * this.junction;
                 if(this.selected)
                 {
-                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2) , COLOR_PALETTE.SELECTED);
-                    line(canvas, Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
-                    line(canvas, Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                 }
-                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), (gridSize / 2));
-                line(canvas, Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2));
-                line(canvas, Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2));
+                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), (gridSize / 2), this.dotted);
+                line(canvas, Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2), this.dotted);
+                line(canvas, Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2), this.dotted);
                 break;
             //Segmented line - horizontal junction.
             case 2:
                 let distY = (By - Ay) * this.junction;
                 if(this.selected)
                 {
-                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2) , COLOR_PALETTE.SELECTED);
-                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2) , COLOR_PALETTE.SELECTED);
-                    line(canvas, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2) , COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
                 }
-                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2));
-                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2));
-                line(canvas, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2));
+                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2), this.dotted);
+                line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2), this.dotted);
+                line(canvas, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2), this.dotted);
                 break;
         }
     }
