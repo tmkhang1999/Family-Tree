@@ -19,7 +19,6 @@ class Member
     sex = '';
     birthDate = "";
     birthPlace = "";
-    died = false;
     deathDate = "";
     note = "";
 
@@ -27,6 +26,17 @@ class Member
     {
         this.x = x;
         this.y = y;
+        this.id = Math.random();
+        while(true) {
+            for (let i = 0; i < members.length; i++) {
+                if(this !== members[i]){
+                    if(this.id === members[i].id){
+                        this.id = Math.random();
+                    }
+                }
+            }
+            break;
+        }
     }
 
     setImage(imageSrc)
@@ -61,7 +71,13 @@ class Member
         canvas.fillStyle = COLOR_PALETTE.FONT;
         canvas.textAlign = 'center';
         canvas.fillText(this.name, this.x + Member.width / 2, this.y + 3 * Member.height / 4);
-        canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
+        try
+        {
+            canvas.drawImage(this.image, this.x + Member.width / 8, this.y + Member.width / 8, Member.imageDim, Member.imageDim);
+        }
+        catch(e){
+            console.log("could not load image");
+        }
     }
 
     isHovering(mouseX, mouseY)
@@ -104,12 +120,11 @@ class Member
         }
     }
 
-    updateInfo(name, sex, birthPlace, birthDate, died, deathDate, note){
+    updateInfo(name, sex, birthPlace, birthDate, deathDate, note){
         this.name = name;
         this.sex = sex;
         this.birthPlace = birthPlace;
         this.birthDate = birthDate;
-        this.died = died;
         this.deathDate = deathDate;
         this.note = note;
     }

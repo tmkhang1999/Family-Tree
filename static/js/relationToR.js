@@ -3,6 +3,7 @@ class RelationToR
     TYPE = RELATION_TYPE.M_TO_R;
     selected = false;
     modeModifier = 1;
+    dotted = false;
 
     centerX = 0;
     centerY = 0;
@@ -12,16 +13,27 @@ class RelationToR
 
     constructor(M, R)
     {
-        this.indexMem = M;
-        this.indexRel = R;
+        this.MemID = M;
+        this.RelID = R;
+        this.id = Math.random();
+        while(true) {
+            for (let i = 0; i < relations.length; i++) {
+                if(this !== relations[i]){
+                    if(this.id === relations[i].id){
+                        this.id = Math.random();
+                    }
+                }
+            }
+            break;
+        }
     }
 
     draw(canvas)
     {
-        const Mx = members[this.indexMem].x;
-        const My = members[this.indexMem].y;
-        const Rx = relations[this.indexRel].centerX;
-        const Ry = relations[this.indexRel].centerY;
+        const Mx = members[members.findIndex(object => { return object.id === this.MemID;})].x;
+        const My = members[members.findIndex(object => { return object.id === this.MemID;})].y;
+        const Rx = relations[relations.findIndex(object => { return object.id === this.RelID;})].centerX;
+        const Ry = relations[relations.findIndex(object => { return object.id === this.RelID;})].centerY;
         this.mode = 0;
 
         if(Mx !== Rx && My !== Ry)
@@ -37,7 +49,7 @@ class RelationToR
             //Straight line.
             case 0:
                 if(this.selected) line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
-                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), this.dotted);
+                line(canvas, Mx + gridSize, My + (gridSize * 2 - (gridSize / 2)), Rx + gridSize, Ry + (gridSize * 2 - (gridSize / 2)), (gridSize / 2), (gridSize / 2), this.dotted);
                 break;
             //Segmented line - vertical junction.
             case 1:
@@ -70,10 +82,10 @@ class RelationToR
 
     isHovering(mouseX, mouseY)
     {
-        const Mx = members[this.indexMem].x;
-        const My = members[this.indexMem].y;
-        const Rx = relations[this.indexRel].centerX;
-        const Ry = relations[this.indexRel].centerY;
+        const Mx = members[members.findIndex(object => { return object.id === this.MemID;})].x;
+        const My = members[members.findIndex(object => { return object.id === this.MemID;})].y;
+        const Rx = relations[relations.findIndex(object => { return object.id === this.RelID;})].centerX;
+        const Ry = relations[relations.findIndex(object => { return object.id === this.RelID;})].centerY;
         
         const x = (mouseX / scale) + cameraX;
         const y = (mouseY / scale) + cameraY;

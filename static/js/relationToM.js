@@ -3,6 +3,7 @@ class RelationToM
     TYPE = RELATION_TYPE.M_TO_M;
     selected = false;
     modeModifier = 1;
+    dotted = false;
 
     centerX = 0;
     centerY = 0;
@@ -12,16 +13,27 @@ class RelationToM
 
     constructor(A, B)
     {
-        this.indexMemA = A;
-        this.indexMemB = B;
+        this.MemAID = A;
+        this.MemBID = B;
+        this.id = Math.random();
+        while(true) {
+            for (let i = 0; i < relations.length; i++) {
+                if(this !== relations[i]){
+                    if(this.id === relations[i].id){
+                        this.id = Math.random();
+                    }
+                }
+            }
+            break;
+        }
     }
 
     draw(canvas)
     {
-        let Ax = members[this.indexMemA].x;
-        let Ay = members[this.indexMemA].y;
-        let Bx = members[this.indexMemB].x;
-        let By = members[this.indexMemB].y;
+        let Ax = members[members.findIndex(object => { return object.id === this.MemAID;})].x;
+        let Ay = members[members.findIndex(object => { return object.id === this.MemAID;})].y;
+        let Bx = members[members.findIndex(object => { return object.id === this.MemBID;})].x;
+        let By = members[members.findIndex(object => { return object.id === this.MemBID;})].y;
         
         this.mode = 0;
 
@@ -45,7 +57,7 @@ class RelationToM
                 let distX = (Bx - Ax) * this.junction;
                 if(this.selected)
                 {
-                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                     line(canvas, Ax + distX + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                     line(canvas, Ax + distX + gridSize, By + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                 }
@@ -58,9 +70,9 @@ class RelationToM
                 let distY = (By - Ay) * this.junction;
                 if(this.selected)
                 {
-                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
-                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
-                    line(canvas, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2) , this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
+                    line(canvas, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
                 }
                 line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2), this.dotted);
                 line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, Bx + gridSize, Ay + (gridSize + (gridSize / 2)) + distY, (gridSize / 2), this.dotted);
@@ -71,10 +83,10 @@ class RelationToM
 
     isHovering(mouseX, mouseY)
     {
-        let Ax = members[this.indexMemA].x;
-        let Ay = members[this.indexMemA].y;
-        let Bx = members[this.indexMemB].x;
-        let By = members[this.indexMemB].y;
+        let Ax = members[members.findIndex(object => { return object.id === this.MemAID;})].x;
+        let Ay = members[members.findIndex(object => { return object.id === this.MemAID;})].y;
+        let Bx = members[members.findIndex(object => { return object.id === this.MemBID;})].x;
+        let By = members[members.findIndex(object => { return object.id === this.MemBID;})].y;
 
         const x = (mouseX / scale) + cameraX;
         const y = (mouseY / scale) + cameraY;

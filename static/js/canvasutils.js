@@ -79,6 +79,16 @@ function handleNewMember()
 function handleDeleteMember()
 {
     if(memberSelected !== -1){
+        for (let i = 0; i < relations.length; i++)
+        {
+            console.log(relations[i]);
+            if (relations[i].MemAID === members[memberSelected].id || relations[i].MemBID === members[memberSelected].id || relations[i].MemID === members[memberSelected].id)
+            {
+                relationSelected = i;
+                handleDeleteRelation();
+                i = -1;
+            }
+        }
         members.splice(memberSelected, 1);
     }
     memberSelected = -1;
@@ -91,6 +101,13 @@ function handleDeleteMember()
 function handleDeleteRelation()
 {
     if(relationSelected !== -1){
+        for(let i = 0; i< relations.length; i++)
+        {
+            if(relations[i].RelID === relations[relationSelected].id){
+                relations.splice(i,1);
+                i = -1;
+            }
+        }
         relations.splice(relationSelected, 1);
     }
     relationSelected = -1;
@@ -144,7 +161,6 @@ function handleMemberForm(event)
 function handleRelationForm(event)
 {
     event.preventDefault();
-    console.log(relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked);
     relations[relationSelected].dotted = relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked;
 }
 

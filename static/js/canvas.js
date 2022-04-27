@@ -51,7 +51,7 @@ function mousePressed(event)
                     fillMemberForm();
                     if(placeRelationMode)
                     {
-                        relations.push(new RelationToM(prevMemberSelected, memberSelected));
+                        relations.push(new RelationToM(members[prevMemberSelected].id, members[memberSelected].id));
                         placeRelationMode = false;
                     }
                 }
@@ -59,11 +59,10 @@ function mousePressed(event)
             for (let i = 0; i < relations.length; i++) {
                 if (relations[i].isHovering(x, y)) {
                     relationSelected = i;
-                    console.log(i);
                     fillRelationForm();
                     if(placeRelationMode)
                     {
-                        relations.push(new RelationToR(prevMemberSelected, relationSelected));
+                        relations.push(new RelationToR(members[prevMemberSelected].id, relations[relationSelected].id));
                         placeRelationMode = false;
                     }
                 }
@@ -108,40 +107,33 @@ function keyPressed(event)
     if(event.target === body)
     {
         let key = event.key;
+        console.log(event);
 
-        if (key === 'w') {
+        if (key === 'w' || key === 'ArrowUp') {
             movementDir.up = true;
         }
-        if (key === 'a') {
-            movementDir.left = true;
-        }
-        if (key === 's') {
+        if (key === 's' || key === 'ArrowDown') {
             movementDir.down = true;
         }
-        if (key === 'd') {
+        if (key === 'a' || key === 'ArrowLeft') {
+            movementDir.left = true;
+        }
+        if (key === 'd' || key === 'ArrowRight') {
             movementDir.right = true;
         }
         if (key === ',' && relationSelected !== -1) {
             if (relations[relationSelected].modeModifier === 0) relations[relationSelected].modeModifier = 1;
             else if (relations[relationSelected].modeModifier === 1) relations[relationSelected].modeModifier = 0;
         }
-        if(key === '.' && relationSelected !== -1)
-        {
+        if(key === '.' && relationSelected !== -1) {
             relations[relationSelected].dotted = !relations[relationSelected].dotted;
         }
         if (key === "Delete" || key === "Backspace") {
             if (memberSelected !== -1) {
-                for (let i = 0; i < relations.length; i++) {
-                    if (relations[i].indexMemA === memberSelected || relations[i].indexMemB === memberSelected || relations[i].indexMem === memberSelected) {
-                        relations.splice(i, 1);
-                    }
-                }
-                members.splice(memberSelected, 1);
-                memberSelected = -1;
+                handleDeleteMember();
             }
             if (relationSelected !== -1) {
-                relations.splice(relationSelected, 1);
-                relationSelected = -1;
+                handleDeleteRelation();
             }
         }
         if (event.shiftKey) {
@@ -156,10 +148,10 @@ function keyReleased(event)
     if(event.target === body)
     {
         let key = event.key;
-        movementDir.up = !(key === 'w') && movementDir.up;
-        movementDir.down = !(key === 's') && movementDir.down;
-        movementDir.left = !(key === 'a') && movementDir.left;
-        movementDir.right = !(key === 'd') && movementDir.right;
+        movementDir.up = !(key === 'w' || key === 'ArrowUp') && movementDir.up;
+        movementDir.down = !(key === 's' || key === 'ArrowDown') && movementDir.down;
+        movementDir.left = !(key === 'a' || key === 'ArrowLeft') && movementDir.left;
+        movementDir.right = !(key === 'd' || key === 'ArrowRight') && movementDir.right;
 
         gridAligning = true;
     }
@@ -229,7 +221,7 @@ function loop()
 {
     requestAnimationFrame(loop);
     updateCamera();
-    
+
     drawGrid();
 
 
