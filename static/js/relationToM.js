@@ -9,6 +9,8 @@ class RelationToM
     centerY = 0;
     junction = 0.5;
 
+    dotted = false;
+
     constructor(A, B)
     {
         this.MemAID = A;

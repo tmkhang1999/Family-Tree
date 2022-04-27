@@ -108,7 +108,6 @@ function handleDeleteRelation()
                 i = -1;
             }
         }
-
         relations.splice(relationSelected, 1);
     }
     relationSelected = -1;
