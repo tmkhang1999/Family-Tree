@@ -9,6 +9,10 @@ main = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
+@main.route('/helppage')
+def helppage():
+    return render_template('helppage.html')
+
 
 @main.route('/profile')
 def profile():
