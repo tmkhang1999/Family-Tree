@@ -35,6 +35,7 @@ function mousePressed(event)
     if(event.target === canvas)
     {
         memberForm.style.display = "none";
+        relationForm.style.display = "none";
         let x = event.clientX;
         let y = event.clientY;
         memberSelected = -1;
@@ -47,10 +48,10 @@ function mousePressed(event)
                 if (members[i].isHovering(x, y)) {
                     members[i].isMoving = true;
                     memberSelected = i;
-                    fillForm();
+                    fillMemberForm();
                     if(placeRelationMode)
                     {
-                        relations.push(new RelationToM(prevMemberSelected, memberSelected));
+                        relations.push(new RelationToM(members[prevMemberSelected].id, members[memberSelected].id));
                         placeRelationMode = false;
                     }
                 }
@@ -58,9 +59,10 @@ function mousePressed(event)
             for (let i = 0; i < relations.length; i++) {
                 if (relations[i].isHovering(x, y)) {
                     relationSelected = i;
+                    fillRelationForm();
                     if(placeRelationMode)
                     {
-                        relations.push(new RelationToR(prevMemberSelected, relationSelected));
+                        relations.push(new RelationToR(members[prevMemberSelected].id, relations[relationSelected].id));
                         placeRelationMode = false;
                     }
                 }
@@ -105,36 +107,33 @@ function keyPressed(event)
     if(event.target === body)
     {
         let key = event.key;
+        console.log(event);
 
-        if (key === 'w') {
+        if (key === 'w' || key === 'ArrowUp') {
             movementDir.up = true;
         }
-        if (key === 'a') {
-            movementDir.left = true;
-        }
-        if (key === 's') {
+        if (key === 's' || key === 'ArrowDown') {
             movementDir.down = true;
         }
-        if (key === 'd') {
+        if (key === 'a' || key === 'ArrowLeft') {
+            movementDir.left = true;
+        }
+        if (key === 'd' || key === 'ArrowRight') {
             movementDir.right = true;
         }
         if (key === ',' && relationSelected !== -1) {
             if (relations[relationSelected].modeModifier === 0) relations[relationSelected].modeModifier = 1;
             else if (relations[relationSelected].modeModifier === 1) relations[relationSelected].modeModifier = 0;
         }
+        if(key === '.' && relationSelected !== -1) {
+            relations[relationSelected].dotted = !relations[relationSelected].dotted;
+        }
         if (key === "Delete" || key === "Backspace") {
             if (memberSelected !== -1) {
-                for (let i = 0; i < relations.length; i++) {
-                    if (relations[i].indexMemA === memberSelected || relations[i].indexMemB === memberSelected || relations[i].indexMem === memberSelected) {
-                        relations.splice(i, 1);
-                    }
-                }
-                members.splice(memberSelected, 1);
-                memberSelected = -1;
+                handleDeleteMember();
             }
             if (relationSelected !== -1) {
-                relations.splice(relationSelected, 1);
-                relationSelected = -1;
+                handleDeleteRelation();
             }
         }
         if (event.shiftKey) {
@@ -149,10 +148,10 @@ function keyReleased(event)
     if(event.target === body)
     {
         let key = event.key;
-        movementDir.up = !(key === 'w') && movementDir.up;
-        movementDir.down = !(key === 's') && movementDir.down;
-        movementDir.left = !(key === 'a') && movementDir.left;
-        movementDir.right = !(key === 'd') && movementDir.right;
+        movementDir.up = !(key === 'w' || key === 'ArrowUp') && movementDir.up;
+        movementDir.down = !(key === 's' || key === 'ArrowDown') && movementDir.down;
+        movementDir.left = !(key === 'a' || key === 'ArrowLeft') && movementDir.left;
+        movementDir.right = !(key === 'd' || key === 'ArrowRight') && movementDir.right;
 
         gridAligning = true;
     }
@@ -222,13 +221,13 @@ function loop()
 {
     requestAnimationFrame(loop);
     updateCamera();
-    
+
     drawGrid();
 
 
     if(placeRelationMode)
     {
-        line(c, members[prevMemberSelected].x + gridSize, members[prevMemberSelected].y + (gridSize + (gridSize / 2)), (mouseX / scale) + cameraX, (mouseY / scale) + cameraY, gridSize / 2, "#999999");
+        line(c, members[prevMemberSelected].x + gridSize, members[prevMemberSelected].y + (gridSize + (gridSize / 2)), (mouseX / scale) + cameraX, (mouseY / scale) + cameraY, gridSize / 2, false, COLOR_PALETTE.RELATION_PLACE);
     }
 
     //Drawing and each relation.
@@ -265,8 +264,10 @@ addEventListener('keydown', keyPressed);
 addEventListener('keyup', keyReleased);
 addEventListener('wheel', pageScrolled);
 
-memberForm.addEventListener('submit', handleForm);
+memberForm.addEventListener('submit', handleMemberForm);
+relationForm.addEventListener('submit', handleRelationForm);
 newMemberButton.addEventListener('click', handleNewMember);
 newRelationButton.addEventListener('click', handleNewRelation);
 deleteMemberButton.addEventListener('click', handleDeleteMember);
+deleteRelationButton.addEventListener('click', handleDeleteRelation);
 loop();

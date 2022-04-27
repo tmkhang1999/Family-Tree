@@ -24,22 +24,17 @@
                 <h1 id="name-tree-edit">[{{ tree_name }}]</h1>
                 <a class="top-button" href="{{ url_for('main.profile') }}">Home</a> |
                 <a class="top-button" href="{{ url_for('main.helppage') }}" target="_blank" rel="noreferrer noopener">Instructions, Help and FAQ</a> |
-                <a class="top-button" onclick="saveTree()">Save Tree</a>
             </div>
 
-            <!-- Changed this from a form to a div because forms cause reload when an input is pressed-->
-            <div class="creation">
-                <input type="image" class="createnew" id="newMember" src="/static/images/newmember.png" alt="New Member">
-                <input type="image" class="createnew" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
-            </div>
+        </div>
+
+        <div id="buttons">
+            <input type="image" class="button" id="saveTree" src = "/static/images/saveButton.png" alt="Save" onclick="saveTree()">
+            <input type="image" class="button" id="newMember" src="/static/images/newmember.png" alt="New Member">
+            <input type="image" class="button" id="newRelation" src="/static/images/newrelation.png" alt="New Relation">
         </div>
 
         <div class="sidebar">
-            <!--
-                -- Changed the names and id's for the form so that they matched the member variables were using in JS
-                -- Moved the header inside the form and gave it an ID of "formHeader"
-                -- Changed the form ID to "memberForm" because I use this form for editing and creating members
-            -->
             <form id = "memberForm" style = "display: none;">
                 <h2 id = "formHeader">Edit Member</h2>
                 <label for="image">Image:</label><br>
@@ -56,8 +51,17 @@
                 <input type="date" id="deathDate" name="deathDate"><br>
                 <label for="note">Note:</label><br>
                 <textarea id="note" name="note" maxlength="500" wrap="soft" placeholder="Put more information about this person here."></textarea><br>
-                <input type="submit" id="save" value="Save">
+                <input type="submit" class = "save" id="saveMember" value="Save">
                 <input type="button" id="deleteMember" value="Delete" style = "display : none;">
+            </form>
+
+            <form id = "relationForm" style = "display: none;">
+                <h2>Edit Relation</h2>
+                <label for="dotted">Dotted:</label><br>
+                <input type="checkbox" id="dotted" name="dotted"><br>
+                <input type="submit" class="save" id="saveRelation" value="Save"><br>
+                <input type="button" id="deleteRelation" value="Delete">
+
             </form>
 
         </div>
@@ -94,6 +98,7 @@
             for(let i = 0; i < data.members.length; i++) {
                 // the commented out variables have not been
                 // added to the html form yet
+                let id = data.members[i].id;
                 let x = data.members[i].x;
                 let y = data.members[i].y;
                 let imageSrc = data.members[i].imageSrc;
@@ -102,20 +107,24 @@
                 let name = data.members[i].name;
                 let birthPlace = data.members[i].birthPlace;
                 let birthDate = data.members[i].birthDate;
-                // let died = data.members[i].died;
                 let deathDate = data.members[i].deathDate;
                 let tempMember = new Member(x,y);
-                tempMember.updateInfo(name, sex, birthPlace, birthDate, false, deathDate, note);
+                tempMember.updateInfo(name, sex, birthPlace, birthDate,deathDate, note);
                 tempMember.setImage(imageSrc);
+                tempMember.id = id;
                 members.push(tempMember);
             }
 
             for(let i = 0; i < data.relations.length; i++) {
                 if(data.relations[i].TYPE === RELATION_TYPE.M_TO_M) {
-                    relations.push(new RelationToM(data.relations[i].indexMemA,data.relations[i].indexMemB));
+                    let tempRelation = new RelationToM(data.relations[i].MemAID,data.relations[i].MemBID);
+                    tempRelation.id = data.relations[i].id;
+                    relations.push(tempRelation);
                 }
                 else if(data.relations[i].TYPE === RELATION_TYPE.M_TO_R) {
-                    relations.push(new RelationToR(data.relations[i].indexMem,data.relations[i].indexRel));
+                    let tempRelation = new RelationToR(data.relations[i].MemID,data.relations[i].RelID);
+                    tempRelation.id = data.relations[i].id;
+                    relations.push(tempRelation);
                 }
             }
         }
