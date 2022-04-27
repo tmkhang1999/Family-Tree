@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Sapling application instruction page.">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{url_for('static', filename='css/helppage.css')}}" type="text/css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,8 +33,8 @@
 			
             <h3>Creating, editing and deleting Relations</h3>
             <p>Click the "Create Relation" button at the top right of the interface. Then click the first member of your relation, followed by the second. When your relation is created, it will appear in your tree as a solid black line, but you can change that later.</p>
-            <p>Click on your relation and drag it around until it fits in with the rest of your tree and looks how you want it to. Doing this won't shift existing members and relations, so don't let that stop you while you customize. [how to toggle junction and lined/dashed?]</p>
-            <p>If your relation is no longer needed, click [...add del relation desc...]. The members connected to your relation will go unaffected when you do this, but the line will disappear.</p>
+            <p>Click on your relation and drag it around until it fits in with the rest of your tree and looks how you want it to. Doing this won't shift existing members and relations, so don't let that stop you while you customize. You can also click on an existing relation and check the box next to "Dotted" for a slightly different look.</p>
+            <p>If your relation is no longer needed, click on it and click the delete button in the panel that pops up. The members connected to your relation will go unaffected when you do this, but the line will disappear.</p>
             <h3>Adding and Removing Collaborators</h3>
             <p>If you want some help nurturing your tree, add a collaborator(s) by [...add collab desc...]. If you are the creator of a tree, only you have the right to add or remove collaborators or delete the tree. Everything else (creating, editing, and deleting members and relations) is fair game to both you and your collaborators. If you are the collaborator of a tree, it will appear in your forest like any other tree [...except?], but you won't be able to delete it or add or remove other collaborators.</p>
             </div>
