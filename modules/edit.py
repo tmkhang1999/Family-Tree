@@ -23,8 +23,8 @@ def save_tree(tree_id):
     return res
 
 
-@edit.route('/saveImage/<tree_id>', methods=["POST"])
-def save_image(tree_id):
+@edit.route('/saveImage/<tree_id>/<member_id>', methods=["POST"])
+def save_image(tree_id, member_id):
     file = request.files['image']
     if file:
         file_type = file.filename.split('.')[-1]
@@ -40,8 +40,7 @@ def save_image(tree_id):
             os.mkdir(tree_path)
 
         # save image
-        image_id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10))
-        image_path = os.path.join(tree_path, image_id + "." + file_type)
+        image_path = os.path.join(tree_path, member_id + "." + file_type)
         file.save(image_path)
     else:
         image_path = None
