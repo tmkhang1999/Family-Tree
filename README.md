@@ -8,7 +8,7 @@
 # II. UI Design Ideas
 * https://www.figma.com/file/c7wQ7DVZuCECJfWvkTurEv/Family-Tree-Login?node-id=0%3A1 (Joseph Montalvo)
 * https://www.figma.com/file/Clnk7AaO1CSWeZvhB8M91l/Family-Tree?node-id=0%3A1 (Khang Tran)
-* https://mbauso.github.io/sproutUI/ (Maddie Bauso)
+* https://mbauso.github.io/sapling/ (Maddie Bauso)
 
 # III. Installation
 ## Prerequisites
