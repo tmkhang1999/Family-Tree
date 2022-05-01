@@ -59,6 +59,13 @@
                 <h2>Edit Relation</h2>
                 <label for="dotted">Dotted:</label><br>
                 <input type="checkbox" id="dotted" name="dotted"><br>
+
+                <label for="junctionType">Junction Direction:</label><br>
+                <select name="junctionType" id="junctionType">
+                  <option value="h">Horizontal</option>
+                  <option value="v">Vertical</option>
+                </select><br>
+
                 <input type="submit" class="save" id="saveRelation" value="Save"><br>
                 <input type="button" id="deleteRelation" value="Delete">
 
@@ -119,11 +126,15 @@
                 if(data.relations[i].TYPE === RELATION_TYPE.M_TO_M) {
                     let tempRelation = new RelationToM(data.relations[i].MemAID,data.relations[i].MemBID);
                     tempRelation.id = data.relations[i].id;
+                    tempRelation.dotted = data.relations[i].dotted;
+                    tempRelation.mode = data.relations[i].mode;
                     relations.push(tempRelation);
                 }
                 else if(data.relations[i].TYPE === RELATION_TYPE.M_TO_R) {
                     let tempRelation = new RelationToR(data.relations[i].MemID,data.relations[i].RelID);
                     tempRelation.id = data.relations[i].id;
+                    tempRelation.dotted = data.relations[i].dotted;
+                    tempRelation.mode = data.relations[i].mode;
                     relations.push(tempRelation);
                 }
             }
@@ -160,11 +171,6 @@
             }).catch(function (error) {
                 alert("Fetch error: " + error);
             });
-        }
-      
-        const help_button = document.getElementById("help-button")
-        help_button.onclick = function () {
-            $("#help-modal").modal("show");
         }
     </script>
 

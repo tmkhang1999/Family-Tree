@@ -15,7 +15,6 @@ let topLeftX = 0;
 let topLeftY = 0;
 let bottomRightX = 0;
 let bottomRightY = 0;
-let gridAligning = true;
 const gridSize = 50;
 const BorderSize = 5;
 
@@ -35,7 +34,8 @@ const FORM_INPUT_LABELS = Object.freeze({
     DIED : "died",
     DEATHDATE : "deathDate",
     NOTE : "note",
-    DOTTED : "dotted"
+    DOTTED : "dotted",
+    JUNCTION_TYPE : "junctionType"
 });
 
 const COLOR_PALETTE = Object.freeze({
@@ -162,6 +162,7 @@ function handleRelationForm(event)
 {
     event.preventDefault();
     relations[relationSelected].dotted = relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked;
+    relations[relationSelected].mode = relationForm.elements[FORM_INPUT_LABELS.JUNCTION_TYPE].value;
 }
 
 function fillMemberForm()
@@ -181,7 +182,9 @@ function fillRelationForm()
 {
     relationForm.style.display = "block";
     relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked = relations[relationSelected].dotted;
+    relationForm.elements[FORM_INPUT_LABELS.JUNCTION_TYPE].value = relations[relationSelected].mode;
 }
+
 // DRAWING FUNCTIONS
 function fillRoundedRect(canvas, x, y, width, height, radius, color = COLOR_PALETTE.DEFAULT)
 {

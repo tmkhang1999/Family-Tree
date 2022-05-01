@@ -11,6 +11,7 @@ let prevMemberSelected = -1;
 //Modes
 let placeMemberMode = false;
 let placeRelationMode = false;
+let gridAligning = true;
 
 //Input Variables
 let mouseX = 0;
@@ -121,10 +122,6 @@ function keyPressed(event)
         if (key === 'd' || key === 'ArrowRight') {
             movementDir.right = true;
         }
-        if (key === ',' && relationSelected !== -1) {
-            if (relations[relationSelected].modeModifier === 0) relations[relationSelected].modeModifier = 1;
-            else if (relations[relationSelected].modeModifier === 1) relations[relationSelected].modeModifier = 0;
-        }
         if(key === '.' && relationSelected !== -1) {
             relations[relationSelected].dotted = !relations[relationSelected].dotted;
         }
@@ -137,7 +134,7 @@ function keyPressed(event)
             }
         }
         if (event.shiftKey) {
-            gridAligning = false;
+            gridAligning = !gridAligning;
         }
     }
 }
@@ -152,8 +149,6 @@ function keyReleased(event)
         movementDir.down = !(key === 's' || key === 'ArrowDown') && movementDir.down;
         movementDir.left = !(key === 'a' || key === 'ArrowLeft') && movementDir.left;
         movementDir.right = !(key === 'd' || key === 'ArrowRight') && movementDir.right;
-
-        gridAligning = true;
     }
 }
 
