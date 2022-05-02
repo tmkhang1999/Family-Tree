@@ -27,15 +27,14 @@ class Member
         this.x = x;
         this.y = y;
         this.id = Math.random();
-        while(true) {
-            for (let i = 0; i < members.length; i++) {
-                if(this !== members[i]){
-                    if(this.id === members[i].id){
-                        this.id = Math.random();
-                    }
+
+        for (let i = 0; i < members.length; i++) {
+            if(this !== members[i]){
+                if(this.id === members[i].id){
+                    this.id = Math.random();
+                    i = 0;
                 }
             }
-            break;
         }
     }
 
@@ -45,15 +44,12 @@ class Member
         if (imageSrc) {
             this.imageSrc = imageSrc;
         } else {
-            this.imageSrc = "static/images/person0.jpeg";
+            this.imageSrc = "static/images/person0.png";
         }
+        this.image.crossOrigin = "anonymous";
         this.image.src = location + this.imageSrc;
     }
 
-    setSex(sex)
-    {
-        this.sex = sex[0];
-    }
 
     setPosition(x,y)
     {
@@ -86,11 +82,6 @@ class Member
         let yInBounds = inBounds(mouseY, (this.y - cameraY) * scale, (this.y + Member.height - cameraY) * scale, 0)
         return !!(xInBounds && yInBounds);
 
-        // if(mouseX > (this.x - cameraX) * scale && mouseX < (this.x + this.width - cameraX) * scale && mouseY > (this.y - cameraY) * scale && mouseY < (this.y + this.height - cameraY) * scale)
-        // {
-        //     return true;
-        // }
-        // return false
     }
 
     update()

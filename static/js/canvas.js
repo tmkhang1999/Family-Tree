@@ -8,6 +8,7 @@ let scalelevel = 0;
 let relationSelected = -1;
 let memberSelected = -1;
 let prevMemberSelected = -1;
+
 //Modes
 let placeMemberMode = false;
 let placeRelationMode = false;
@@ -18,7 +19,6 @@ let mouseX = 0;
 let mouseY = 0;
 let newMemberX = 0;
 let newMemberY = 0;
-
 const movementDir = {
     "up": false,
     "down": false,
@@ -26,6 +26,7 @@ const movementDir = {
     "right": false
 };
 
+//Tree Related Variables
 let newMember = null;
 const members = [];
 const relations = [];
@@ -136,6 +137,9 @@ function keyPressed(event)
         if (event.shiftKey) {
             gridAligning = !gridAligning;
         }
+        if(key === "n"){
+            printCanvas();
+        }
     }
 }
 
@@ -217,8 +221,12 @@ function loop()
     requestAnimationFrame(loop);
     updateCamera();
 
-    drawGrid();
+    draw();
+}
 
+function draw()
+{
+    drawGrid();
 
     if(placeRelationMode)
     {
@@ -249,7 +257,9 @@ function loop()
 
     c.translate(cameraX, cameraY);
     c.scale(1 / scale, 1 / scale);
+
 }
+
 
 addEventListener('mousedown', mousePressed);
 addEventListener('mouseup', mouseReleased);

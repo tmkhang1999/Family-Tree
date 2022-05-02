@@ -142,6 +142,7 @@ function handleMemberForm(event)
     }
 
     const form_data = new FormData($('#memberForm')[0]);
+    console.log(form_data);
     $.ajax({
         type: 'POST',
         url: `${window.origin}/saveImage/${treeID}/${member.id}`,
@@ -168,6 +169,7 @@ function handleRelationForm(event)
 function fillMemberForm()
 {
     memberForm.style.display = "block";
+    relationForm.style.display = "none";
     formHeader.textContent = FORM_HEADERS.EDIT_MEMBER;
     deleteMemberButton.style.display = "block";
     memberForm.elements[FORM_INPUT_LABELS.NAME].value = members[memberSelected].name;
@@ -181,11 +183,12 @@ function fillMemberForm()
 function fillRelationForm()
 {
     relationForm.style.display = "block";
+    memberForm.style.display = "none";
     relationForm.elements[FORM_INPUT_LABELS.DOTTED].checked = relations[relationSelected].dotted;
     relationForm.elements[FORM_INPUT_LABELS.JUNCTION_TYPE].value = relations[relationSelected].mode;
 }
 
-// DRAWING FUNCTIONS
+//DRAWING
 function fillRoundedRect(canvas, x, y, width, height, radius, color = COLOR_PALETTE.DEFAULT)
 {
     canvas.fillStyle = color;
@@ -223,39 +226,8 @@ function line(canvas, x1, y1, x2, y2, width = 1, dotted = false, stroke = COLOR_
     canvas.stroke();
 }
 
-function stepLine(canvas,x1,y1,x2,y2,midX = 0,midY = 0, width = 1,stroke = COLOR_PALETTE.DEFAULT)
-{
-    if(midY === 0)
-    {
-        line(canvas, x1, y1 , midX, y1, stroke,width);
-        line(canvas, midX, y1, midX, y2, stroke, width);
-        line(canvas, midX, y2, x2, y2, stroke, width);
-    }
-    else if (midX === 0)
-    {
-        line(canvas, x1, y1 , x1, midY, stroke, width);
-        line(canvas, x1, midY, x2, midY, stroke, width);
-        line(canvas, x2, midY, x2, y2, stroke, width);
-    }
-}
 
-function ULine(canvas,x1,y1,x2,y2,xOff = 0,yOff = 0, width = 1, stroke = COLOR_PALETTE.DEFAULT)
-{
-    if(xOff === 0)
-    {
-        line(canvas, x1, y1, x1, y1 + yOff, stroke, width);
-        line(canvas, x1, y1 + yOff, x2, y2 + yOff, stroke, width);
-        line(canvas, x2, y2 + yOff, x2, y2, stroke, width);
-    }
-    else if(yOff === 0)
-    {
-        line(canvas,x1, y1, x1 + xOff, y1, stroke, width);
-        line(canvas,x1 + xOff, y1, x2 + xOff, y2, stroke, width);
-        line(canvas,x2 + xOff, y2, x2, y2, stroke, width);
-    }
-}
 
-//moved from canvas
 function drawGrid()
 {
     if(scalelevel < 1.5 && gridAligning)
@@ -272,10 +244,75 @@ function drawGrid()
 }
 
 
-//COLLISION DETECTION
-function inBounds(x, x1, x2, tolerance)
+//DOWNLOADING AS IMAGE
+function printCanvas()
 {
-    return (x >= x1 - tolerance && x <= x2 + tolerance) || (x >= x2 - tolerance && x <= x1 + tolerance);
+    gridAligning = false;
+    setCanvasImageBounds()
+    gridAligning = true;
+    let image = canvas.toDataURL("image/png");
+
+    let a = document.createElement('a');
+    a.href = image;
+    a.download = "output.png";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+
+}
+
+function setCanvasImageBounds()
+{
+    let top, bottom, left, right;
+
+    for(let i = 0; i < members.length; i++)
+    {
+        if(i === 0)
+        {
+            bottom = members[i].y + 150;
+            top = members[i].y;
+            left = members[i].x;
+            right = members[i].x + 100;
+        }
+        if(members[i].y < top)
+        {
+            top = members[i].y;
+        }
+        if(members[i].y + 150 > bottom)
+        {
+            bottom = members[i].y + 150;
+        }
+        if(members[i].x < left)
+        {
+            left = members[i].x;
+        }
+        if(members[i].x + 100 > right)
+        {
+            right = members[i].x + 100;
+        }
+    }
+
+    canvas.width = right - left;
+    canvas.height = bottom - top;
+
+    c.translate(-left, -top);
+
+    topLeftX = Math.floor(left / gridSize) * gridSize;
+    topLeftY = Math.floor(top / gridSize) * gridSize;
+
+    bottomRightX = Math.floor((right / scale) / gridSize) * gridSize;
+    bottomRightY = Math.floor((bottom / scale) / gridSize) * gridSize;
+
+    c.fillStyle = '#ffffff';
+    c.fillRect(left, top, right - left, bottom-top);
+    draw();
+}
+
+
+//COLLISION DETECTION
+function inBounds(a, min, max, tolerance)
+{
+    return (a >= min - tolerance && a <= max + tolerance) || (a >= max - tolerance && a <= min + tolerance);
 }
 
 function pointOnVertical(x, y, y1, y2, lineY, tolerance)
