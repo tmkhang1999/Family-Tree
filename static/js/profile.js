@@ -30,7 +30,7 @@ function create(key) {
     // Create three-dots button
     const nav_img = document.createElement("img");
     nav_img.setAttribute("class", "nav-img");
-    nav_img.setAttribute("src", "/static/images/three-dots.png");
+    nav_img.setAttribute("src", "/static/images/more.png");
 
     const nav_link = document.createElement("a");
     nav_link.setAttribute("class", "nav-link");
@@ -44,7 +44,7 @@ function create(key) {
 
     // Add rename option
     const pen = document.createElement("img");
-    pen.setAttribute("src", "/static/images/rename.png")
+    pen.setAttribute("src", "/static/images/edit.png")
     pen.setAttribute("class", "nav-img")
     const rename = document.createTextNode("Rename");
     const option1 = document.createElement("a");
@@ -58,7 +58,7 @@ function create(key) {
 
     // Add collaboration option
     const group = document.createElement("img");
-    group.setAttribute("src", "/static/images/group.png")
+    group.setAttribute("src", "/static/images/collaboration.png")
     group.setAttribute("class", "nav-img")
     const collabText = document.createTextNode("Collaboration");
     const option2 = document.createElement("a");
@@ -72,7 +72,7 @@ function create(key) {
 
     // Add remove tree option
     const trash = document.createElement("img");
-    trash.setAttribute("src", "/static/images/trash.png")
+    trash.setAttribute("src", "/static/images/delete.png")
     trash.setAttribute("class", "nav-img")
     const remove = document.createTextNode("Delete this tree");
     const option3 = document.createElement("a");

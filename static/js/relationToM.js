@@ -16,15 +16,13 @@ class RelationToM
         this.MemAID = A;
         this.MemBID = B;
         this.id = Math.random();
-        while(true) {
-            for (let i = 0; i < relations.length; i++) {
-                if(this !== relations[i]){
-                    if(this.id === relations[i].id){
-                        this.id = Math.random();
-                    }
+        for (let i = 0; i < relations.length; i++) {
+            if(this !== relations[i]){
+                if(this.id === relations[i].id){
+                    this.id = Math.random();
+                    i = 0;
                 }
             }
-            break;
         }
     }
 
@@ -40,11 +38,6 @@ class RelationToM
 
         switch(this.mode)
         {
-            //Straight line.
-            // case 0:
-            // if(this.selected) line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)),(gridSize / 2) + (BorderSize * 2), this.dotted, COLOR_PALETTE.SELECTED);
-            //     line(canvas, Ax + gridSize, Ay + (gridSize + (gridSize / 2)), Bx + gridSize, By + (gridSize + (gridSize / 2)), (gridSize / 2), this.dotted);
-            //     break;
             //Segmented line - vertical junction.
             case "v":
 
