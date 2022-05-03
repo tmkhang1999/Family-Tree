@@ -1,21 +1,30 @@
 const add_button = document.getElementById("add-box")
 const add_form = document.getElementById("add-form");
 const add_submit = document.getElementById("add-submit");
-const rename_button = document.getElementById("rename-button");
-const delete_button = document.getElementById("delete-button")
+
+const rename_form = document.getElementById("rename-form");
+const rename_submit = document.getElementById("rename-submit");
+
+const collab_button = document.getElementById("collab-button");
+const email_list = document.getElementById("email-list");
+
+const delete_submit = document.getElementById("delete-submit");
+
 
 function create(key) {
     let treeID = null;
     let treeName = "New Box";
+    let userEmails = null;
     if (key) {
         treeID = key[0];
         treeName = key[1];
+        userEmails = key[2];
     }
 
     const name = document.createTextNode(treeName);
     const nameHolder = document.createElement("div");
     nameHolder.setAttribute('class', 'tree-name');
-    nameHolder.setAttribute("onclick", `redirect("${treeID}")`)
+    nameHolder.onclick = function () {redirect(treeID)}
     nameHolder.appendChild(name);
 
     // Create three-dots button
@@ -40,7 +49,7 @@ function create(key) {
     const rename = document.createTextNode("Rename");
     const option1 = document.createElement("a");
     option1.setAttribute("class", "dropdown-item");
-    option1.setAttribute("onclick", `renameConfirm("${treeID}")`)
+    option1.onclick = function() {renameConfirm(treeID)};
     option1.appendChild(pen);
     option1.appendChild(rename);
 
@@ -51,11 +60,12 @@ function create(key) {
     const group = document.createElement("img");
     group.setAttribute("src", "/static/images/group.png")
     group.setAttribute("class", "nav-img")
-    const collaboration = document.createTextNode("Collaboration");
+    const collabText = document.createTextNode("Collaboration");
     const option2 = document.createElement("a");
     option2.setAttribute("class", "dropdown-item");
+    option2.onclick = function() {collaboration(treeID, userEmails)};
     option2.appendChild(group);
-    option2.appendChild(collaboration);
+    option2.appendChild(collabText);
 
     const line2 = document.createElement("div");
     line2.setAttribute("class", "dropdown-divider");
@@ -67,8 +77,8 @@ function create(key) {
     const remove = document.createTextNode("Delete this tree");
     const option3 = document.createElement("a");
     option3.setAttribute("class", "dropdown-item");
-    option3.setAttribute("style", "color: #FF0000")
-    option3.setAttribute("onclick", `deleteConfirm("${treeID}")`)
+    option3.setAttribute("style", "color: #FF0000");
+    option3.onclick = function () {deleteConfirm(treeID)};
     option3.appendChild(trash);
     option3.appendChild(remove);
 
@@ -120,7 +130,7 @@ add_form.onsubmit = function (event) {
         [input.id]: input.value
     }), {});
     const id = Math.random().toString(36).substr(2, 9)
-    const key = [id, text['message']]
+    const key = [id, text['message'], []]
 
     fetch(`${window.origin}/profile/add`, {
         method: "POST",
@@ -145,50 +155,20 @@ add_form.onsubmit = function (event) {
     });
 }
 
-function deleteConfirm(element) {
-    delete_button.setAttribute("onclick", `deleteTree("${element}")`)
-    $("#delete-modal").modal("show");
-}
-
-function deleteTree(element) {
-    fetch(`${window.origin}/profile/delete`, {
-        method: "POST",
-        credentials: "include",
-        body: JSON.stringify(element),
-        cache: "no-cache",
-        headers: new Headers({
-        "content-type": "application/json"
-        })
-    }).then(function (response) {
-        if (response.status !== 200) {
-            console.log(`Looks like there was a problem. Status code: ${response.status}`);
-            return;
-        }
-        response.json().then(function (data) {
-            if (data['message'] === "OK") {
-                const box = document.getElementById(element)
-                box.remove()
-            }
-        });
-    }).catch(function (error) {
-        console.log("Fetch error:" + error);
-    });
-}
-
 function renameConfirm(element) {
-    rename_button.setAttribute("onclick", `renameTree("${element}")`)
+    rename_submit.onclick = function () {renameTree(element)}
     $("#rename-modal").modal("show");
 }
 
-rename_button.onmousemove = function () {
-    if (add_form.checkValidity() === true) {
+rename_submit.onmousemove = function () {
+    if (rename_form.checkValidity() === true) {
         document.getElementById("rename-button").setAttribute("data-bs-dismiss", "modal");
     } else {
         document.getElementById("rename-button").removeAttribute("data-bs-dismiss");
     }
 }
 
-function renameTree (element) {
+function renameTree(element) {
     const text = Array.from(document.querySelectorAll("#rename-form input")).reduce((acc, input) => ({
         ...acc,
         [input.id]: input.value
@@ -217,5 +197,81 @@ function renameTree (element) {
         });
     }).catch(function (error) {
         console.log("Fetch error: " + error);
+    });
+}
+
+function collaboration(treeID,emails) {
+    collab_button.onclick = function () {sendMail(treeID)}
+    email_list.innerHTML = ""
+    emails.forEach(function (email) {
+        const name = document.createTextNode(email);
+        const tag = document.createElement("p");
+        const line = document.createElement("hr");
+        tag.appendChild(name)
+        email_list.appendChild(tag)
+        email_list.appendChild(line)
+    })
+    $("#collab-modal").modal("show");
+}
+
+function sendMail(treeID){
+    const text = Array.from(document.querySelectorAll("#collab-form input")).reduce((acc, input) => ({
+        ...acc,
+        [input.id]: input.value
+    }), {});
+    const key = [treeID, text['email']]
+
+    fetch(`${window.origin}/send_email`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(key),
+        cache: "no-cache",
+        headers: new Headers({
+        "content-type": "application/json"
+        })
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.log(`Looks like there was a problem. Status code: ${response.status}`);
+            return;
+        }
+        response.json().then(function (data) {
+            if (data['message'] === "OK") {
+                alert("A collaboration invitation email has been sent to this user")
+            } else {
+                alert(data["message"])
+            }
+        });
+    }).catch(function (error) {
+        console.log("Fetch error: " + error);
+    });
+}
+
+function deleteConfirm(element) {
+    delete_submit.onclick = function () {deleteTree(element)}
+    $("#delete-modal").modal("show");
+}
+
+function deleteTree(element) {
+    fetch(`${window.origin}/profile/delete`, {
+        method: "POST",
+        credentials: "include",
+        body: JSON.stringify(element),
+        cache: "no-cache",
+        headers: new Headers({
+        "content-type": "application/json"
+        })
+    }).then(function (response) {
+        if (response.status !== 200) {
+            console.log(`Looks like there was a problem. Status code: ${response.status}`);
+            return;
+        }
+        response.json().then(function (data) {
+            if (data['message'] === "OK") {
+                const box = document.getElementById(element)
+                box.remove()
+            }
+        });
+    }).catch(function (error) {
+        console.log("Fetch error:" + error);
     });
 }
