@@ -2,6 +2,18 @@
 {% block content %}
 
 <div id="home-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="alert {{ category }}" role="alert">{{ message }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <div id="info-container">
         <h4>Welcome to Sapling!</h4>
         <p>Make highly flexible and customizable family trees and invite your family to collaborate!</p>
@@ -35,6 +47,9 @@
     const help_button = document.getElementById("help-tag")
     help_button.onclick = function () {
         $("#help-modal").modal("show");
+    }
+    window.onload = function(){
+        $("#alert-modal").modal("show");
     }
 </script>
 
