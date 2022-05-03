@@ -35,7 +35,7 @@ The first step to enable a Google Login option is to register your application a
 
 **Step 2:** Create a copy of `.env.example` file, rename it to `.env` and fill in all the required variables as specified in the file. For "SECRET_KEY", you can type whatever you want.
 
-![](https://i.imgur.com/OhIRg12.png)
+![](https://i.imgur.com/tdJBQLC.png)
 
 **Step 4:** From the terminal, run `pip install -r requirements.txt`.
 
