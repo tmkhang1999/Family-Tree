@@ -38,8 +38,17 @@ class Database:
             trees = db.create_table("trees")
             trees.create_column("tree_id", db.types.text)
             trees.create_column("name", db.types.text)
+            trees.create_column("status", db.types.text)
+            trees.create_column("user_emails", db.types.json)
             trees.create_column("content", db.types.json)
             log.info("Created missing table: trees")
+
+        if "emails" not in db:
+            emails = db.create_table("emails")
+            emails.create_column("tree_id", db.types.text)
+            emails.create_column("email", db.types.text)
+            emails.create_column("confirmed", db.types.boolean)
+            log.info("Created missing table: emails")
 
         db.commit()
         db.close()
