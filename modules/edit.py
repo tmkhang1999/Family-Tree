@@ -1,21 +1,40 @@
 import os
-import string
-import random
-
-from flask import Blueprint, render_template, request, jsonify, make_response
+from flask import Blueprint, render_template, request, jsonify, make_response, redirect, url_for, flash
+from flask_login import current_user, login_required
 from .user import User
-from flask_login import current_user
 
 edit = Blueprint('edit', __name__)
 
 
-@edit.route('/editTree/<id>')
-def edit_tree(id):
-    name, content = User.get_tree(id)
-    return render_template('edit_tree.html', tree_id=id, tree_name=name, tree_content=content)
+@edit.route('/status_profile/<tree_id>')
+@login_required
+def status_profile(tree_id):
+    User.update_tree_status(tree_id, None)
+    return redirect(url_for('main.profile'))
+
+
+@edit.route('/editTree/<tree_id>')
+@login_required
+def edit_tree(tree_id):
+    name, status, _, content = User.get_tree(tree_id)
+    if not status:
+        User.update_tree_status(tree_id, current_user.id)
+        return render_template('edit_tree.html', tree_id=tree_id, tree_name=name, tree_content=content)
+    elif status == current_user.id:
+        return render_template('edit_tree.html', tree_id=tree_id, tree_name=name, tree_content=content)
+    elif status != current_user.id:
+        flash('Someone is editing this tree. Please come back later', 'alert-warning')
+        return redirect(url_for('main.profile'))
+
+
+@edit.route('/help_page')
+@login_required
+def help_page():
+    return render_template('help_page.html')
 
 
 @edit.route('/saveTree/<tree_id>', methods=["POST"])
+@login_required
 def save_tree(tree_id):
     content = request.get_json()
     User.save_tree(tree_id=tree_id, new_content=content)
@@ -24,6 +43,7 @@ def save_tree(tree_id):
 
 
 @edit.route('/saveImage/<tree_id>/<member_id>', methods=["POST"])
+@login_required
 def save_image(tree_id, member_id):
     file = request.files['image']
     if file:
@@ -47,6 +67,3 @@ def save_image(tree_id, member_id):
 
     res = make_response(jsonify({"message": "OK", "image_path": image_path}), 200)
     return res
-
-
-

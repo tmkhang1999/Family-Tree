@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, request, make_response, jsonify
-from flask_login import current_user
+from flask import Blueprint, render_template, request, make_response, jsonify, redirect, url_for
+from flask_login import current_user, login_required
+
 from .user import User
 
 main = Blueprint('main', __name__)
@@ -9,56 +10,44 @@ main = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
-@main.route('/helppage')
-def helppage():
-    return render_template('helppage.html')
-
 
 @main.route('/profile')
+@login_required
 def profile():
     tree_ids = current_user.tree_ids
-    tree_names = []
+    tree_keys = []
     for id in tree_ids:
-        name, _ = User.get_tree(id)
-        tree_names.append(name)
-    tree_keys = [[tree_ids[i], tree_names[i]] for i in range(len(tree_ids))]
+        name, _, user_emails, _ = User.get_tree(id)
+        user_emails.remove(current_user.email)
+        tree_keys.append([id, name, user_emails])
 
     return render_template('profile.html', name=current_user.name, tree_keys=tree_keys)
 
 
 @main.route("/profile/add", methods=["POST"])
+@login_required
 def add_tree():
     req = request.get_json()
-
-    # Add the new tree's ID to the tree_ids array of the current user
-    tree_ids = current_user.tree_ids
-    tree_ids.append(req[0])
-
-    # Add the new tree to the DB
-    User.add_tree(user_id=current_user.id, tree_ids=tree_ids, tree_id=req[0], tree_name=req[1])
-
-    res = make_response(jsonify({"message": "OK"}), 200)
-    return res
-
-
-@main.route("/profile/delete", methods=["POST"])
-def delete_tree():
-    tree_id = request.get_json()
-
-    # Add the new tree's ID to the tree_ids array of the current user
-    tree_ids = current_user.tree_ids
-    tree_ids.remove(tree_id)
-
-    # Add the new tree to the DB
-    User.delete_tree(user_id=current_user.id, tree_ids=tree_ids, tree_id=tree_id)
+    User.add_tree(tree_id=req[0], tree_name=req[1])
 
     res = make_response(jsonify({"message": "OK"}), 200)
     return res
 
 
 @main.route("/profile/rename", methods=["POST"])
+@login_required
 def rename_tree():
     req = request.get_json()
     User.rename_tree(tree_id=req[0], new_name=req[1])
+    res = make_response(jsonify({"message": "OK"}), 200)
+    return res
+
+
+@main.route("/profile/delete", methods=["POST"])
+@login_required
+def delete_tree():
+    tree_id = request.get_json()
+    User.delete_tree(tree_id=tree_id)
+
     res = make_response(jsonify({"message": "OK"}), 200)
     return res

@@ -1,7 +1,7 @@
 import json
 import requests
 from flask import Blueprint, redirect, request, url_for
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from oauthlib.oauth2 import WebApplicationClient
 from .user import User
 from config import Config
@@ -72,7 +72,7 @@ def callback():
 
     # Check if this account is in the database
     if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email, None)
+        User.create(unique_id, users_name, users_email)
 
     # Begin user session
     user = User.get(unique_id)
@@ -85,6 +85,7 @@ def callback():
 
 
 @auth.route("/logout")
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.index'))

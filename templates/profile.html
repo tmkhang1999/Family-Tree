@@ -2,6 +2,18 @@
 {% block content %}
 
 <div id="profile-container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="modal fade" id="alert-modal" tabindex="-1" role="dialog">
+                    <div class="modal-dialog">
+                        <div class="alert {{ category }}" role="alert">{{ message }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
     <div class="top-bar">
         <a id="hello-txt">Welcome to your Forest, {{ name }}!</a>
         <a class="profile-button" id="help-button">Instructions</a>
@@ -24,10 +36,10 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
-                    <div class="modal-body" id="modal-body">
+                    <div class="modal-body">
                         <div class="form-group mb-3">
                             <label for="message" class="col-form-label">Message:</label>
-                            <input type="text" class="form-control" id="message" placeholder="Enter the tree's name!" maxlength="18">
+                            <input type="text" class="form-control" id="message" placeholder="Enter the tree's name!" maxlength="18" required>
                         </div>
                     </div>
 
@@ -50,12 +62,38 @@
                     </div>
 
                     <div class="modal-body" id="modal-body">
-                        <input type="text" class="form-control" id="message" placeholder="Enter the new name!" maxlength="18">
+                        <input type="text" class="form-control" id="message" placeholder="Enter the new name!" maxlength="18" required>
                     </div>
 
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="rename-button">Change</button>
+                        <button type="button" class="btn btn-primary" id="rename-submit">Change</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="collab-modal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <form id="collab-form">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Collaboration</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <button type="button" class="btn btn-outline-secondary" id="collab-button">Invite</button>
+                            </div>
+                            <input type="text" id="email" aria-label="" class="form-control" placeholder="Enter the email of the user you would like to invite!">
+                        </div>
+
+                        <label class="col-form-label">Collaborators:</label>
+                        <div class="anyClass form-control" id="email-list">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -71,7 +109,7 @@
 
                 <div class="modal-footer justify-content-center">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="delete-button">Delete</button>
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" id="delete-submit">Delete</button>
                 </div>
             </div>
         </div>
@@ -82,6 +120,7 @@
 
 <script>
     window.onload = function(){
+        $("#alert-modal").modal("show");
         try {
             const treeNames = {{ tree_keys|tojson }};
             treeNames.forEach(function (key) {
