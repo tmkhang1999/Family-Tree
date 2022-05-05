@@ -46,16 +46,17 @@ def save_tree(tree_id):
 @login_required
 def save_image(tree_id, member_id):
     file = request.files['image']
+    user_path = os.path.join("static/images/history", current_user.id)
+    tree_path = os.path.join(user_path, tree_id)
+
     if file:
         file_type = file.filename.split('.')[-1]
 
         # check user folder
-        user_path = os.path.join("static/images/history", current_user.id)
         if not os.path.exists(user_path):
             os.mkdir(user_path)
 
         # check tree folder
-        tree_path = os.path.join(user_path, tree_id)
         if not os.path.exists(tree_path):
             os.mkdir(tree_path)
 
@@ -63,7 +64,14 @@ def save_image(tree_id, member_id):
         image_path = os.path.join(tree_path, member_id + "." + file_type)
         file.save(image_path)
     else:
-        image_path = None
+        image_path = check_exist(tree_path, member_id)
 
     res = make_response(jsonify({"message": "OK", "image_path": image_path}), 200)
     return res
+
+
+def check_exist(folder, name):
+    for file in os.listdir(folder):
+        if name.split(".")[1] == file.split(".")[1]:
+            return os.path.join(folder, file)
+    return None
