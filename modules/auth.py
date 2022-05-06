@@ -6,7 +6,7 @@ from oauthlib.oauth2 import WebApplicationClient
 from .user import User
 from config import Config
 
-auth = Blueprint('auth', __name__)
+auth = Blueprint("auth", __name__)
 
 # Configuration
 client = WebApplicationClient(Config.GOOGLE_CLIENT_ID)
@@ -23,12 +23,13 @@ def login():
     authorization_endpoint = google_provider_cfg["authorization_endpoint"]
 
     # the request for Google login
-    request_uri = client.prepare_request_uri(
+    client.prepare_request_uri(
         authorization_endpoint,
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
-    return redirect(request_uri)
+
+    return redirect(client.redirect_url)
 
 
 @auth.route("/login/callback")
@@ -47,6 +48,7 @@ def callback():
         redirect_url=request.base_url,
         code=code
     )
+
     token_response = requests.post(
         token_url,
         headers=headers,
@@ -79,13 +81,13 @@ def callback():
     login_user(user)
 
     if current_user.is_authenticated:
-        return redirect(url_for('main.profile'))
-    else:
-        return redirect(url_for('main.index'))
+        return redirect(url_for("main.profile"))
+
+    return redirect(url_for("main.index"))
 
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for("main.index"))
