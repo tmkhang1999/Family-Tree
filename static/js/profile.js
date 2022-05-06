@@ -162,9 +162,9 @@ function renameConfirm(element) {
 
 rename_submit.onmousemove = function () {
     if (rename_form.checkValidity() === true) {
-        document.getElementById("rename-button").setAttribute("data-bs-dismiss", "modal");
+        document.getElementById("rename-submit").setAttribute("data-bs-dismiss", "modal");
     } else {
-        document.getElementById("rename-button").removeAttribute("data-bs-dismiss");
+        document.getElementById("rename-submit").removeAttribute("data-bs-dismiss");
     }
 }
 
