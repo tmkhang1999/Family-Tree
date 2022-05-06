@@ -1,12 +1,14 @@
 import json
+
 import requests
 from flask import Blueprint, redirect, request, url_for
 from flask_login import current_user, login_user, logout_user, login_required
 from oauthlib.oauth2 import WebApplicationClient
-from .user import User
-from config import Config
 
-auth = Blueprint('auth', __name__)
+from config import Config
+from .user import User
+
+auth = Blueprint("auth", __name__)
 
 # Configuration
 client = WebApplicationClient(Config.GOOGLE_CLIENT_ID)
@@ -28,6 +30,7 @@ def login():
         redirect_uri=request.base_url + "/callback",
         scope=["openid", "email", "profile"],
     )
+
     return redirect(request_uri)
 
 
@@ -47,6 +50,7 @@ def callback():
         redirect_url=request.base_url,
         code=code
     )
+
     token_response = requests.post(
         token_url,
         headers=headers,
@@ -63,12 +67,12 @@ def callback():
     userinfo_response = requests.get(uri, headers=headers, data=body)
 
     # Check if their email is verified
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        users_name = userinfo_response.json()["given_name"]
-    else:
+    if not userinfo_response.json().get("email_verified"):
         return "User email not available or not verified by Google.", 400
+
+    unique_id = userinfo_response.json()["sub"]
+    users_email = userinfo_response.json()["email"]
+    users_name = userinfo_response.json()["given_name"]
 
     # Check if this account is in the database
     if not User.get(unique_id):
@@ -79,13 +83,13 @@ def callback():
     login_user(user)
 
     if current_user.is_authenticated:
-        return redirect(url_for('main.profile'))
-    else:
-        return redirect(url_for('main.index'))
+        return redirect(url_for("main.profile"))
+
+    return redirect(url_for("main.index"))
 
 
 @auth.route("/logout")
 @login_required
 def logout():
     logout_user()
-    return redirect(url_for('main.index'))
+    return redirect(url_for("main.index"))
