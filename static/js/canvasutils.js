@@ -142,7 +142,6 @@ function handleMemberForm(event)
     }
 
     const form_data = new FormData($('#memberForm')[0]);
-    console.log(form_data);
     $.ajax({
         type: 'POST',
         url: `${window.origin}/saveImage/${treeID}/${member.id}`,

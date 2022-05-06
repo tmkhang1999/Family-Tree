@@ -1,3 +1,5 @@
+import os
+
 from flask import Blueprint, render_template, request, make_response, jsonify, redirect, url_for
 from flask_login import current_user, login_required
 
@@ -30,6 +32,16 @@ def add_tree():
     req = request.get_json()
     User.add_tree(tree_id=req[0], tree_name=req[1])
 
+    # check user folder
+    user_path = os.path.join("static/images/history", current_user.id)
+    if not os.path.exists(user_path):
+        os.mkdir(user_path)
+
+    # check tree folder
+    tree_path = os.path.join(user_path, req[0])
+    if not os.path.exists(tree_path):
+        os.mkdir(tree_path)
+
     res = make_response(jsonify({"message": "OK"}), 200)
     return res
 
@@ -48,6 +60,7 @@ def rename_tree():
 def delete_tree():
     tree_id = request.get_json()
     User.delete_tree(tree_id=tree_id)
+    os.rmdir(os.path.join("static/images/history", current_user.id, tree_id))
 
     res = make_response(jsonify({"message": "OK"}), 200)
     return res

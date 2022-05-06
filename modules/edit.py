@@ -46,21 +46,10 @@ def save_tree(tree_id):
 @login_required
 def save_image(tree_id, member_id):
     file = request.files['image']
-    user_path = os.path.join("static/images/history", current_user.id)
-    tree_path = os.path.join(user_path, tree_id)
+    tree_path = os.path.join("static/images/history", current_user.id, tree_id)
 
     if file:
         file_type = file.filename.split('.')[-1]
-
-        # check user folder
-        if not os.path.exists(user_path):
-            os.mkdir(user_path)
-
-        # check tree folder
-        if not os.path.exists(tree_path):
-            os.mkdir(tree_path)
-
-        # save image
         image_path = os.path.join(tree_path, member_id + "." + file_type)
         file.save(image_path)
     else:
