@@ -1,78 +1,54 @@
-import json
-import requests
-from flask import Blueprint, redirect, request, url_for
-from flask_login import current_user, login_user, logout_user, login_required
-from oauthlib.oauth2 import WebApplicationClient
-from .user import User
 from config import Config
+from flask import Blueprint, redirect, request, url_for, session
+from flask_login import current_user, login_user, logout_user, login_required
+from requests_oauthlib import OAuth2Session
+from .user import User
 
 auth = Blueprint('auth', __name__)
 
-# Configuration
-client = WebApplicationClient(Config.GOOGLE_CLIENT_ID)
+# Credentials from registering a new application
+client_id = Config.GOOGLE_CLIENT_ID
+client_secret = Config.GOOGLE_CLIENT_SECRET
 
-
-def get_google_provider_cfg():
-    return requests.get(Config.GOOGLE_DISCOVERY_URI).json()
+# OAuth endpoints given in the Google API documentation
+authorization_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
+token_url = "https://www.googleapis.com/oauth2/v4/token"
+user_info_url = "https://www.googleapis.com/oauth2/v1/userinfo"
 
 
 @auth.route("/login")
 def login():
-    # URL for Google login
-    google_provider_cfg = get_google_provider_cfg()
-    authorization_endpoint = google_provider_cfg["authorization_endpoint"]
+    # Create a new session
+    redirect_uri = request.base_url + "/callback"
+    scope = ["openid", "email", "profile"]
+    google = OAuth2Session(client_id, scope=scope, redirect_uri=redirect_uri)
 
-    # the request for Google login
-    request_uri = client.prepare_request_uri(
-        authorization_endpoint,
-        redirect_uri=request.base_url + "/callback",
-        scope=["openid", "email", "profile"],
-    )
-    return redirect(request_uri)
+    # Redirect user to Google for authorization
+    authorization_url, state = google.authorization_url(authorization_base_url,
+                                                        access_type="offline", prompt="select_account")
+    session['oauth_state'] = state
+    return redirect(authorization_url)
 
 
 @auth.route("/login/callback")
 def callback():
-    # Get authorization code from Google
-    code = request.args.get("code")
-
-    # URL to get tokens
-    google_provider_cfg = get_google_provider_cfg()
-    token_endpoint = google_provider_cfg["token_endpoint"]
-
-    # Prepare and send a request to get tokens
-    token_url, headers, body = client.prepare_token_request(
-        token_endpoint,
-        authorization_response=request.url,
-        redirect_url=request.base_url,
-        code=code
-    )
-    token_response = requests.post(
-        token_url,
-        headers=headers,
-        data=body,
-        auth=(Config.GOOGLE_CLIENT_ID, Config.GOOGLE_CLIENT_SECRET),
-    )
-
-    # Parse the tokens
-    client.parse_request_body_response(json.dumps(token_response.json()))
-
-    # Getting the user's profile information
-    userinfo_endpoint = google_provider_cfg["userinfo_endpoint"]
-    uri, headers, body = client.add_token(userinfo_endpoint)
-    userinfo_response = requests.get(uri, headers=headers, data=body)
+    # Fetch the access token
+    google = OAuth2Session(client_id, state=session['oauth_state'], redirect_uri=request.base_url)
+    google.fetch_token(token_url, client_secret=client_secret, authorization_response=request.url)
 
     # Check if their email is verified
-    if userinfo_response.json().get("email_verified"):
-        unique_id = userinfo_response.json()["sub"]
-        users_email = userinfo_response.json()["email"]
-        users_name = userinfo_response.json()["given_name"]
+    user_info = google.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
+    print(user_info)
+    if user_info["verified_email"]:
+        unique_id = user_info["id"]
+        user_email = user_info["email"]
+        user_name = user_info["name"]
     else:
         return "User email not available or not verified by Google.", 400
 
-    # Check if this account is in the database
+    # Check if this account exists in the database
     if not User.get(unique_id):
-        User.create(unique_id, users_name, users_email)
+        User.create(unique_id, user_name, user_email)
 
     # Begin user session
     user = User.get(unique_id)
