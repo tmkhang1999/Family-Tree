@@ -8,3 +8,4 @@ sqlalchemy
 sqlalchemy-utils
 python-dotenv
 requests-oauthlib
+pyaml-env
