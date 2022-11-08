@@ -1,10 +1,13 @@
 import os
+import logging
 
-from flask import Blueprint, render_template, request, make_response, jsonify, redirect, url_for
+from flask import Blueprint, render_template, request, make_response, jsonify
 from flask_login import current_user, login_required
 
-from .user import User
+from utils.user import User
+from utils.config import config
 
+log = logging.getLogger(__name__)
 main = Blueprint('main', __name__)
 
 
@@ -60,7 +63,7 @@ def rename_tree():
 def delete_tree():
     tree_id = request.get_json()
     User.delete_tree(tree_id=tree_id)
-    os.rmdir(os.path.join("static/images/history", current_user.id, tree_id))
+    os.rmdir(os.path.join(config['app']["history_path"], current_user.id, tree_id))
 
     res = make_response(jsonify({"message": "OK"}), 200)
     return res

@@ -5,7 +5,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from requests_oauthlib import OAuth2Session
 
 from utils.config import config
-from modules.user import User
+from utils.user import User
 
 log = logging.getLogger(__name__)
 auth = Blueprint('auth', __name__)
@@ -14,7 +14,7 @@ auth = Blueprint('auth', __name__)
 client_id = config['google']['client_id']
 client_secret = config['google']['client_secret']
 
-# OAuth endpoints given in the Google API documentation
+# URLs given in the Google API documentation
 authorization_base_url = config['google']['authorization_base_url']
 token_url = config['google']['token_url']
 user_info_url = config['google']['user_info_url']

@@ -1,8 +1,10 @@
 # All the variables should be queried from .env file
 log_level: "DEBUG"
-host: "0.0.0.0"
-port: "5000"
-secret_key: !ENV ${SECRET_KEY}
+app:
+  secret_key: !ENV ${SECRET_KEY}
+  history_path: "static/history"
+  host: "0.0.0.0"
+  port: "5000"
 google:
   client_id: !ENV ${GOOGLE_CLIENT_ID}
   client_secret: !ENV ${GOOGLE_CLIENT_SECRET}

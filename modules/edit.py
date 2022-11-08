@@ -1,8 +1,13 @@
 import os
+import logging
+
 from flask import Blueprint, render_template, request, jsonify, make_response, redirect, url_for, flash
 from flask_login import current_user, login_required
-from .user import User
 
+from utils.user import User
+from utils.config import config
+
+log = logging.getLogger(__name__)
 edit = Blueprint('edit', __name__)
 
 
@@ -46,7 +51,7 @@ def save_tree(tree_id):
 @login_required
 def save_image(tree_id, member_id):
     file = request.files['image']
-    tree_path = os.path.join("static/images/history", current_user.id, tree_id)
+    tree_path = os.path.join(config['app']['history_path'], current_user.id, tree_id)
 
     if file:
         file_type = file.filename.split('.')[-1]

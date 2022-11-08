@@ -6,14 +6,15 @@ from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
 
 from modules import mail
-from modules.user import User
+from utils.user import User
 from utils.config import config
 
 log = logging.getLogger(__name__)
 email = Blueprint('email', __name__)
 
-secret_key = config['secret_key']
-password_salt = config['SECURITY_PASSWORD_SALT']
+# Load variables for flask_mail
+secret_key = config['app']['secret_key']
+password_salt = config['email']['SECURITY_PASSWORD_SALT']
 
 
 @email.route('/send_email', methods=["POST"])
