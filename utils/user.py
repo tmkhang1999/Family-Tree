@@ -1,5 +1,5 @@
 from flask_login import UserMixin, current_user
-from .db import Database
+from utils.database import Database
 
 db = Database().get()
 users = db['users']
