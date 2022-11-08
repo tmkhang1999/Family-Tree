@@ -1,19 +1,23 @@
-from config import Config
+import logging
+
 from flask import Blueprint, redirect, request, url_for, session
 from flask_login import current_user, login_user, logout_user, login_required
 from requests_oauthlib import OAuth2Session
-from .user import User
 
+from utils.config import config
+from modules.user import User
+
+log = logging.getLogger(__name__)
 auth = Blueprint('auth', __name__)
 
 # Credentials from registering a new application
-client_id = Config.GOOGLE_CLIENT_ID
-client_secret = Config.GOOGLE_CLIENT_SECRET
+client_id = config['google']['client_id']
+client_secret = config['google']['client_secret']
 
 # OAuth endpoints given in the Google API documentation
-authorization_base_url = "https://accounts.google.com/o/oauth2/v2/auth"
-token_url = "https://www.googleapis.com/oauth2/v4/token"
-user_info_url = "https://www.googleapis.com/oauth2/v1/userinfo"
+authorization_base_url = config['google']['authorization_base_url']
+token_url = config['google']['token_url']
+user_info_url = config['google']['user_info_url']
 
 
 @auth.route("/login")
@@ -37,8 +41,7 @@ def callback():
     google.fetch_token(token_url, client_secret=client_secret, authorization_response=request.url)
 
     # Check if their email is verified
-    user_info = google.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
-    print(user_info)
+    user_info = google.get(user_info_url).json()
     if user_info["verified_email"]:
         unique_id = user_info["id"]
         user_email = user_info["email"]

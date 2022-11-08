@@ -1,12 +1,19 @@
-from config import Config
+import logging
+
 from flask import Blueprint, flash, redirect, url_for, render_template, request, make_response, jsonify
 from flask_login import login_required, current_user
 from flask_mail import Message
 from itsdangerous import URLSafeTimedSerializer
-from . import mail
-from .user import User
 
+from modules import mail
+from modules.user import User
+from utils.config import config
+
+log = logging.getLogger(__name__)
 email = Blueprint('email', __name__)
+
+secret_key = config['secret_key']
+password_salt = config['SECURITY_PASSWORD_SALT']
 
 
 @email.route('/send_email', methods=["POST"])
@@ -65,16 +72,16 @@ def confirm_email(tree_token, email_token):
 
 
 def generate_confirmation_token(content):
-    serializer = URLSafeTimedSerializer(Config.SECRET_KEY)
-    return serializer.dumps(content, salt=Config.SECURITY_PASSWORD_SALT)
+    serializer = URLSafeTimedSerializer(secret_key)
+    return serializer.dumps(content, salt=password_salt)
 
 
 def confirm_token(token, expiration=3600):
-    serializer = URLSafeTimedSerializer(Config.SECRET_KEY)
+    serializer = URLSafeTimedSerializer(secret_key)
     try:
         content = serializer.loads(
             token,
-            salt=Config.SECURITY_PASSWORD_SALT,
+            salt=password_salt,
             max_age=expiration
         )
     except:

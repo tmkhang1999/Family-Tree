@@ -1,9 +1,14 @@
 import os
+import logging
+
 from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
-from .db import Database
-from config import Config
+
+from modules.db import Database
+from utils.config import config
+
+log = logging.getLogger(__name__)
 
 # Set up login and mail
 login_manager = LoginManager()
@@ -13,7 +18,7 @@ mail = Mail()
 def create_app():
     # Flask app setup
     app = Flask(__name__, template_folder="../templates", static_folder="../static")
-    app.config.from_object('config.Config')
+    app.config.from_object(config)
     login_manager.init_app(app)
     mail.init_app(app)
 
