@@ -21,4 +21,7 @@ email:
   SECURITY_PASSWORD_SALT: !ENV ${SECURITY_PASSWORD_SALT}
   MAIL_DEFAULT_SENDER: "from@example.com"
 database:
-  url: "sqlite:///db.sqlite"
+  user: !ENV ${MYSQL_USER}
+  password: !ENV ${MYSQL_PASSWORD}
+  host: !ENV ${MYSQL_HOST}
+  database: !ENV ${MYSQL_DATABASE}

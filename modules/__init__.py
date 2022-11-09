@@ -5,13 +5,12 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_mail import Mail
 
-from utils.database import Database
 from utils.config import config
 from utils.user import User
 
 log = logging.getLogger(__name__)
 
-# Set up login and mail
+# Set up login and mail for Flask
 login_manager = LoginManager()
 mail = Mail()
 
@@ -28,9 +27,6 @@ def create_app():
         from modules.main import main as main_blueprint
         from modules.edit import edit as edit_blueprint
         from modules.email import email as email_blueprint
-
-        # Database setup
-        Database().setup()
 
         # History setup
         if not os.path.exists(config['app']['history_path']):
