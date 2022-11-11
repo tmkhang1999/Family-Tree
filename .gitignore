@@ -13,4 +13,6 @@ venv
 **/sqlite_db-shm
 **/sqlite_db-wal
 .DS_Store
+
+# Uploaded images
 static/history
