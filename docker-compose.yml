@@ -1,0 +1,37 @@
+version: "3.3"
+services:
+  web:
+    image: tmkhang1999/family-tree:latest
+    container_name: tree
+    restart: unless-stopped
+    command: gunicorn --bind 0.0.0.0:5000 -w 3 app:gunicorn_app
+    ports:
+        - "8080:5000"
+    volumes:
+        - ./config.yml:/app/config.yml
+        - ./logs:/app/logs/
+    environment:
+        SECRET_KEY: ${SECRET_KEY}
+
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_HOST: ${MYSQL_HOST}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
+
+        GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+        GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+
+        APP_MAIL_USERNAME: ${APP_MAIL_USERNAME}
+        APP_MAIL_PASSWORD: ${APP_MAIL_PASSWORD}
+        SECURITY_PASSWORD_SALT: ${SECURITY_PASSWORD_SALT}
+  db:
+    image: mariadb
+    container_name: tree-db
+    restart: unless-stopped
+    volumes:
+        - ./db:/var/lib/mysql
+    environment:
+        MYSQL_USER: ${MYSQL_USER}
+        MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+        MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+        MYSQL_DATABASE: ${MYSQL_DATABASE}
